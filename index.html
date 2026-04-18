@@ -1,804 +1,331 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HM Group Stock</title>
-  <style>
-    :root {
-      --bg: #f4f6f9;
-      --panel: #ffffff;
-      --text: #122033;
-      --muted: #66758a;
-      --line: #d9e4f0;
-      --brand: #1f4e79;
-      --brand-2: #2f7fbd;
-      --ok: #dcfce7;
-      --warn: #ffedd5;
-      --danger: #fee2e2;
-      --radius: 12px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HM Group</title>
 
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      min-height: 100vh;
-    }
+<style>
+body{margin:0;font-family:Arial;background:#f4f6f9}
 
-    .sidebar {
-      width: 240px;
-      background: var(--brand);
-      color: white;
-      padding: 16px;
-      flex-shrink: 0;
-    }
+.topbar{
+display:none;
+background:#1f4e79;
+color:white;
+padding:12px;
+align-items:center;
+gap:10px;
+font-weight:bold;
+}
 
-    .sidebar h2 {
-      margin: 0 0 20px;
-      font-size: 20px;
-    }
+.topbar button{
+background:none;
+border:none;
+color:white;
+font-size:22px;
+cursor:pointer;
+}
 
-    .nav-item {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      text-align: left;
-      cursor: pointer;
-      font-weight: 700;
-    }
+.sidebar{
+width:220px;
+background:#1f4e79;
+color:white;
+position:fixed;
+height:100%;
+padding:15px;
+transition:0.3s;
+}
 
-    .nav-item.active {
-      background: rgba(255,255,255,0.18);
-    }
+.sidebar h2{margin-top:0}
 
-    .main {
-      flex: 1;
-      padding: 20px;
-      overflow-x: auto;
-    }
+.sidebar button{
+display:block;
+width:100%;
+margin:8px 0;
+padding:10px;
+background:rgba(255,255,255,0.1);
+border:none;
+color:white;
+border-radius:8px;
+cursor:pointer;
+text-align:left;
+}
 
-    .screen { display: none; }
-    .screen.active { display: block; }
+.main{
+margin-left:230px;
+padding:15px;
+}
 
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 16px;
-    }
+.screen{display:none}
+.screen.active{display:block}
 
-    .card h3 {
-      margin-top: 0;
-    }
+.card{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+}
 
-    .row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
+input,select,button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+border:1px solid #ccc;
+}
 
-    .row-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
+button{
+background:#1f4e79;
+color:white;
+font-weight:bold;
+}
 
-    .row-5 {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 2fr auto;
-      gap: 10px;
-    }
+.row{
+display:flex;
+gap:10px;
+}
 
-    input, select, button, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: 1px solid #cfd8e3;
-      font: inherit;
-    }
+.row>div{flex:1}
 
-    textarea { min-height: 80px; }
+@media(max-width:900px){
 
-    button {
-      cursor: pointer;
-      background: var(--brand);
-      color: white;
-      font-weight: 700;
-    }
+.topbar{display:flex}
 
-    button.secondary {
-      background: #e8f0fb;
-      color: var(--brand);
-    }
+.sidebar{
+left:-100%;
+top:0;
+z-index:1000;
+}
 
-    button.green {
-      background: #16a34a;
-    }
+.sidebar.open{
+left:0;
+}
 
-    button.orange {
-      background: #ea580c;
-    }
+.main{
+margin-left:0;
+padding:10px;
+}
 
-    button.red {
-      background: #dc2626;
-    }
+.row{flex-direction:column}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
-
-    th, td {
-      border-top: 1px solid var(--line);
-      padding: 10px;
-      text-align: left;
-      vertical-align: top;
-      font-size: 14px;
-    }
-
-    th {
-      color: var(--muted);
-      background: #fbfdff;
-    }
-
-    .muted { color: var(--muted); }
-    .pill {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .pill-ok { background: var(--ok); color: #166534; }
-    .pill-warn { background: var(--warn); color: #9a3412; }
-    .pill-danger { background: var(--danger); color: #991b1b; }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .status {
-      margin-bottom: 16px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #eef5ff;
-      color: #1d4ed8;
-      display: none;
-    }
-
-    .status.error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    @media (max-width: 900px) {
-      body { display: block; }
-      .sidebar {
-        width: 100%;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
-      .row, .row-4, .row-5 {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+}
+</style>
 </head>
+
 <body>
-  <aside class="sidebar">
-    <h2>HM Group</h2>
-    <button class="nav-item active" onclick="showScreen('dashboard', this)">Dashboard</button>
-    <button class="nav-item" onclick="showScreen('stock', this)">Stock</button>
-    <button class="nav-item" onclick="showScreen('sorties', this)">Sorties</button>
-    <button class="nav-item" onclick="showScreen('commandes', this)">Commandes</button>
-    <button class="nav-item" onclick="showScreen('achats', this)">Achats</button>
-    <button class="nav-item" onclick="showScreen('bl', this)">BL</button>
-    <button class="nav-item" onclick="showScreen('valorisation', this)">Valorisation</button>
-    <button class="nav-item" onclick="showScreen('parametres', this)">Paramètres</button>
-  </aside>
-
-  <main class="main">
-    <div id="appStatus" class="status"></div>
-
-    <section id="dashboard" class="screen active">
-      <div class="card">
-        <h3>Dashboard</h3>
-        <p class="muted">Base connectée à Supabase.</p>
-        <div class="row-4">
-          <div class="card">
-            <strong id="dashProducts">0</strong>
-            <div class="muted">Produits</div>
-          </div>
-          <div class="card">
-            <strong id="dashMoves">0</strong>
-            <div class="muted">Mouvements</div>
-          </div>
-          <div class="card">
-            <strong id="dashBL">0</strong>
-            <div class="muted">BL</div>
-          </div>
-          <div class="card">
-            <strong id="dashValue">0 €</strong>
-            <div class="muted">Valeur stock</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="stock" class="screen">
-      <div class="card">
-        <h3>Stock</h3>
-        <div class="actions">
-          <button class="secondary" onclick="loadProducts()">Actualiser</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Groupe</th>
-              <th>Stock mini</th>
-            </tr>
-          </thead>
-          <tbody id="productsTable"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="sorties" class="screen">
-      <div class="card">
-        <h3>Nouvelle sortie</h3>
-        <div class="row">
-          <div>
-            <label>Société stock</label>
-            <select id="sortieSociete">
-              <option>CPTE Conseils</option>
-              <option>Essentiel Énergie</option>
-            </select>
-          </div>
-          <div>
-            <label>Client final</label>
-            <input id="sortieClient" placeholder="Nom client" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label>Produit</label>
-            <select id="sortieProduit"></select>
-          </div>
-          <div>
-            <label>Quantité</label>
-            <input id="sortieQty" type="number" min="1" value="1" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label>Prix interne</label>
-            <input id="sortiePrix" type="number" step="0.01" placeholder="Ex: 58.00" />
-          </div>
-          <div>
-            <label>Commentaire</label>
-            <input id="sortieComment" placeholder="Commentaire" />
-          </div>
-        </div>
-
-        <div class="actions">
-          <button onclick="createSortie()">Valider sortie</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Historique sorties</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Produit</th>
-              <th>Qté</th>
-              <th>Type</th>
-              <th>Prix</th>
-            </tr>
-          </thead>
-          <tbody id="sortiesTable"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="commandes" class="screen">
-      <div class="card">
-        <h3>Commandes</h3>
-        <p class="muted">Base prête. On la branchera ensuite sur tes vraies tables commande.</p>
-      </div>
-    </section>
-
-    <section id="achats" class="screen">
-      <div class="card">
-        <h3>Nouvel achat fournisseur</h3>
-
-        <div class="row">
-          <div>
-            <label>Fournisseur</label>
-            <input id="achatFournisseur" placeholder="Nom fournisseur" />
-          </div>
-          <div>
-            <label>Produit</label>
-            <select id="achatProduit"></select>
-          </div>
-        </div>
-
-        <div class="row-4">
-          <div>
-            <label>Quantité</label>
-            <input id="achatQty" type="number" min="1" value="1" />
-          </div>
-          <div>
-            <label>Prix</label>
-            <input id="achatPrix" type="number" step="0.01" placeholder="Ex: 60.00" />
-          </div>
-          <div>
-            <label>Date commande</label>
-            <input id="achatDate" type="date" />
-          </div>
-          <div>
-            <label>Commentaire</label>
-            <input id="achatComment" placeholder="Commentaire" />
-          </div>
-        </div>
-
-        <div class="actions">
-          <button onclick="createAchat()">Créer achat</button>
-          <button class="secondary" onclick="copyAchatSansPrix()">Copier commande (sans prix)</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Historique achats</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Produit</th>
-              <th>Qté</th>
-              <th>Prix</th>
-              <th>Commentaire</th>
-            </tr>
-          </thead>
-          <tbody id="achatsTable"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="bl" class="screen">
-      <div class="card">
-        <h3>BL</h3>
-        <div class="row">
-          <div>
-            <label>Recherche client</label>
-            <input id="blSearch" placeholder="Ex: Dupont" oninput="filterBL()" />
-          </div>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Client</th>
-              <th>Date</th>
-              <th>Commentaire</th>
-              <th>Coût interne</th>
-            </tr>
-          </thead>
-          <tbody id="blTable"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="valorisation" class="screen">
-      <div class="card">
-        <h3>Valorisation FIFO</h3>
-        <div class="row">
-          <div>
-            <label>Date</label>
-            <input id="valoDate" type="date" />
-          </div>
-          <div>
-            <label>Société</label>
-            <select id="valoSociete">
-              <option>Global</option>
-              <option>CPTE Conseils</option>
-              <option>Essentiel Énergie</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button onclick="calculateValorisation()">Calculer</button>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Produit</th>
-              <th>Qté</th>
-              <th>Prix FIFO</th>
-              <th>Valeur</th>
-            </tr>
-          </thead>
-          <tbody id="valoTable"></tbody>
-        </table>
-
-        <p><strong>Total : <span id="valoTotal">0 €</span></strong></p>
-      </div>
-    </section>
-
-    <section id="parametres" class="screen">
-      <div class="card">
-        <h3>Ajouter un produit</h3>
-        <div class="row">
-          <div>
-            <label>Nom</label>
-            <input id="productName" placeholder="Nom produit" />
-          </div>
-          <div>
-            <label>Groupe</label>
-            <input id="productGroup" placeholder="Ex: Photovoltaïque" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label>Stock mini</label>
-            <input id="productStockMin" type="number" min="0" value="0" />
-          </div>
-        </div>
-
-        <div class="actions">
-          <button onclick="createProduct()">Ajouter produit</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = "https://siirathwhnbrnlpsrkifr.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpaXJhdHdobmJybmxwc3JraWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NTU5NjYsImV4cCI6MjA5MjAzMTk2Nn0.f1wmZVst3Sh8CKgxpRxL3PrXpThXSk8vaQxlIXs6940";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    let allProducts = [];
-    let allMovements = [];
-    let allBL = [];
-
-    function showStatus(message, isError = false) {
-      const el = document.getElementById("appStatus");
-      el.textContent = message;
-      el.className = isError ? "status error" : "status";
-      el.style.display = "block";
-      setTimeout(() => {
-        el.style.display = "none";
-      }, 4000);
-    }
-
-    function showScreen(id, btn) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    }
-
-    function formatEuro(value) {
-      return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(value || 0);
-    }
-
-    function setSelectOptions() {
-      const produitOptions = allProducts.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
-      document.getElementById("sortieProduit").innerHTML = produitOptions;
-      document.getElementById("achatProduit").innerHTML = produitOptions;
-    }
-
-    async function loadProducts() {
-      const { data, error } = await client
-        .from("products")
-        .select("*")
-        .order("name", { ascending: true });
-
-      if (error) {
-        showStatus("Erreur chargement produits", true);
-        console.error(error);
-        return;
-      }
-
-      allProducts = data || [];
-      setSelectOptions();
-
-      const tbody = document.getElementById("productsTable");
-      tbody.innerHTML = allProducts.length
-        ? allProducts.map(p => `
-            <tr>
-              <td>${p.name || ""}</td>
-              <td>${p.group_name || ""}</td>
-              <td>${p.stock_min ?? 0}</td>
-            </tr>
-          `).join("")
-        : `<tr><td colspan="3">Aucun produit</td></tr>`;
-
-      document.getElementById("dashProducts").textContent = allProducts.length;
-    }
-
-    async function createProduct() {
-      const name = document.getElementById("productName").value.trim();
-      const group_name = document.getElementById("productGroup").value.trim();
-      const stock_min = Number(document.getElementById("productStockMin").value || 0);
-
-      if (!name) {
-        showStatus("Nom produit obligatoire", true);
-        return;
-      }
-
-      const { error } = await client.from("products").insert([{ name, group_name, stock_min }]);
-
-      if (error) {
-        showStatus("Erreur ajout produit", true);
-        console.error(error);
-        return;
-      }
-
-      document.getElementById("productName").value = "";
-      document.getElementById("productGroup").value = "";
-      document.getElementById("productStockMin").value = "0";
-
-      showStatus("Produit ajouté");
-      await loadProducts();
-    }
-
-    async function loadMovements() {
-      const { data, error } = await client
-        .from("movements")
-        .select("*")
-        .order("date", { ascending: false });
-
-      if (error) {
-        showStatus("Erreur chargement mouvements", true);
-        console.error(error);
-        return;
-      }
-
-      allMovements = data || [];
-      document.getElementById("dashMoves").textContent = allMovements.length;
-
-      const achatsRows = allMovements
-        .filter(m => m.type === "purchase")
-        .map(m => `
-          <tr>
-            <td>${new Date(m.date).toLocaleDateString("fr-FR")}</td>
-            <td>${findProductName(m.product_id)}</td>
-            <td>${m.quantity}</td>
-            <td>${formatEuro(m.price)}</td>
-            <td>${m.comment || ""}</td>
-          </tr>
-        `).join("");
-
-      document.getElementById("achatsTable").innerHTML = achatsRows || `<tr><td colspan="5">Aucun achat</td></tr>`;
-
-      const sortiesRows = allMovements
-        .filter(m => m.type === "sortie" || m.type === "retour")
-        .map(m => `
-          <tr>
-            <td>${new Date(m.date).toLocaleDateString("fr-FR")}</td>
-            <td>${findProductName(m.product_id)}</td>
-            <td>${m.quantity}</td>
-            <td>${m.type}</td>
-            <td>${formatEuro(m.price)}</td>
-          </tr>
-        `).join("");
-
-      document.getElementById("sortiesTable").innerHTML = sortiesRows || `<tr><td colspan="5">Aucune sortie</td></tr>`;
-
-      const currentValue = allMovements.reduce((sum, m) => {
-        return sum + (Number(m.quantity || 0) * Number(m.price || 0));
-      }, 0);
-
-      document.getElementById("dashValue").textContent = formatEuro(currentValue);
-    }
-
-    function findProductName(productId) {
-      const product = allProducts.find(p => p.id === productId);
-      return product ? product.name : productId || "";
-    }
-
-    async function createAchat() {
-      const product_id = document.getElementById("achatProduit").value;
-      const quantity = Number(document.getElementById("achatQty").value || 0);
-      const price = Number(document.getElementById("achatPrix").value || 0);
-      const date = document.getElementById("achatDate").value || new Date().toISOString();
-      const comment = `${document.getElementById("achatFournisseur").value || ""} - ${document.getElementById("achatComment").value || ""}`.trim();
-
-      if (!product_id || quantity <= 0) {
-        showStatus("Produit et quantité obligatoires", true);
-        return;
-      }
-
-      const { error } = await client.from("movements").insert([{
-        product_id,
-        quantity,
-        type: "purchase",
-        price,
-        date,
-        comment
-      }]);
-
-      if (error) {
-        showStatus("Erreur création achat", true);
-        console.error(error);
-        return;
-      }
-
-      showStatus("Achat enregistré");
-      await loadMovements();
-    }
-
-    async function createSortie() {
-      const product_id = document.getElementById("sortieProduit").value;
-      const quantity = Number(document.getElementById("sortieQty").value || 0);
-      const price = Number(document.getElementById("sortiePrix").value || 0);
-      const clientName = document.getElementById("sortieClient").value.trim();
-      const comment = document.getElementById("sortieComment").value.trim();
-
-      if (!product_id || quantity <= 0 || !clientName) {
-        showStatus("Produit, quantité et client obligatoires", true);
-        return;
-      }
-
-      const { error: moveError } = await client.from("movements").insert([{
-        product_id,
-        quantity: -Math.abs(quantity),
-        type: "sortie",
-        price,
-        date: new Date().toISOString(),
-        comment
-      }]);
-
-      if (moveError) {
-        showStatus("Erreur création sortie", true);
-        console.error(moveError);
-        return;
-      }
-
-      const { error: blError } = await client.from("bl").insert([{
-        client: clientName,
-        comment
-      }]);
-
-      if (blError) {
-        showStatus("Sortie créée mais erreur BL", true);
-        console.error(blError);
-        await loadMovements();
-        return;
-      }
-
-      showStatus("Sortie et BL créés");
-      await loadMovements();
-      await loadBL();
-    }
-
-    async function loadBL() {
-      const { data, error } = await client
-        .from("bl")
-        .select("*")
-        .order("date", { ascending: false });
-
-      if (error) {
-        showStatus("Erreur chargement BL", true);
-        console.error(error);
-        return;
-      }
-
-      allBL = data || [];
-      document.getElementById("dashBL").textContent = allBL.length;
-      renderBL(allBL);
-    }
-
-    function renderBL(list) {
-      const tbody = document.getElementById("blTable");
-      tbody.innerHTML = list.length
-        ? list.map(row => `
-            <tr>
-              <td>${row.client || ""}</td>
-              <td>${row.date ? new Date(row.date).toLocaleDateString("fr-FR") : ""}</td>
-              <td>${row.comment || ""}</td>
-              <td>${formatEuro(row.cost || 0)}</td>
-            </tr>
-          `).join("")
-        : `<tr><td colspan="4">Aucun BL</td></tr>`;
-    }
-
-    function filterBL() {
-      const q = document.getElementById("blSearch").value.toLowerCase().trim();
-      const filtered = allBL.filter(row => (row.client || "").toLowerCase().includes(q));
-      renderBL(filtered);
-    }
-
-    function copyAchatSansPrix() {
-      const productName = findProductName(document.getElementById("achatProduit").value);
-      const qty = document.getElementById("achatQty").value || "";
-      const fournisseur = document.getElementById("achatFournisseur").value || "";
-
-      const text = `Bonjour,
-
-Merci de prévoir la commande suivante :
-
-- ${qty} x ${productName}
-
-Fournisseur : ${fournisseur}
-
-Cordialement`;
-
-      navigator.clipboard.writeText(text)
-        .then(() => showStatus("Commande copiée sans prix"))
-        .catch(() => showStatus("Copie impossible", true));
-    }
-
-    function calculateValorisation() {
-      const selectedDate = document.getElementById("valoDate").value;
-      const rows = [];
-      let total = 0;
-
-      for (const product of allProducts) {
-        const productMoves = allMovements
-          .filter(m => m.product_id === product.id)
-          .filter(m => !selectedDate || new Date(m.date) <= new Date(selectedDate));
-
-        let qty = 0;
-        let lastPrice = 0;
-
-        for (const m of productMoves) {
-          qty += Number(m.quantity || 0);
-          if (m.price !== null && m.price !== undefined) {
-            lastPrice = Number(m.price || 0);
-          }
-        }
-
-        const value = qty * lastPrice;
-        total += value;
-
-        rows.push(`
-          <tr>
-            <td>${product.name}</td>
-            <td>${qty}</td>
-            <td>${formatEuro(lastPrice)}</td>
-            <td>${formatEuro(value)}</td>
-          </tr>
-        `);
-      }
-
-      document.getElementById("valoTable").innerHTML = rows.join("") || `<tr><td colspan="4">Aucune donnée</td></tr>`;
-      document.getElementById("valoTotal").textContent = formatEuro(total);
-    }
-
-    async function init() {
-      await loadProducts();
-      await loadMovements();
-      await loadBL();
-      showStatus("Connexion Supabase OK");
-    }
-
-    init();
-  </script>
+
+<!-- TOP BAR MOBILE -->
+<div class="topbar">
+<button onclick="toggleMenu()">☰</button>
+<span>HM Group</span>
+</div>
+
+<!-- MENU -->
+<div class="sidebar" id="sidebar">
+<h2>HM Group</h2>
+
+<button onclick="go('dashboard')">Dashboard</button>
+<button onclick="go('stock')">Stock</button>
+<button onclick="go('sortie')">Sorties</button>
+<button onclick="go('achat')">Achats</button>
+<button onclick="go('bl')">BL</button>
+<button onclick="go('valo')">Valorisation</button>
+<button onclick="go('param')">Paramètres</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div id="dashboard" class="screen active">
+<div class="card">Dashboard</div>
+</div>
+
+<div id="stock" class="screen">
+<div class="card">
+<h3>Produits</h3>
+<input id="productName" placeholder="Nom produit">
+<button onclick="addProduct()">Ajouter</button>
+
+<ul id="productList"></ul>
+</div>
+</div>
+
+<div id="sortie" class="screen">
+<div class="card">
+<h3>Sortie</h3>
+
+<input id="client" placeholder="Client">
+
+<select id="productSelect"></select>
+
+<input id="qty" type="number" placeholder="Quantité">
+
+<input id="price" placeholder="Prix">
+
+<button onclick="addSortie()">Valider sortie</button>
+
+</div>
+</div>
+
+<div id="achat" class="screen">
+<div class="card">
+<h3>Achat</h3>
+
+<select id="achatProduct"></select>
+
+<input id="achatQty" placeholder="Quantité">
+<input id="achatPrice" placeholder="Prix">
+
+<button onclick="addAchat()">Créer achat</button>
+
+</div>
+</div>
+
+<div id="bl" class="screen">
+<div class="card">
+<h3>BL</h3>
+
+<input placeholder="Recherche client">
+
+<div id="blList"></div>
+
+</div>
+</div>
+
+<div id="valo" class="screen">
+<div class="card">
+<h3>Valorisation</h3>
+
+<input type="date" id="date">
+
+<button onclick="calcValo()">Calculer</button>
+
+<div id="valoResult"></div>
+
+</div>
+</div>
+
+<div id="param" class="screen">
+<div class="card">
+<h3>Paramètres</h3>
+<p>Base prête</p>
+</div>
+</div>
+
+</div>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+const supabase = supabase.createClient(
+"https://siirathwhnbrnlpsrkifr.supabase.co",
+"TA_CLE_ICI"
+)
+
+// NAV
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("open")
+}
+
+function go(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"))
+document.getElementById(id).classList.add("active")
+document.getElementById("sidebar").classList.remove("open")
+}
+
+// PRODUITS
+async function addProduct(){
+let name=document.getElementById("productName").value
+
+await supabase.from("products").insert([{name}])
+
+loadProducts()
+}
+
+async function loadProducts(){
+let {data}=await supabase.from("products").select("*")
+
+let list=""
+let options=""
+
+data.forEach(p=>{
+list+=`<li>${p.name}</li>`
+options+=`<option value="${p.id}">${p.name}</option>`
+})
+
+document.getElementById("productList").innerHTML=list
+document.getElementById("productSelect").innerHTML=options
+document.getElementById("achatProduct").innerHTML=options
+}
+
+// ACHAT
+async function addAchat(){
+let product=document.getElementById("achatProduct").value
+let qty=document.getElementById("achatQty").value
+let price=document.getElementById("achatPrice").value
+
+await supabase.from("movements").insert([{
+product_id:product,
+quantity:qty,
+type:"purchase",
+price:price
+}])
+
+}
+
+// SORTIE
+async function addSortie(){
+let product=document.getElementById("productSelect").value
+let qty=document.getElementById("qty").value
+let price=document.getElementById("price").value
+let client=document.getElementById("client").value
+
+await supabase.from("movements").insert([{
+product_id:product,
+quantity:-qty,
+type:"sortie",
+price:price
+}])
+
+await supabase.from("bl").insert([{
+client:client
+}])
+
+loadBL()
+}
+
+// BL
+async function loadBL(){
+let {data}=await supabase.from("bl").select("*")
+
+let html=""
+
+data.forEach(b=>{
+html+=`<div class="card">${b.client}</div>`
+})
+
+document.getElementById("blList").innerHTML=html
+}
+
+// VALO
+async function calcValo(){
+let {data}=await supabase.from("movements").select("*")
+
+let total=0
+
+data.forEach(m=>{
+total+=m.quantity*(m.price||0)
+})
+
+document.getElementById("valoResult").innerHTML="Total : "+total+"€"
+}
+
+// INIT
+loadProducts()
+loadBL()
+
+</script>
+
 </body>
 </html>
