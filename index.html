@@ -8,14 +8,13 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9}
 
-/* TOPBAR */
 .topbar{
-display:flex;
 background:#1f4e79;
 color:white;
 padding:12px;
+display:flex;
 align-items:center;
-justify-content:space-between;
+gap:10px;
 }
 
 .topbar button{
@@ -23,10 +22,8 @@ background:none;
 border:none;
 color:white;
 font-size:22px;
-cursor:pointer;
 }
 
-/* MENU */
 .sidebar{
 position:fixed;
 top:0;
@@ -36,7 +33,6 @@ height:100%;
 background:#1f4e79;
 padding:15px;
 transition:0.3s;
-z-index:1000;
 }
 
 .sidebar.open{left:0;}
@@ -45,18 +41,14 @@ z-index:1000;
 display:block;
 width:100%;
 margin:8px 0;
-padding:12px;
+padding:10px;
 background:rgba(255,255,255,0.1);
 border:none;
 color:white;
-border-radius:10px;
-text-align:left;
+border-radius:8px;
 }
 
-/* MAIN */
-.main{
-padding:15px;
-}
+.main{padding:15px;}
 
 .screen{display:none}
 .screen.active{display:block}
@@ -65,7 +57,7 @@ padding:15px;
 background:white;
 padding:15px;
 margin-bottom:15px;
-border-radius:12px;
+border-radius:10px;
 }
 
 input,select,button{
@@ -81,7 +73,6 @@ background:#1f4e79;
 color:white;
 font-weight:bold;
 }
-
 </style>
 </head>
 
@@ -93,7 +84,6 @@ font-weight:bold;
 </div>
 
 <div class="sidebar" id="sidebar">
-<button onclick="go('dashboard')">Dashboard</button>
 <button onclick="go('stock')">Stock</button>
 <button onclick="go('sortie')">Sorties</button>
 <button onclick="go('achat')">Achats</button>
@@ -103,11 +93,7 @@ font-weight:bold;
 
 <div class="main">
 
-<div id="dashboard" class="screen active">
-<div class="card">Dashboard OK</div>
-</div>
-
-<div id="stock" class="screen">
+<div id="stock" class="screen active">
 <div class="card">
 <h3>Produits</h3>
 <input id="productName">
@@ -121,7 +107,6 @@ font-weight:bold;
 <h3>Sortie</h3>
 <select id="productSelect"></select>
 <input id="qty">
-<input id="price">
 <button onclick="addSortie()">Valider</button>
 </div>
 </div>
@@ -131,7 +116,6 @@ font-weight:bold;
 <h3>Achat</h3>
 <select id="achatProduct"></select>
 <input id="achatQty">
-<input id="achatPrice">
 <button onclick="addAchat()">Créer</button>
 </div>
 </div>
@@ -146,21 +130,17 @@ font-weight:bold;
 <div id="valo" class="screen">
 <div class="card">
 <h3>Valorisation</h3>
-<button onclick="calcValo()">Calculer</button>
 <div id="valoResult"></div>
 </div>
 </div>
 
 </div>
 
-<!-- SUPABASE (CORRECT) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-const SUPABASE_URL = "https://siirathwhnbrnlpsrkifr.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpaXJhdHdobmJybmxwc3JraWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NTU5NjYsImV4cCI6MjA5MjAzMTk2Nn0.f1wmZVst3Sh8CKgxpRxL3PrXpThXSk8vaQxlIXs6940";
 
-const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let products = []
+let movements = []
+let bl = []
 
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("open")
@@ -172,23 +152,19 @@ document.getElementById(id).classList.add("active")
 document.getElementById("sidebar").classList.remove("open")
 }
 
-/* PRODUITS */
-async function addProduct(){
+function addProduct(){
 let name=document.getElementById("productName").value
-await client.from("products").insert([{name}])
-loadProducts()
+products.push({name})
+renderProducts()
 }
 
-async function loadProducts(){
-let {data,error}=await client.from("products").select("*")
-if(error){console.log(error);return;}
-
+function renderProducts(){
 let html=""
 let opt=""
 
-data.forEach(p=>{
+products.forEach((p,i)=>{
 html+=`<li>${p.name}</li>`
-opt+=`<option value="${p.id}">${p.name}</option>`
+opt+=`<option value="${i}">${p.name}</option>`
 })
 
 document.getElementById("productList").innerHTML=html
@@ -196,49 +172,31 @@ document.getElementById("productSelect").innerHTML=opt
 document.getElementById("achatProduct").innerHTML=opt
 }
 
-/* ACHAT */
-async function addAchat(){
-await client.from("movements").insert([{
-product_id:document.getElementById("achatProduct").value,
-quantity:document.getElementById("achatQty").value,
-type:"purchase",
-price:document.getElementById("achatPrice").value
-}])
+function addAchat(){
+let i=document.getElementById("achatProduct").value
+let qty=document.getElementById("achatQty").value
+
+movements.push({product:i,qty:parseInt(qty)})
 }
 
-/* SORTIE */
-async function addSortie(){
-await client.from("movements").insert([{
-product_id:document.getElementById("productSelect").value,
-quantity:-Math.abs(document.getElementById("qty").value),
-type:"sortie",
-price:document.getElementById("price").value
-}])
+function addSortie(){
+let i=document.getElementById("productSelect").value
+let qty=document.getElementById("qty").value
 
-await client.from("bl").insert([{}])
+movements.push({product:i,qty:-parseInt(qty)})
 
-loadBL()
+bl.push("BL client")
+
+renderBL()
 }
 
-/* BL */
-async function loadBL(){
-let {data}=await client.from("bl").select("*")
+function renderBL(){
 let html=""
-data.forEach(b=>{html+=`<div class="card">BL</div>`})
+bl.forEach(b=>{
+html+=`<div class="card">${b}</div>`
+})
 document.getElementById("blList").innerHTML=html
 }
-
-/* VALO */
-async function calcValo(){
-let {data}=await client.from("movements").select("*")
-let total=0
-data.forEach(m=>{total+=m.quantity*(m.price||0)})
-document.getElementById("valoResult").innerHTML="Total "+total+"€"
-}
-
-/* INIT */
-loadProducts()
-loadBL()
 
 </script>
 
