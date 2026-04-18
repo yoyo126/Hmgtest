@@ -1,840 +1,232 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Prototype V7.1 — Stock & Commandes</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HM Stock</title>
+
 <style>
-  :root{
-    --bg:#f3f6fb;
-    --panel:#ffffff;
-    --panel-2:#f8fbff;
-    --text:#0f172a;
-    --muted:#64748b;
-    --line:#dbe4f0;
-    --brand:#2563eb;
-    --brand-soft:#e8f0ff;
-    --green:#16a34a;
-    --orange:#ea580c;
-    --red:#dc2626;
-    --shadow:0 10px 30px rgba(15,23,42,.08);
-    --radius:18px;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-  .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
-  .sidebar{
-    background:linear-gradient(180deg,#0f172a 0%, #111c34 100%);
-    color:#fff;padding:22px 18px;position:sticky;top:0;height:100vh
-  }
-  .brand{display:flex;flex-direction:column;gap:4px;margin-bottom:24px}
-  .brand h1{font-size:20px;margin:0}
-  .brand p{margin:0;color:#cbd5e1;font-size:13px}
-  .menu{display:grid;gap:8px}
-  .menu button{
-    width:100%;text-align:left;border:none;background:transparent;color:#dbe7ff;
-    padding:12px 14px;border-radius:14px;font-weight:700;cursor:pointer;font-size:14px
-  }
-  .menu button.active{background:rgba(255,255,255,.12);color:#fff}
-  .menu button:hover{background:rgba(255,255,255,.08)}
-  .sidecard{
-    margin-top:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);
-    border-radius:16px;padding:14px
-  }
-  .sidecard .small{color:#cbd5e1}
-  .main{padding:22px}
-  .topbar{
-    display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px
-  }
-  .title h2{margin:0;font-size:28px}
-  .title p{margin:4px 0 0;color:var(--muted);font-size:14px}
-  .actions{display:flex;gap:10px;flex-wrap:wrap}
-  .btn{
-    border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer
-  }
-  .btn.primary{background:var(--brand);color:#fff}
-  .btn.soft{background:var(--brand-soft);color:#1d4ed8}
-  .btn.green{background:#dcfce7;color:#166534}
-  .btn.orange{background:#ffedd5;color:#9a3412}
-  .btn.red{background:#fee2e2;color:#991b1b}
-  .screen{display:none}
-  .screen.active{display:block}
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
-  .card{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)
-  }
-  .kpi{padding:18px}
-  .kpi .label{font-size:13px;color:var(--muted)}
-  .kpi .value{font-size:32px;font-weight:800;margin-top:8px}
-  .kpi .note{font-size:12px;color:var(--muted);margin-top:6px}
-  .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
-  .section{padding:18px}
-  .section h3{margin:0 0 12px;font-size:18px}
-  .section-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}
-  .section-head p{margin:0;color:var(--muted);font-size:13px}
-  table{width:100%;border-collapse:collapse}
-  th,td{padding:12px 10px;border-top:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
-  th{color:var(--muted);font-weight:700;background:#fbfdff}
-  .pill{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}
-  .blue{background:#dbeafe;color:#1d4ed8}
-  .green-pill{background:#dcfce7;color:#166534}
-  .orange-pill{background:#ffedd5;color:#9a3412}
-  .red-pill{background:#fee2e2;color:#991b1b}
-  .slate-pill{background:#eef2f7;color:#334155}
-  .list{display:grid;gap:10px}
-  .list-item{
-    border:1px solid var(--line);background:var(--panel-2);border-radius:14px;padding:14px
-  }
-  .list-item strong{display:block;margin-bottom:6px}
-  .muted{color:var(--muted)}
-  .compact{font-size:13px}
-  .toolbar{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:10px;margin-bottom:12px}
-  input,select,textarea{
-    width:100%;padding:11px 12px;border:1px solid #cfd8e3;border-radius:12px;background:#fff;color:var(--text)
-  }
-  textarea{min-height:84px}
-  .form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .form-grid-5{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:10px}
-  .subgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .empty{padding:24px;text-align:center;color:var(--muted)}
-  .logo{
-    display:inline-block;padding:8px 12px;border-radius:12px;font-weight:800
-  }
-  .logo.cpte{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
-  .logo.ess{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
-  .bl-preview table th,.bl-preview table td{font-size:13px}
-  @media (max-width:1100px){
-    .app{grid-template-columns:1fr}
-    .sidebar{position:static;height:auto;border-bottom:1px solid rgba(255,255,255,.08)}
-    .kpis,.grid-2,.subgrid,.toolbar,.form-grid,.form-grid-5{grid-template-columns:1fr}
-    .main{padding:14px}
-    .topbar{align-items:flex-start;flex-direction:column}
-  }
+body {
+  margin:0;
+  font-family:Arial;
+  display:flex;
+  background:#f5f6fa;
+}
+
+.sidebar {
+  width:220px;
+  background:#1f4e79;
+  color:white;
+  padding:15px;
+  height:100vh;
+}
+
+.sidebar h2 {
+  margin-bottom:20px;
+}
+
+.sidebar div {
+  margin:10px 0;
+  cursor:pointer;
+}
+
+.main {
+  flex:1;
+  padding:20px;
+}
+
+.screen {
+  display:none;
+}
+
+.screen.active {
+  display:block;
+}
+
+.card {
+  background:white;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:10px;
+}
+
+input, select, button {
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+button {
+  background:#1f4e79;
+  color:white;
+  font-weight:bold;
+}
+
+.row {
+  display:flex;
+  gap:10px;
+}
+
+.row > div {
+  flex:1;
+}
+
+@media(max-width:800px){
+  body { flex-direction:column; }
+  .sidebar { width:100%; height:auto; }
+  .row { flex-direction:column; }
+}
 </style>
 </head>
+
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand">
-      <h1>Stock & Commandes</h1>
-      <p>CPTE Conseils / Essentiel Énergie</p>
-    </div>
 
-    <div class="menu">
-      <button class="nav active" data-screen="dashboard">Dashboard</button>
-      <button class="nav" data-screen="stock">Stock</button>
-      <button class="nav" data-screen="orders">Commandes client</button>
-      <button class="nav" data-screen="purchases">Achats fournisseur</button>
-      <button class="nav" data-screen="bl">BL</button>
-      <button class="nav" data-screen="moves">Mouvements</button>
-    </div>
+<div class="sidebar">
+<h2>HM Group</h2>
+<div onclick="show('dashboard')">Dashboard</div>
+<div onclick="show('stock')">Stock</div>
+<div onclick="show('sortie')">Sorties</div>
+<div onclick="show('commande')">Commandes</div>
+<div onclick="show('achat')">Achats</div>
+<div onclick="show('bl')">BL</div>
+<div onclick="show('valo')">Valorisation</div>
+</div>
 
-    <div class="sidecard">
-      <strong>Logique métier</strong>
-      <div class="small" style="margin-top:8px">
-        Dépôt commun.<br>
-        Alertes sur stock global.<br>
-        Détail analytique CPTE / Essentiel.<br>
-        BL = sortie stock produit par produit.
-      </div>
-    </div>
-  </aside>
+<div class="main">
 
-  <main class="main">
-    <div class="topbar">
-      <div class="title">
-        <h2 id="pageTitle">Dashboard</h2>
-        <p id="pageSub">Vue rapide du stock, des commandes client et des derniers mouvements.</p>
-      </div>
-      <div class="actions">
-        <button class="btn soft" onclick="resetDemo()">Réinitialiser</button>
-      </div>
-    </div>
+<!-- DASHBOARD -->
+<div id="dashboard" class="screen active">
+<div class="card">Dashboard (à compléter)</div>
+</div>
 
-    <section id="dashboard" class="screen active">
-      <div class="kpis">
-        <div class="card kpi">
-          <div class="label">Stock global dépôt</div>
-          <div class="value" id="kpiQty">0</div>
-          <div class="note">Toutes sociétés confondues</div>
-        </div>
-        <div class="card kpi">
-          <div class="label">Valeur stock</div>
-          <div class="value" id="kpiValue">0 €</div>
-          <div class="note">Base prix achat actuels</div>
-        </div>
-        <div class="card kpi">
-          <div class="label">Produits sous mini</div>
-          <div class="value" id="kpiAlert">0</div>
-          <div class="note">Calcul sur le global</div>
-        </div>
-        <div class="card kpi">
-          <div class="label">Commandes ouvertes</div>
-          <div class="value" id="kpiOrders">0</div>
-          <div class="note">Attendu / Reçu / Programmé</div>
-        </div>
-      </div>
+<!-- STOCK -->
+<div id="stock" class="screen">
+<div class="card">
+<h3>Stock</h3>
+<input placeholder="Recherche produit">
+</div>
+</div>
 
-      <div class="grid-2">
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Alertes stock</h3>
-              <p>Produits à surveiller en priorité.</p>
-            </div>
-          </div>
-          <div id="alertsList" class="list"></div>
-        </div>
+<!-- SORTIE -->
+<div id="sortie" class="screen">
+<div class="card">
+<h3>Nouvelle sortie</h3>
 
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Répartition par société</h3>
-              <p>Lecture analytique CPTE / Essentiel.</p>
-            </div>
-          </div>
-          <table>
-            <thead>
-              <tr><th>Société</th><th>Qté</th><th>Valeur</th></tr>
-            </thead>
-            <tbody id="entitySummary"></tbody>
-          </table>
-        </div>
-      </div>
+<div class="row">
+<div><input placeholder="Société"></div>
+<div><input placeholder="Client"></div>
+</div>
 
-      <div class="grid-2" style="margin-top:16px">
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Dernières commandes client</h3>
-              <p>Vue rapide avant d’ouvrir l’écran commandes.</p>
-            </div>
-          </div>
-          <table>
-            <thead>
-              <tr><th>Client</th><th>Société</th><th>Statut</th><th>Livraison</th></tr>
-            </thead>
-            <tbody id="dashOrders"></tbody>
-          </table>
-        </div>
+<input placeholder="Commande liée">
 
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Derniers mouvements</h3>
-              <p>Entrées et sorties récentes.</p>
-            </div>
-          </div>
-          <table>
-            <thead>
-              <tr><th>Date</th><th>Type</th><th>Produit</th><th>Qté</th></tr>
-            </thead>
-            <tbody id="dashMoves"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+<h4>Produit</h4>
+<input placeholder="Recherche produit">
+<input type="number" placeholder="Quantité">
+<button>Ajouter produit</button>
 
-    <section id="stock" class="screen">
-      <div class="card section">
-        <div class="section-head">
-          <div>
-            <h3>Stock dépôt commun</h3>
-            <p>Écran inspiré de ton tableau Excel : compact, lisible, direct.</p>
-          </div>
-        </div>
-        <div class="toolbar">
-          <input id="searchStock" placeholder="Recherche produit, référence, marque..." />
-          <select id="filterCategory"><option value="">Toutes catégories</option></select>
-          <select id="filterEntityView">
-            <option value="">Vue globale</option>
-            <option>CPTE Conseils</option>
-            <option>Essentiel Énergie</option>
-          </select>
-          <button class="btn soft" onclick="renderStock()">Actualiser</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Réf</th><th>Produit</th><th>Marque</th><th>Catégorie</th>
-              <th>Global</th><th>Mini</th><th>CPTE</th><th>Essentiel</th><th>PA</th><th>Statut</th>
-            </tr>
-          </thead>
-          <tbody id="stockBody"></tbody>
-        </table>
-      </div>
-    </section>
+<h4>Kit</h4>
+<input placeholder="Recherche kit">
+<button>Ajouter kit</button>
 
-    <section id="orders" class="screen">
-      <div class="subgrid">
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Nouvelle commande client attribuée</h3>
-              <p>Tu crées ici la commande, puis tu lui ajoutes ses lignes.</p>
-            </div>
-          </div>
-          <div class="form-grid">
-            <select id="orderEntity">
-              <option>CPTE Conseils</option>
-              <option>Essentiel Énergie</option>
-            </select>
-            <input id="orderClient" placeholder="Client / référence client" value="Dupont" />
-            <select id="orderType">
-              <option>Photovoltaïque</option>
-              <option>PAC</option>
-              <option>ECS</option>
-            </select>
-            <input id="orderDate" />
-          </div>
-          <div class="form-grid" style="margin-top:10px">
-            <select id="orderStatus">
-              <option>Attendu</option>
-              <option>Reçu</option>
-              <option>Programmé</option>
-              <option>Posé</option>
-            </select>
-            <input id="orderDelivery" placeholder="Date livraison prévue" value="2026-04-23" />
-            <textarea id="orderNotes" placeholder="Notes">Commande client test</textarea>
-            <button class="btn primary" onclick="createClientOrder()">Créer commande</button>
-          </div>
+<h4>Commentaire</h4>
+<input placeholder="Ajouter commentaire">
 
-          <div class="form-grid-5" style="margin-top:14px">
-            <select id="orderSelect"></select>
-            <select id="orderProduct"></select>
-            <input id="orderQty" type="number" min="1" value="1" />
-            <input id="orderItemCost" type="number" step="0.01" min="0" placeholder="Coût unitaire" />
-            <button class="btn orange" onclick="addLineToClientOrder()">Ajouter ligne</button>
-          </div>
-        </div>
+<button>Valider sortie + BL</button>
 
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Commandes client</h3>
-              <p>Liste compacte, pensée pour ne pas exploser quand tu as 20 clients.</p>
-            </div>
-          </div>
-          <div class="toolbar">
-            <input id="searchOrders" placeholder="Recherche client..." />
-            <select id="filterOrderEntity">
-              <option value="">Toutes sociétés</option>
-              <option>CPTE Conseils</option>
-              <option>Essentiel Énergie</option>
-            </select>
-            <select id="filterOrderStatus">
-              <option value="">Tous statuts</option>
-              <option>Attendu</option>
-              <option>Reçu</option>
-              <option>Programmé</option>
-              <option>Posé</option>
-            </select>
-            <button class="btn soft" onclick="renderClientOrders()">Filtrer</button>
-          </div>
-          <table>
-            <thead>
-              <tr><th>Client</th><th>Société</th><th>Type</th><th>Statut</th><th>Détail</th><th>Actions</th></tr>
-            </thead>
-            <tbody id="clientOrdersBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+</div>
+</div>
 
-    <section id="purchases" class="screen">
-      <div class="subgrid">
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Nouvel achat fournisseur</h3>
-              <p>Réception = entrée stock + affectation analytique à la société.</p>
-            </div>
-          </div>
-          <div class="form-grid">
-            <select id="purchaseEntity">
-              <option>CPTE Conseils</option>
-              <option>Essentiel Énergie</option>
-            </select>
-            <input id="purchaseSupplier" placeholder="Fournisseur" value="Rexel" />
-            <input id="purchaseDate" />
-            <input id="purchaseDelivery" placeholder="Date livraison prévue" value="2026-04-24" />
-          </div>
-          <div class="form-grid-5" style="margin-top:10px">
-            <select id="purchaseProduct"></select>
-            <input id="purchaseQty" type="number" min="1" value="1" />
-            <input id="purchasePrice" type="number" step="0.01" min="0" placeholder="Prix achat HT" />
-            <input value="Stock dépôt" disabled />
-            <button class="btn primary" onclick="addPurchaseLine()">Ajouter ligne</button>
-          </div>
-          <table style="margin-top:12px">
-            <thead><tr><th>Produit</th><th>Qté</th><th>PA</th><th>Total</th><th></th></tr></thead>
-            <tbody id="purchaseDraftBody"></tbody>
-          </table>
-          <div style="display:flex;justify-content:flex-end;margin-top:12px">
-            <button class="btn orange" onclick="createPurchaseOrder()">Créer achat</button>
-          </div>
-        </div>
+<!-- COMMANDE -->
+<div id="commande" class="screen">
+<div class="card">
+<h3>Commande attribuée</h3>
 
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Achats fournisseur</h3>
-              <p>Tu réceptionnes quand la marchandise arrive.</p>
-            </div>
-          </div>
-          <div id="purchaseOrdersList" class="list"></div>
-        </div>
-      </div>
-    </section>
+<input placeholder="Client">
+<input type="date">
 
-    <section id="bl" class="screen">
-      <div class="subgrid">
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h3>Créer un BL</h3>
-              <p>Le BL sort le stock produit par produit.</p>
-            </div>
-          </div>
-          <div class="form-grid">
-            <select id="blEntity">
-              <option>CPTE Conseils</option>
-              <option>Essentiel Énergie</option>
-            </select>
-            <input id="blClient" placeholder="Client / référence client" value="Dupont" />
-            <input id="blDate" />
-            <select id="blSourceOrder">
-              <option value="">Sans commande client</option>
-            </select>
-          </div>
-          <div style="display:flex;justify-content:flex-end;margin-top:10px">
-            <button class="btn soft" onclick="loadSelectedOrderToBL()">Charger commande client</button>
-          </div>
-          <div class="form-grid-5" style="margin-top:10px">
-            <select id="blProduct"></select>
-            <input id="blQty" type="number" min="1" value="1" />
-            <input id="blNote" placeholder="Note ligne" />
-            <input value="Sortie produit par produit" disabled />
-            <button class="btn primary" onclick="addBLLine()">Ajouter ligne</button>
-          </div>
+<input placeholder="Produit">
+<input type="number">
+<button>Ajouter ligne</button>
 
-          <table style="margin-top:12px">
-            <thead><tr><th>Produit</th><th>Qté</th><th>Coût interne</th><th>Note</th><th></th></tr></thead>
-            <tbody id="blDraftBody"></tbody>
-          </table>
+<button>Créer commande</button>
 
-          <div style="display:flex;justify-content:flex-end;margin-top:12px">
-            <button class="btn green" onclick="validateBL()">Valider le BL</button>
-          </div>
-        </div>
+</div>
+</div>
 
-        <div class="card section bl-preview">
-          <div class="section-head">
-            <div>
-              <h3>Aperçu BL</h3>
-              <p>Sans prix côté client, avec coût interne visible ici.</p>
-            </div>
-          </div>
-          <div id="blPreview" class="muted">Ajoute des lignes pour voir l’aperçu.</div>
-        </div>
-      </div>
-    </section>
+<!-- ACHAT -->
+<div id="achat" class="screen">
+<div class="card">
+<h3>Achat fournisseur</h3>
 
-    <section id="moves" class="screen">
-      <div class="card section">
-        <div class="section-head">
-          <div>
-            <h3>Mouvements</h3>
-            <p>Historique des achats reçus et des sorties BL.</p>
-          </div>
-        </div>
-        <table>
-          <thead><tr><th>Date</th><th>Type</th><th>Société</th><th>Produit</th><th>Qté</th><th>Détail</th></tr></thead>
-          <tbody id="movesBody"></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+<input placeholder="Fournisseur">
+<input type="date">
+
+<input placeholder="Produit">
+<input type="number">
+<input placeholder="Prix">
+
+<button>Ajouter ligne</button>
+<button>Copier commande (sans prix)</button>
+<button>Créer achat</button>
+
+</div>
+</div>
+
+<!-- BL -->
+<div id="bl" class="screen">
+<div class="card">
+<h3>BL</h3>
+
+<input placeholder="Recherche client">
+
+<p>Client : Dupont</p>
+<p>Date : 20/04/2026</p>
+
+<table border="1" width="100%">
+<tr><th>Produit</th><th>Quantité</th></tr>
+<tr><td>Panneau 500W</td><td>12</td></tr>
+<tr><td>Micro HMS</td><td>6</td></tr>
+</table>
+
+<p>Commentaire : RAS</p>
+
+</div>
+</div>
+
+<!-- VALORISATION -->
+<div id="valo" class="screen">
+<div class="card">
+<h3>Valorisation FIFO</h3>
+
+<input type="date">
+<select>
+<option>Global</option>
+<option>CPTE</option>
+<option>Essentiel</option>
+</select>
+
+<button>Calculer</button>
+
+<table border="1" width="100%">
+<tr><th>Produit</th><th>Qté</th><th>Prix</th><th>Valeur</th></tr>
+<tr><td>Panneau</td><td>100</td><td>60€</td><td>6000€</td></tr>
+</table>
+
+<p><strong>Total : 6000€</strong></p>
+
+</div>
+</div>
+
 </div>
 
 <script>
-const ENTITIES = ["CPTE Conseils","Essentiel Énergie"];
-const screensMeta = {
-  dashboard:["Dashboard","Vue rapide du stock, des commandes client et des derniers mouvements."],
-  stock:["Stock","Vision dépôt commun + détail analytique par société."],
-  orders:["Commandes client","Commandes attribuées aux clients, compactes et lisibles."],
-  purchases:["Achats fournisseur","Entrées stock et coûts d’achat."],
-  bl:["BL","Préparation et sortie de stock produit par produit."],
-  moves:["Mouvements","Historique global des entrées et sorties."]
-};
-
-function isoToday(){
-  const d=new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function show(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
 }
-function frToday(){ return new Date().toLocaleDateString('fr-FR'); }
-function currency(v){ return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(v); }
-
-const initialData = {
-  products: [
-    {id:1, ref:"PV500-JA", name:"Panneau photovoltaïque 500W", brand:"JA Solar", category:"Photovoltaïque", globalQty:420, minQty:300, cost:78, entityStock:{"CPTE Conseils":260,"Essentiel Énergie":160}},
-    {id:2, ref:"HM-1000", name:"Micro-onduleur Hoymiles HMS-1000", brand:"Hoymiles", category:"Photovoltaïque", globalQty:190, minQty:80, cost:145, entityStock:{"CPTE Conseils":90,"Essentiel Énergie":100}},
-    {id:3, ref:"RAIL-420", name:"Rail aluminium 4,20 m", brand:"K2", category:"Fixation", globalQty:650, minQty:200, cost:18.5, entityStock:{"CPTE Conseils":320,"Essentiel Énergie":330}},
-    {id:4, ref:"COFF-AC-1R", name:"Coffret AC 1 rangée", brand:"Legrand", category:"Électricité", globalQty:37, minQty:20, cost:74, entityStock:{"CPTE Conseils":15,"Essentiel Énergie":22}},
-    {id:5, ref:"PAC-LG12", name:"PAC LG 12 kW", brand:"LG", category:"PAC", globalQty:4, minQty:2, cost:3200, entityStock:{"CPTE Conseils":3,"Essentiel Énergie":1}},
-    {id:6, ref:"BALL-190", name:"Ballon thermodynamique 190L", brand:"Thermor", category:"ECS", globalQty:7, minQty:3, cost:540, entityStock:{"CPTE Conseils":5,"Essentiel Énergie":2}},
-    {id:7, ref:"PASS-DTU", name:"Passerelle DTU Pro-S", brand:"Hoymiles", category:"Photovoltaïque", globalQty:12, minQty:6, cost:185, entityStock:{"CPTE Conseils":6,"Essentiel Énergie":6}}
-  ],
-  clientOrders: [
-    {id:101, entity:"CPTE Conseils", client:"Dupont", type:"Photovoltaïque", date:"2026-04-25", delivery:"2026-04-23", status:"Attendu", notes:"Toiture sud-ouest", items:[
-      {productId:1, qty:12, cost:78},{productId:2, qty:6, cost:145},{productId:4, qty:1, cost:74}
-    ]},
-    {id:102, entity:"Essentiel Énergie", client:"Martin", type:"PAC", date:"2026-04-22", delivery:"2026-04-20", status:"Reçu", notes:"Matériel livré au dépôt", items:[
-      {productId:5, qty:1, cost:3200},{productId:6, qty:1, cost:540}
-    ]}
-  ],
-  purchaseOrders: [
-    {id:201, entity:"Essentiel Énergie", supplier:"Rexel", date:"2026-04-17", delivery:"2026-04-22", status:"En attente", lines:[
-      {productId:1, qty:100, price:77.5},{productId:2, qty:50, price:144}
-    ]}
-  ],
-  moves: [
-    {date:frToday(), type:"Sortie BL", entity:"CPTE Conseils", product:"Panneau photovoltaïque 500W", qty:"-12", detail:"BL commande Martin"},
-    {date:frToday(), type:"Achat reçu", entity:"CPTE Conseils", product:"PAC LG 12 kW", qty:"+1", detail:"Commande fournisseur LG"}
-  ]
-};
-
-let state = JSON.parse(JSON.stringify(initialData));
-let purchaseDraft = [];
-let blDraft = [];
-
-function getProduct(id){ return state.products.find(p=>p.id===id); }
-function stockStatus(p){ if(p.globalQty<=0) return "out"; if(p.globalQty<=p.minQty) return "low"; return "ok"; }
-function badge(st){
-  if(st==="ok") return '<span class="pill green-pill">OK</span>';
-  if(st==="low") return '<span class="pill orange-pill">Stock faible</span>';
-  return '<span class="pill red-pill">Rupture</span>';
-}
-function orderBadge(st){
-  if(st==="Attendu") return '<span class="pill red-pill">Attendu</span>';
-  if(st==="Reçu") return '<span class="pill orange-pill">Reçu</span>';
-  if(st==="Programmé") return '<span class="pill blue">Programmé</span>';
-  return '<span class="pill green-pill">Posé</span>';
-}
-function entityBadge(entity){
-  return entity === "CPTE Conseils" ? '<span class="pill blue">CPTE</span>' : '<span class="pill green-pill">Essentiel</span>';
-}
-function entityLogoClass(entity){ return entity === "CPTE Conseils" ? "cpte" : "ess"; }
-
-function switchScreen(name){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(name).classList.add('active');
-  document.querySelectorAll('.nav').forEach(b=>b.classList.remove('active'));
-  document.querySelector(`.nav[data-screen="${name}"]`).classList.add('active');
-  document.getElementById('pageTitle').textContent = screensMeta[name][0];
-  document.getElementById('pageSub').textContent = screensMeta[name][1];
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-document.querySelectorAll('.nav').forEach(btn=>{
-  btn.addEventListener('click', ()=>switchScreen(btn.dataset.screen));
-});
-
-function renderKPIs(){
-  const totalQty = state.products.reduce((a,p)=>a+p.globalQty,0);
-  const totalValue = state.products.reduce((a,p)=>a+p.globalQty*p.cost,0);
-  const alerts = state.products.filter(p=>stockStatus(p)!=="ok").length;
-  const openOrders = state.clientOrders.filter(o=>o.status!=="Posé").length;
-  document.getElementById('kpiQty').textContent = totalQty;
-  document.getElementById('kpiValue').textContent = currency(totalValue);
-  document.getElementById('kpiAlert').textContent = alerts;
-  document.getElementById('kpiOrders').textContent = openOrders;
-}
-
-function renderDashboard(){
-  const critical = state.products.filter(p=>stockStatus(p)!=="ok");
-  document.getElementById('alertsList').innerHTML = critical.length ? critical.map(p=>`
-    <div class="list-item">
-      <strong>${p.name}</strong>
-      <div class="compact muted">Global : ${p.globalQty} | Mini : ${p.minQty}</div>
-      <div style="margin-top:8px">${badge(stockStatus(p))}</div>
-    </div>`).join('') : '<div class="empty">Aucune alerte critique.</div>';
-
-  document.getElementById('entitySummary').innerHTML = ENTITIES.map(entity=>{
-    const qty = state.products.reduce((a,p)=>a+(p.entityStock[entity]||0),0);
-    const value = state.products.reduce((a,p)=>a+((p.entityStock[entity]||0)*p.cost),0);
-    return `<tr><td>${entity}</td><td>${qty}</td><td>${currency(value)}</td></tr>`;
-  }).join('');
-
-  document.getElementById('dashOrders').innerHTML = state.clientOrders.slice(0,5).map(o=>`
-    <tr><td>${o.client}</td><td>${entityBadge(o.entity)}</td><td>${orderBadge(o.status)}</td><td>${o.delivery||'-'}</td></tr>
-  `).join('') || '<tr><td colspan="4" class="empty">Aucune commande</td></tr>';
-
-  document.getElementById('dashMoves').innerHTML = state.moves.slice(0,5).map(m=>`
-    <tr><td>${m.date}</td><td>${m.type}</td><td>${m.product}</td><td>${m.qty}</td></tr>
-  `).join('') || '<tr><td colspan="4" class="empty">Aucun mouvement</td></tr>';
-}
-
-function renderSelectors(){
-  const cats = [...new Set(state.products.map(p=>p.category))];
-  document.getElementById('filterCategory').innerHTML = '<option value="">Toutes catégories</option>' + cats.map(c=>`<option>${c}</option>`).join('');
-  const options = state.products.map(p=>`<option value="${p.id}">${p.ref} — ${p.name}</option>`).join('');
-  document.getElementById('orderProduct').innerHTML = options;
-  document.getElementById('purchaseProduct').innerHTML = options;
-  document.getElementById('blProduct').innerHTML = options;
-  const orderOptions = state.clientOrders.map(o=>`<option value="${o.id}">${o.client} — ${o.entity}</option>`).join('');
-  document.getElementById('orderSelect').innerHTML = '<option value="">Choisir commande client</option>' + orderOptions;
-  document.getElementById('blSourceOrder').innerHTML = '<option value="">Sans commande client</option>' + orderOptions;
-}
-
-function renderStock(){
-  const q = document.getElementById('searchStock').value.toLowerCase();
-  const cat = document.getElementById('filterCategory').value;
-  const entityView = document.getElementById('filterEntityView').value;
-  const rows = state.products.filter(p=>{
-    const okQ = (p.ref+' '+p.name+' '+p.brand).toLowerCase().includes(q);
-    const okC = !cat || p.category===cat;
-    return okQ && okC;
-  }).map(p=>{
-    const mainQty = entityView ? p.entityStock[entityView] : p.globalQty;
-    return `<tr>
-      <td>${p.ref}</td><td>${p.name}</td><td>${p.brand}</td><td>${p.category}</td>
-      <td>${mainQty}</td><td>${p.minQty}</td><td>${p.entityStock["CPTE Conseils"]}</td><td>${p.entityStock["Essentiel Énergie"]}</td><td>${currency(p.cost)}</td><td>${badge(stockStatus(p))}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('stockBody').innerHTML = rows || '<tr><td colspan="10" class="empty">Aucun produit</td></tr>';
-}
-
-function createClientOrder(){
-  const entity = document.getElementById('orderEntity').value;
-  const client = document.getElementById('orderClient').value.trim();
-  const type = document.getElementById('orderType').value;
-  const date = document.getElementById('orderDate').value;
-  const status = document.getElementById('orderStatus').value;
-  const delivery = document.getElementById('orderDelivery').value;
-  const notes = document.getElementById('orderNotes').value.trim();
-  if(!client) return alert("Mets un client.");
-  state.clientOrders.unshift({id:Date.now(), entity, client, type, date, delivery, status, notes, items:[]});
-  renderAll();
-}
-function addLineToClientOrder(){
-  const orderId = +document.getElementById('orderSelect').value;
-  const productId = +document.getElementById('orderProduct').value;
-  const qty = +document.getElementById('orderQty').value;
-  const cost = +document.getElementById('orderItemCost').value;
-  if(!orderId || !productId || qty<1) return alert("Choisis une commande et un produit.");
-  const order = state.clientOrders.find(o=>o.id===orderId);
-  order.items.push({productId, qty, cost: cost || getProduct(productId).cost});
-  renderAll();
-}
-function changeOrderStatus(id, dir){
-  const order = state.clientOrders.find(o=>o.id===id);
-  const statuses = ["Attendu","Reçu","Programmé","Posé"];
-  const idx = statuses.indexOf(order.status);
-  const next = idx + dir;
-  if(next >= 0 && next < statuses.length){
-    order.status = statuses[next];
-    renderClientOrders();
-    renderKPIs();
-    renderDashboard();
-  }
-}
-function loadOrderToBL(id){
-  const order = state.clientOrders.find(o=>o.id===id);
-  document.getElementById('blEntity').value = order.entity;
-  document.getElementById('blClient').value = order.client;
-  document.getElementById('blSourceOrder').value = String(order.id);
-  blDraft = order.items.map(i=>({productId:i.productId, qty:i.qty, note:`Commande ${order.client}`}));
-  renderBLDraft();
-  switchScreen('bl');
-}
-function renderClientOrders(){
-  const q = document.getElementById('searchOrders').value.toLowerCase();
-  const entity = document.getElementById('filterOrderEntity').value;
-  const status = document.getElementById('filterOrderStatus').value;
-  const rows = state.clientOrders.filter(o=>{
-    const okQ = (o.client+' '+o.notes).toLowerCase().includes(q);
-    const okE = !entity || o.entity===entity;
-    const okS = !status || o.status===status;
-    return okQ && okE && okS;
-  }).map(o=>{
-    const detail = o.items.map(i=>`${i.qty} × ${getProduct(i.productId).name}`).join('<br>');
-    const totalCost = o.items.reduce((a,i)=>a+i.qty*i.cost,0);
-    return `<tr>
-      <td><strong>${o.client}</strong><div class="compact muted">${o.delivery || '-'} • ${o.notes || ''}</div></td>
-      <td>${entityBadge(o.entity)}</td>
-      <td>${o.type}</td>
-      <td>${orderBadge(o.status)}</td>
-      <td><div class="compact">${detail || 'Aucune ligne'}</div><div class="compact muted" style="margin-top:6px">Coût : ${currency(totalCost)}</div></td>
-      <td>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="btn soft" onclick="changeOrderStatus(${o.id},-1)">←</button>
-          <button class="btn soft" onclick="changeOrderStatus(${o.id},1)">→</button>
-          <button class="btn orange" onclick="loadOrderToBL(${o.id})">Vers BL</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-  document.getElementById('clientOrdersBody').innerHTML = rows || '<tr><td colspan="6" class="empty">Aucune commande client</td></tr>';
-}
-
-function addPurchaseLine(){
-  const productId = +document.getElementById('purchaseProduct').value;
-  const qty = +document.getElementById('purchaseQty').value;
-  const price = +document.getElementById('purchasePrice').value;
-  if(!productId || qty<1 || price<0) return alert("Complète correctement la ligne achat.");
-  purchaseDraft.push({productId, qty, price});
-  renderPurchaseDraft();
-}
-function renderPurchaseDraft(){
-  document.getElementById('purchaseDraftBody').innerHTML = purchaseDraft.map((l,i)=>{
-    const p = getProduct(l.productId);
-    return `<tr><td>${p.name}</td><td>${l.qty}</td><td>${currency(l.price)}</td><td>${currency(l.qty*l.price)}</td><td><button class="btn red" onclick="purchaseDraft.splice(${i},1);renderPurchaseDraft()">X</button></td></tr>`;
-  }).join('') || '<tr><td colspan="5" class="empty">Aucune ligne</td></tr>';
-}
-function createPurchaseOrder(){
-  const entity = document.getElementById('purchaseEntity').value;
-  const supplier = document.getElementById('purchaseSupplier').value.trim();
-  const date = document.getElementById('purchaseDate').value;
-  const delivery = document.getElementById('purchaseDelivery').value;
-  if(!supplier || purchaseDraft.length===0) return alert("Mets un fournisseur et au moins une ligne.");
-  state.purchaseOrders.unshift({id:Date.now(), entity, supplier, date, delivery, status:"En attente", lines:[...purchaseDraft]});
-  purchaseDraft = [];
-  renderPurchaseDraft();
-  renderPurchaseOrders();
-}
-function receivePurchaseOrder(id){
-  const po = state.purchaseOrders.find(x=>x.id===id);
-  if(!po || po.status==="Reçue") return;
-  po.lines.forEach(l=>{
-    const p = getProduct(l.productId);
-    p.globalQty += l.qty;
-    p.entityStock[po.entity] += l.qty;
-    p.cost = l.price;
-    state.moves.unshift({date:frToday(), type:"Achat reçu", entity:po.entity, product:p.name, qty:`+${l.qty}`, detail:`${po.supplier} / livraison ${po.delivery || '-'}`});
-  });
-  po.status = "Reçue";
-  renderAll();
-}
-function renderPurchaseOrders(){
-  document.getElementById('purchaseOrdersList').innerHTML = state.purchaseOrders.map(po=>{
-    const total = po.lines.reduce((a,l)=>a+l.qty*l.price,0);
-    const details = po.lines.map(l=>`${getProduct(l.productId).name} x${l.qty}`).join(' • ');
-    return `<div class="list-item">
-      <strong>${po.supplier}</strong>
-      <div class="compact muted">Société : ${po.entity} • Livraison : ${po.delivery || '-'} • Statut : ${po.status}</div>
-      <div class="compact" style="margin-top:8px">${details}</div>
-      <div class="compact muted" style="margin-top:8px">Total : ${currency(total)}</div>
-      <div style="display:flex;justify-content:flex-end;margin-top:10px">
-        ${po.status!=="Reçue" ? `<button class="btn green" onclick="receivePurchaseOrder(${po.id})">Réceptionner</button>` : `<span class="pill green-pill">Déjà reçue</span>`}
-      </div>
-    </div>`;
-  }).join('') || '<div class="empty">Aucun achat fournisseur</div>';
-}
-
-function loadSelectedOrderToBL(){
-  const id = +document.getElementById('blSourceOrder').value;
-  if(!id) return alert("Choisis une commande client.");
-  loadOrderToBL(id);
-}
-function addBLLine(){
-  const productId = +document.getElementById('blProduct').value;
-  const qty = +document.getElementById('blQty').value;
-  const note = document.getElementById('blNote').value.trim();
-  if(!productId || qty<1) return alert("Choisis un produit et une quantité.");
-  blDraft.push({productId, qty, note});
-  renderBLDraft();
-}
-function renderBLDraft(){
-  document.getElementById('blDraftBody').innerHTML = blDraft.map((l,i)=>{
-    const p = getProduct(l.productId);
-    return `<tr><td>${p.name}</td><td>${l.qty}</td><td>${currency(l.qty*p.cost)}</td><td>${l.note || ''}</td><td><button class="btn red" onclick="blDraft.splice(${i},1);renderBLDraft()">X</button></td></tr>`;
-  }).join('') || '<tr><td colspan="5" class="empty">Aucune ligne</td></tr>';
-
-  const entity = document.getElementById('blEntity').value;
-  const client = document.getElementById('blClient').value || '-';
-  const totalCost = blDraft.reduce((a,l)=>a + getProduct(l.productId).cost*l.qty,0);
-  const lines = blDraft.map(l=>{
-    const p = getProduct(l.productId);
-    return `<tr><td>${p.ref}</td><td>${p.name}</td><td>${l.qty}</td><td>${l.note||''}</td></tr>`;
-  }).join('') || '<tr><td colspan="4">Aucune ligne</td></tr>';
-
-  document.getElementById('blPreview').innerHTML = `
-    <div class="logo ${entityLogoClass(entity)}">${entity}</div>
-    <div style="margin-top:10px"><strong>Bon de livraison</strong></div>
-    <div class="compact muted">Date : ${document.getElementById('blDate').value}</div>
-    <div style="margin-top:10px"><strong>Client :</strong> ${client}</div>
-    <table style="margin-top:10px">
-      <thead><tr><th>Réf</th><th>Désignation</th><th>Qté</th><th>Note</th></tr></thead>
-      <tbody>${lines}</tbody>
-    </table>
-    <div class="compact muted" style="margin-top:10px">Coût interne total : ${currency(totalCost)} (non affiché au client)</div>
-  `;
-}
-function validateBL(){
-  const entity = document.getElementById('blEntity').value;
-  const client = document.getElementById('blClient').value.trim();
-  if(!client || blDraft.length===0) return alert("Mets un client et au moins une ligne.");
-  for(const l of blDraft){
-    const p = getProduct(l.productId);
-    if(p.globalQty < l.qty) return alert(`Stock global insuffisant pour ${p.name}`);
-  }
-  blDraft.forEach(l=>{
-    const p = getProduct(l.productId);
-    p.globalQty -= l.qty;
-    p.entityStock[entity] -= l.qty;
-    state.moves.unshift({date:frToday(), type:"Sortie BL", entity, product:p.name, qty:`-${l.qty}`, detail:`BL commande ${client}`});
-  });
-  const sourceId = +document.getElementById('blSourceOrder').value;
-  if(sourceId){
-    const order = state.clientOrders.find(o=>o.id===sourceId);
-    if(order) order.status = "Programmé";
-  }
-  blDraft = [];
-  renderAll();
-  alert("BL validé. Le stock a été sorti produit par produit.");
-}
-
-function renderMoves(){
-  document.getElementById('movesBody').innerHTML = state.moves.map(m=>`
-    <tr><td>${m.date}</td><td>${m.type}</td><td>${m.entity}</td><td>${m.product}</td><td>${m.qty}</td><td>${m.detail}</td></tr>
-  `).join('') || '<tr><td colspan="6" class="empty">Aucun mouvement</td></tr>';
-}
-
-function renderAll(){
-  renderKPIs();
-  renderDashboard();
-  renderSelectors();
-  renderStock();
-  renderClientOrders();
-  renderPurchaseDraft();
-  renderPurchaseOrders();
-  renderBLDraft();
-  renderMoves();
-}
-function resetDemo(){
-  state = JSON.parse(JSON.stringify(initialData));
-  purchaseDraft = [];
-  blDraft = [];
-  document.getElementById('purchaseDate').value = isoToday();
-  document.getElementById('orderDate').value = isoToday();
-  document.getElementById('blDate').value = isoToday();
-  document.getElementById('searchStock').value = '';
-  document.getElementById('searchOrders').value = '';
-  renderAll();
-}
-
-document.getElementById('searchStock').addEventListener('input', renderStock);
-document.getElementById('filterCategory').addEventListener('change', renderStock);
-document.getElementById('filterEntityView').addEventListener('change', renderStock);
-document.getElementById('searchOrders').addEventListener('input', renderClientOrders);
-document.getElementById('filterOrderEntity').addEventListener('change', renderClientOrders);
-document.getElementById('filterOrderStatus').addEventListener('change', renderClientOrders);
-document.getElementById('blEntity').addEventListener('change', renderBLDraft);
-document.getElementById('blClient').addEventListener('input', renderBLDraft);
-document.getElementById('blDate').addEventListener('input', renderBLDraft);
-
-resetDemo();
 </script>
+
 </body>
 </html>
