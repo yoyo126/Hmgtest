@@ -8,13 +8,14 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9}
 
+/* TOPBAR MOBILE */
 .topbar{
+display:none;
 background:#1f4e79;
 color:white;
 padding:12px;
-display:flex;
 align-items:center;
-gap:10px;
+justify-content:space-between;
 }
 
 .topbar button{
@@ -24,47 +25,54 @@ color:white;
 font-size:22px;
 }
 
+/* MENU */
 .sidebar{
-position:fixed;
-top:0;
-left:-100%;
 width:240px;
-height:100%;
 background:#1f4e79;
+color:white;
+position:fixed;
+height:100%;
 padding:15px;
-transition:0.3s;
 }
 
-.sidebar.open{left:0;}
+.sidebar h2{margin-top:0}
 
 .sidebar button{
 display:block;
 width:100%;
-margin:8px 0;
-padding:10px;
+margin:10px 0;
+padding:12px;
 background:rgba(255,255,255,0.1);
 border:none;
 color:white;
-border-radius:8px;
+border-radius:10px;
+text-align:left;
+font-weight:bold;
 }
 
-.main{padding:15px;}
+/* MAIN */
+.main{
+margin-left:260px;
+padding:20px;
+}
 
 .screen{display:none}
 .screen.active{display:block}
 
+/* CARD */
 .card{
 background:white;
-padding:15px;
-margin-bottom:15px;
-border-radius:10px;
+padding:20px;
+margin-bottom:20px;
+border-radius:12px;
 }
 
+/* FORM */
 input,select,button{
 width:100%;
-padding:10px;
-margin-top:8px;
-border-radius:8px;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
 border:1px solid #ccc;
 }
 
@@ -73,17 +81,43 @@ background:#1f4e79;
 color:white;
 font-weight:bold;
 }
+
+/* MOBILE */
+@media(max-width:900px){
+
+.topbar{display:flex}
+
+.sidebar{
+left:-100%;
+top:0;
+width:250px;
+z-index:1000;
+transition:0.3s;
+}
+
+.sidebar.open{left:0;}
+
+.main{
+margin-left:0;
+padding:15px;
+}
+}
 </style>
 </head>
 
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
 <button onclick="toggleMenu()">☰</button>
 <span>HM Group</span>
 </div>
 
+<!-- MENU -->
 <div class="sidebar" id="sidebar">
+<h2>HM Group</h2>
+
+<button onclick="go('dashboard')">Dashboard</button>
 <button onclick="go('stock')">Stock</button>
 <button onclick="go('sortie')">Sorties</button>
 <button onclick="go('achat')">Achats</button>
@@ -91,45 +125,65 @@ font-weight:bold;
 <button onclick="go('valo')">Valorisation</button>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
-<div id="stock" class="screen active">
+<!-- DASHBOARD -->
+<div id="dashboard" class="screen active">
 <div class="card">
-<h3>Produits</h3>
-<input id="productName">
+<h2>Dashboard</h2>
+<p>Application prête</p>
+</div>
+</div>
+
+<!-- STOCK -->
+<div id="stock" class="screen">
+<div class="card">
+<h2>Produits</h2>
+
+<input id="productName" placeholder="Nom produit">
 <button onclick="addProduct()">Ajouter</button>
+
 <ul id="productList"></ul>
 </div>
 </div>
 
+<!-- SORTIE -->
 <div id="sortie" class="screen">
 <div class="card">
-<h3>Sortie</h3>
+<h2>Sortie</h2>
+
 <select id="productSelect"></select>
-<input id="qty">
+<input id="qty" type="number" placeholder="Quantité">
+
 <button onclick="addSortie()">Valider</button>
 </div>
 </div>
 
+<!-- ACHAT -->
 <div id="achat" class="screen">
 <div class="card">
-<h3>Achat</h3>
+<h2>Achat</h2>
+
 <select id="achatProduct"></select>
-<input id="achatQty">
+<input id="achatQty" type="number" placeholder="Quantité">
+
 <button onclick="addAchat()">Créer</button>
 </div>
 </div>
 
+<!-- BL -->
 <div id="bl" class="screen">
 <div class="card">
-<h3>BL</h3>
+<h2>BL</h2>
 <div id="blList"></div>
 </div>
 </div>
 
+<!-- VALO -->
 <div id="valo" class="screen">
 <div class="card">
-<h3>Valorisation</h3>
+<h2>Valorisation</h2>
 <div id="valoResult"></div>
 </div>
 </div>
@@ -138,10 +192,17 @@ font-weight:bold;
 
 <script>
 
-let products = []
+/* DATA DEMO */
+let products = [
+{name:"Panneau 500W"},
+{name:"Micro-onduleur"},
+{name:"Ballon ECS"}
+]
+
 let movements = []
 let bl = []
 
+/* NAV */
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("open")
 }
@@ -152,44 +213,48 @@ document.getElementById(id).classList.add("active")
 document.getElementById("sidebar").classList.remove("open")
 }
 
+/* PRODUITS */
+function renderProducts(){
+let list=""
+let options=""
+
+products.forEach((p,i)=>{
+list+=`<li>${p.name}</li>`
+options+=`<option value="${i}">${p.name}</option>`
+})
+
+document.getElementById("productList").innerHTML=list
+document.getElementById("productSelect").innerHTML=options
+document.getElementById("achatProduct").innerHTML=options
+}
+
 function addProduct(){
 let name=document.getElementById("productName").value
 products.push({name})
 renderProducts()
 }
 
-function renderProducts(){
-let html=""
-let opt=""
-
-products.forEach((p,i)=>{
-html+=`<li>${p.name}</li>`
-opt+=`<option value="${i}">${p.name}</option>`
-})
-
-document.getElementById("productList").innerHTML=html
-document.getElementById("productSelect").innerHTML=opt
-document.getElementById("achatProduct").innerHTML=opt
-}
-
+/* ACHAT */
 function addAchat(){
 let i=document.getElementById("achatProduct").value
-let qty=document.getElementById("achatQty").value
+let qty=parseInt(document.getElementById("achatQty").value)
 
-movements.push({product:i,qty:parseInt(qty)})
+movements.push({product:i,qty})
 }
 
+/* SORTIE */
 function addSortie(){
 let i=document.getElementById("productSelect").value
-let qty=document.getElementById("qty").value
+let qty=parseInt(document.getElementById("qty").value)
 
-movements.push({product:i,qty:-parseInt(qty)})
+movements.push({product:i,qty:-qty})
 
 bl.push("BL client")
 
 renderBL()
 }
 
+/* BL */
 function renderBL(){
 let html=""
 bl.forEach(b=>{
@@ -197,6 +262,9 @@ html+=`<div class="card">${b}</div>`
 })
 document.getElementById("blList").innerHTML=html
 }
+
+/* INIT */
+renderProducts()
 
 </script>
 
