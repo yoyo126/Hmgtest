@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HM Group — V8.6 final</title>
+<title>HM Group — V8.7 final</title>
 <style>
 :root{
   --bg:#f3f7fb;--panel:#fff;--panel-soft:#f8fbff;--line:#d9e4f0;--text:#122033;--muted:#66758a;
@@ -80,7 +80,9 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 .row-actions{display:flex;gap:8px;flex-wrap:wrap}
 .badge-active{display:inline-block;padding:4px 8px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px;font-weight:700}
 .badge-inactive{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5e7eb;color:#374151;font-size:12px;font-weight:700}
-.notice{margin-top:12px;padding:10px 12px;border-radius:12px;background:#eef6ff;color:#1d4ed8;font-size:13px;display:none}
+.notice{margin-top:12px;padding:10px 12px;border-radius:12px;background:#eef6ff;color:#1d4ed8;font-size:13px;display:none;white-space:pre-wrap}
+.import-box{margin-top:14px;padding:14px;border:1px dashed #9fb8d3;border-radius:14px;background:#f9fcff}
+.import-result{margin-top:12px;padding:12px;border-radius:12px;background:#f8fafc;border:1px solid var(--line);font-size:13px;white-space:pre-wrap}
 @media (max-width:1200px){
   .app{grid-template-columns:1fr}
   .sidebar{position:fixed;left:-100%;top:0;width:280px;height:100vh;z-index:1000;transition:.25s}
@@ -116,8 +118,8 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
     </div>
 
     <div class="sidebox">
-      <h4>Version V8.6</h4>
-      <p>Visuel conservé. Paramètres enrichis avec actif / inactif, modification et suppression sécurisées.</p>
+      <h4>Version V8.7</h4>
+      <p>Visuel conservé. Import CSV ajouté sans casser la structure.</p>
     </div>
   </aside>
 
@@ -129,7 +131,7 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
         <h1 id="pageTitle">Dashboard</h1>
         <p id="pageSub">Vue générale : stock, alertes, commandes client, achats en retard et rappels.</p>
       </div>
-      <button class="btn soft">V8.6</button>
+      <button class="btn soft">V8.7</button>
     </div>
 
     <section id="dashboard" class="screen active">
@@ -165,7 +167,8 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 
     <section id="stock" class="screen">
       <div class="card section">
-        <div class="sectionhead"><div><h3>Stock dépôt commun</h3><p>Le mini se paramètre dans Paramètres &gt; Produits.</p></div></div>
+        <div class="sectionhead"><div><h3>Stock dépôt commun</h3><p>Le mini se paramètre dans Paramètres &gt; Produits. Les lignes importées s’affichent en dessous.</p></div></div>
+
         <div class="toolbar">
           <input placeholder="Recherche produit, référence, marque..." />
           <select id="stockFilter">
@@ -176,12 +179,23 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
           <select><option>Toutes catégories</option><option>Photovoltaïque</option><option>PAC</option><option>ECS</option></select>
           <button class="btn soft" onclick="applyStockFilter()">Actualiser</button>
         </div>
+
         <div class="table-scroll">
           <table>
             <thead>
               <tr><th>Réf</th><th>Produit</th><th>Marque</th><th>Groupe</th><th>Global</th><th>Mini</th><th>CPTE</th><th>Essentiel</th><th>Dernier PA</th><th>Statut</th></tr>
             </thead>
             <tbody id="stockBody"></tbody>
+          </table>
+        </div>
+
+        <div class="block" style="margin-top:14px">
+          <div class="sectionhead"><div><h3 style="font-size:16px">Stock importé</h3><p>Résultat brut de l’import CSV.</p></div></div>
+          <table>
+            <thead><tr><th>Référence produit</th><th>Quantité calculée</th></tr></thead>
+            <tbody id="importStockBody">
+              <tr><td colspan="2" class="muted">Aucun import pour le moment</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -456,6 +470,16 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
             <button class="btn orange">Ajouter commentaire</button>
           </div>
         </div>
+
+        <div class="block" style="margin-top:14px">
+          <div class="sectionhead"><div><h3 style="font-size:16px">Sorties importées</h3><p>Historique brut issu du CSV.</p></div></div>
+          <table>
+            <thead><tr><th>Date</th><th>Client</th><th>Société</th><th>Référence produit</th><th>Quantité</th><th>Commentaire</th></tr></thead>
+            <tbody id="importSortiesBody">
+              <tr><td colspan="6" class="muted">Aucun import pour le moment</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -593,6 +617,22 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
             </table>
             <div class="notice" id="kitsNotice"></div>
           </div>
+
+          <div class="import-box">
+            <div class="sectionhead"><div><h3 style="font-size:16px">Import CSV</h3><p>Test d’import achats et sorties sans casser le reste du CRM.</p></div></div>
+
+            <div class="form3">
+              <input type="file" id="fileInput" accept=".csv" />
+              <select id="importType">
+                <option value="auto">Détection auto</option>
+                <option value="achat">Achats</option>
+                <option value="sortie">Sorties</option>
+              </select>
+              <button class="btn primary" onclick="importCSV()">Importer</button>
+            </div>
+
+            <div class="import-result" id="importResult">Aucun fichier importé pour le moment.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -621,7 +661,7 @@ const meta = {
   purchases:["Achats","Commandes fournisseur, dates et réception."],
   bl:["BL","Historique, PDF et coût interne."],
   valuation:["Valorisation","Valorisation FIFO à date avec filtres Global / CPTE / Essentiel."],
-  params:["Paramètres","Produits, groupes, sociétés et kits."],
+  params:["Paramètres","Produits, groupes, sociétés, kits et import CSV."],
   moves:["Mouvements","Historique des mouvements."]
 };
 
@@ -658,6 +698,10 @@ const paramData = {
     {id:3,name:"Ancien kit démo",active:false,used:true}
   ]
 };
+
+let achatsImport = [];
+let sortiesImport = [];
+let stockImport = {};
 
 function formatEuro(v){
   return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(v||0);
@@ -748,12 +792,10 @@ function toggleActive(type, id){
 function editItem(type, id){
   const item = paramData[type].find(x=>x.id===id);
   if(!item) return;
-
   if(item.used){
     showNotice(type+'Notice', 'Impossible de modifier : déjà utilisé');
     return;
   }
-
   const next = prompt("Modifier le nom :", item.name);
   if(next && next.trim()){
     item.name = next.trim();
@@ -765,12 +807,10 @@ function editItem(type, id){
 function deleteItem(type, id){
   const item = paramData[type].find(x=>x.id===id);
   if(!item) return;
-
   if(item.used){
     showNotice(type+'Notice', 'Impossible de supprimer : déjà utilisé');
     return;
   }
-
   if(confirmDelete(item.name)){
     paramData[type] = paramData[type].filter(x=>x.id!==id);
     renderParamLists();
@@ -784,7 +824,6 @@ function renderParamTable(type, bodyId){
     const status = item.active
       ? '<span class="badge-active">Actif</span>'
       : '<span class="badge-inactive">Inactif</span>';
-
     const used = item.used
       ? '<span class="pill pill-orange">Oui</span>'
       : '<span class="pill pill-green">Non</span>';
@@ -811,6 +850,135 @@ function renderParamLists(){
   renderParamTable('kits','kitsCreatedBody');
 }
 
+function renderImportStock(){
+  const body = document.getElementById('importStockBody');
+  const keys = Object.keys(stockImport);
+  if(keys.length === 0){
+    body.innerHTML = `<tr><td colspan="2" class="muted">Aucun import pour le moment</td></tr>`;
+    return;
+  }
+  body.innerHTML = keys.map(ref=>`<tr><td>${ref}</td><td>${stockImport[ref]}</td></tr>`).join('');
+}
+
+function renderImportSorties(){
+  const body = document.getElementById('importSortiesBody');
+  if(sortiesImport.length === 0){
+    body.innerHTML = `<tr><td colspan="6" class="muted">Aucun import pour le moment</td></tr>`;
+    return;
+  }
+  body.innerHTML = sortiesImport.map(row=>`<tr>
+    <td>${row.date || ''}</td>
+    <td>${row.client || ''}</td>
+    <td>${row.societe || ''}</td>
+    <td>${row.reference_produit || ''}</td>
+    <td>${row.quantite || ''}</td>
+    <td>${row.commentaire || ''}</td>
+  </tr>`).join('');
+}
+
+function csvLineToArray(line){
+  const result = [];
+  let current = '';
+  let insideQuotes = false;
+
+  for(let i=0;i<line.length;i++){
+    const char = line[i];
+    const next = line[i+1];
+
+    if(char === '"'){
+      if(insideQuotes && next === '"'){
+        current += '"';
+        i++;
+      } else {
+        insideQuotes = !insideQuotes;
+      }
+    } else if(char === ',' && !insideQuotes){
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current);
+  return result.map(v=>v.trim());
+}
+
+function importCSV(){
+  const file = document.getElementById('fileInput').files[0];
+  if(!file){
+    document.getElementById('importResult').textContent = 'Choisis un fichier CSV.';
+    return;
+  }
+
+  const forcedType = document.getElementById('importType').value;
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const text = e.target.result.replace(/\r/g,'');
+    const lines = text.split('\n').filter(l=>l.trim() !== '');
+
+    if(lines.length < 2){
+      document.getElementById('importResult').textContent = 'Fichier vide ou invalide.';
+      return;
+    }
+
+    const headers = csvLineToArray(lines[0]);
+    let type = forcedType;
+
+    if(type === 'auto'){
+      if(headers.includes('fournisseur')) type = 'achat';
+      else if(headers.includes('client')) type = 'sortie';
+      else type = 'inconnu';
+    }
+
+    if(type === 'inconnu'){
+      document.getElementById('importResult').textContent = 'Impossible de détecter le type du fichier.';
+      return;
+    }
+
+    let importedCount = 0;
+
+    for(let i=1;i<lines.length;i++){
+      const cols = csvLineToArray(lines[i]);
+      const row = {};
+      headers.forEach((h,idx)=> row[h.trim()] = cols[idx] || '');
+
+      const ref = row.reference_produit;
+      const qty = parseFloat((row.quantite || '0').replace(',','.'));
+
+      if(!ref || isNaN(qty)) continue;
+      if(!stockImport[ref]) stockImport[ref] = 0;
+
+      if(type === 'achat'){
+        achatsImport.push(row);
+        stockImport[ref] += qty;
+        importedCount++;
+      }
+
+      if(type === 'sortie'){
+        sortiesImport.push(row);
+        stockImport[ref] -= qty;
+        importedCount++;
+      }
+    }
+
+    renderImportStock();
+    renderImportSorties();
+
+    document.getElementById('importResult').textContent =
+      `Import terminé.
+Type détecté : ${type}
+Lignes importées : ${importedCount}
+
+Totaux actuels :
+- Achats importés : ${achatsImport.length}
+- Sorties importées : ${sortiesImport.length}
+- Références stockées : ${Object.keys(stockImport).length}`;
+  };
+
+  reader.readAsText(file, 'utf-8');
+}
+
 document.querySelectorAll('.navbtn').forEach(btn=>{
   btn.addEventListener('click',()=>switchScreen(btn.dataset.screen));
 });
@@ -818,6 +986,8 @@ document.querySelectorAll('.navbtn').forEach(btn=>{
 renderStockTable();
 renderValuation();
 renderParamLists();
+renderImportStock();
+renderImportSorties();
 </script>
 </body>
 </html>
