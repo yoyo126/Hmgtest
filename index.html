@@ -8,6 +8,7 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9}
 
+/* TOPBAR MOBILE */
 .topbar{
 display:none;
 background:#1f4e79;
@@ -26,6 +27,7 @@ font-size:22px;
 cursor:pointer;
 }
 
+/* MENU */
 .sidebar{
 width:220px;
 background:#1f4e79;
@@ -42,30 +44,35 @@ transition:0.3s;
 display:block;
 width:100%;
 margin:8px 0;
-padding:10px;
+padding:12px;
 background:rgba(255,255,255,0.1);
 border:none;
 color:white;
-border-radius:8px;
+border-radius:10px;
 cursor:pointer;
 text-align:left;
+font-weight:bold;
 }
 
+/* MAIN */
 .main{
 margin-left:230px;
 padding:15px;
 }
 
+/* SCREENS */
 .screen{display:none}
 .screen.active{display:block}
 
+/* CARD */
 .card{
 background:white;
 padding:15px;
 margin-bottom:15px;
-border-radius:10px;
+border-radius:12px;
 }
 
+/* FORM */
 input,select,button{
 width:100%;
 padding:10px;
@@ -87,6 +94,7 @@ gap:10px;
 
 .row>div{flex:1}
 
+/* MOBILE */
 @media(max-width:900px){
 
 .topbar{display:flex}
@@ -95,6 +103,7 @@ gap:10px;
 left:-100%;
 top:0;
 z-index:1000;
+width:250px;
 }
 
 .sidebar.open{
@@ -114,7 +123,7 @@ padding:10px;
 
 <body>
 
-<!-- TOP BAR MOBILE -->
+<!-- TOPBAR -->
 <div class="topbar">
 <button onclick="toggleMenu()">☰</button>
 <span>HM Group</span>
@@ -145,63 +154,49 @@ padding:10px;
 <h3>Produits</h3>
 <input id="productName" placeholder="Nom produit">
 <button onclick="addProduct()">Ajouter</button>
-
 <ul id="productList"></ul>
 </div>
 </div>
 
 <div id="sortie" class="screen">
 <div class="card">
-<h3>Sortie</h3>
+<h3>Nouvelle sortie</h3>
 
 <input id="client" placeholder="Client">
-
 <select id="productSelect"></select>
-
 <input id="qty" type="number" placeholder="Quantité">
-
 <input id="price" placeholder="Prix">
 
 <button onclick="addSortie()">Valider sortie</button>
-
 </div>
 </div>
 
 <div id="achat" class="screen">
 <div class="card">
-<h3>Achat</h3>
+<h3>Achat fournisseur</h3>
 
 <select id="achatProduct"></select>
-
 <input id="achatQty" placeholder="Quantité">
 <input id="achatPrice" placeholder="Prix">
 
 <button onclick="addAchat()">Créer achat</button>
-
 </div>
 </div>
 
 <div id="bl" class="screen">
 <div class="card">
 <h3>BL</h3>
-
 <input placeholder="Recherche client">
-
 <div id="blList"></div>
-
 </div>
 </div>
 
 <div id="valo" class="screen">
 <div class="card">
 <h3>Valorisation</h3>
-
 <input type="date" id="date">
-
 <button onclick="calcValo()">Calculer</button>
-
 <div id="valoResult"></div>
-
 </div>
 </div>
 
@@ -220,10 +215,10 @@ padding:10px;
 <script>
 const supabase = supabase.createClient(
 "https://siirathwhnbrnlpsrkifr.supabase.co",
-"TA_CLE_ICI"
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpaXJhdHdobmJybmxwc3JraWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NTU5NjYsImV4cCI6MjA5MjAzMTk2Nn0.f1wmZVst3Sh8CKgxpRxL3PrXpThXSk8vaQxlIXs6940"
 )
 
-// NAV
+// MENU
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("open")
 }
@@ -237,9 +232,7 @@ document.getElementById("sidebar").classList.remove("open")
 // PRODUITS
 async function addProduct(){
 let name=document.getElementById("productName").value
-
 await supabase.from("products").insert([{name}])
-
 loadProducts()
 }
 
@@ -271,7 +264,6 @@ quantity:qty,
 type:"purchase",
 price:price
 }])
-
 }
 
 // SORTIE
@@ -288,9 +280,7 @@ type:"sortie",
 price:price
 }])
 
-await supabase.from("bl").insert([{
-client:client
-}])
+await supabase.from("bl").insert([{client}])
 
 loadBL()
 }
