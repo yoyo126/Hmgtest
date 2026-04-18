@@ -1,272 +1,582 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HM Group</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HM Group — V8 base validée</title>
 <style>
-body{margin:0;font-family:Arial;background:#f4f6f9}
-
-/* TOPBAR MOBILE */
-.topbar{
-display:none;
-background:#1f4e79;
-color:white;
-padding:12px;
-align-items:center;
-justify-content:space-between;
-}
-
-.topbar button{
-background:none;
-border:none;
-color:white;
-font-size:22px;
-}
-
-/* MENU */
-.sidebar{
-width:240px;
-background:#1f4e79;
-color:white;
-position:fixed;
-height:100%;
-padding:15px;
-}
-
-.sidebar h2{margin-top:0}
-
-.sidebar button{
-display:block;
-width:100%;
-margin:10px 0;
-padding:12px;
-background:rgba(255,255,255,0.1);
-border:none;
-color:white;
-border-radius:10px;
-text-align:left;
-font-weight:bold;
-}
-
-/* MAIN */
-.main{
-margin-left:260px;
-padding:20px;
-}
-
+:root{--bg:#f3f7fb;--panel:#fff;--panel-soft:#f8fbff;--line:#d9e4f0;--text:#122033;--muted:#66758a;--hm:#2f7fbd;--ess:#8dc63f;--blue-soft:#e9f3fb;--shadow:0 10px 30px rgba(18,32,51,.08);--radius:18px}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:linear-gradient(180deg,#0f172a 0%, #13324d 35%, #215e8d 100%);color:#fff;padding:18px 16px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;gap:12px;align-items:center;padding:8px 6px 18px;border-bottom:1px solid rgba(255,255,255,.12)}
+.brand .logo-box{width:74px;height:44px;border-radius:10px;background:#fff;color:#1f4e79;display:flex;align-items:center;justify-content:center;font-weight:700}
+.brand .txt strong{display:block;font-size:18px;line-height:1.15}
+.brand .txt span{display:block;font-size:12px;color:#dbeafe;margin-top:4px}
+.nav{display:grid;gap:8px;margin-top:18px}
+.nav button{border:none;background:transparent;color:#eaf3ff;text-align:left;padding:12px 14px;border-radius:14px;cursor:pointer;font-weight:700;font-size:14px}
+.nav button.active{background:rgba(255,255,255,.15)}
+.nav button:hover{background:rgba(255,255,255,.10)}
+.sidebox{margin-top:18px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
+.sidebox h4{margin:0 0 8px;font-size:14px}
+.sidebox p{margin:0;color:#dbeafe;font-size:12px;line-height:1.5}
+.content{padding:18px}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
+.title h1{margin:0;font-size:30px}
+.title p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.btn{border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;font-size:14px}
+.btn.primary{background:var(--hm);color:#fff}
+.btn.soft{background:var(--blue-soft);color:#1d4ed8}
+.btn.green{background:#dcfce7;color:#166534}
+.btn.orange{background:#ffedd5;color:#9a3412}
+.btn.red{background:#fee2e2;color:#991b1b}
+.btn.small{padding:7px 10px;font-size:12px}
 .screen{display:none}
 .screen.active{display:block}
-
-/* CARD */
-.card{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:12px;
-}
-
-/* FORM */
-input,select,button{
-width:100%;
-padding:12px;
-margin-top:10px;
-border-radius:10px;
-border:1px solid #ccc;
-}
-
-button{
-background:#1f4e79;
-color:white;
-font-weight:bold;
-}
-
-/* MOBILE */
-@media(max-width:900px){
-
-.topbar{display:flex}
-
-.sidebar{
-left:-100%;
-top:0;
-width:250px;
-z-index:1000;
-transition:0.3s;
-}
-
-.sidebar.open{left:0;}
-
-.main{
-margin-left:0;
-padding:15px;
-}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.kpi{padding:18px}
+.kpi .label{font-size:13px;color:var(--muted)}
+.kpi .value{font-size:30px;font-weight:800;margin-top:8px}
+.kpi .note{font-size:12px;color:var(--muted);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.grid2eq{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.section{padding:16px}
+.sectionhead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}
+.sectionhead h3{margin:0;font-size:18px}
+.sectionhead p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.toolbar{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:10px;margin-bottom:12px}
+.form4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.form5{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:10px}
+.form3{display:grid;grid-template-columns:1.6fr .8fr auto;gap:10px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid #cdd8e4;border-radius:12px;background:#fff;color:var(--text)}
+textarea{min-height:78px;resize:vertical}
+label{display:block;font-size:12px;color:var(--muted);margin:2px 0 6px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px 10px;border-top:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
+th{background:#fbfdff;color:var(--muted);font-weight:700}
+.pill{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}
+.pill-blue{background:#dbeafe;color:#1d4ed8}
+.pill-green{background:#dcfce7;color:#166534}
+.pill-orange{background:#ffedd5;color:#9a3412}
+.pill-red{background:#fee2e2;color:#991b1b}
+.pill-slate{background:#eef2f7;color:#334155}
+.list{display:grid;gap:10px}
+.listitem{border:1px solid var(--line);background:var(--panel-soft);border-radius:14px;padding:14px}
+.listitem strong{display:block;margin-bottom:5px}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+.muted{color:var(--muted)}
+.compact{font-size:13px;line-height:1.45}
+.warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:14px;padding:12px}
+.hmbar{height:6px;background:linear-gradient(90deg,var(--hm) 0%, var(--ess) 100%);border-radius:999px;margin:0 0 14px}
+.table-scroll{overflow:auto}
+.block{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--panel-soft)}
+.subtle{background:#fafcff}
+.sep{height:1px;background:var(--line);margin:14px 0}
+.mobile-toggle{display:none}
+@media (max-width:1200px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:-100%;top:0;width:280px;height:100vh;z-index:1000;transition:.25s}
+  .sidebar.open{left:0}
+  .content{padding:12px}
+  .topbar{flex-direction:column}
+  .kpis,.grid2,.grid2eq,.toolbar,.form4,.form5,.form3{grid-template-columns:1fr}
+  .mobile-toggle{display:inline-flex;align-items:center;justify-content:center;border:none;border-radius:12px;background:var(--hm);color:#fff;padding:10px 14px;font-weight:700;cursor:pointer}
 }
 </style>
 </head>
-
 <body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo-box">HM</div>
+      <div class="txt"><strong>HM Group</strong><span>Stock • Commandes • BL • Achats</span></div>
+    </div>
+    <div class="nav">
+      <button class="navbtn active" data-screen="dashboard">Dashboard</button>
+      <button class="navbtn" data-screen="stock">Stock</button>
+      <button class="navbtn" data-screen="simpleOut">Sorties simples</button>
+      <button class="navbtn" data-screen="orders">Commandes attribuées</button>
+      <button class="navbtn" data-screen="purchases">Achats</button>
+      <button class="navbtn" data-screen="bl">BL</button>
+      <button class="navbtn" data-screen="params">Paramètres</button>
+      <button class="navbtn" data-screen="moves">Mouvements</button>
+    </div>
+    <div class="sidebox">
+      <h4>Base visuelle validée</h4>
+      <p>On garde cette arborescence et ce style. Les ajustements se font uniquement à l’intérieur des écrans.</p>
+    </div>
+  </aside>
 
-<!-- TOPBAR -->
-<div class="topbar">
-<button onclick="toggleMenu()">☰</button>
-<span>HM Group</span>
-</div>
+  <main class="content">
+    <div class="topbar">
+      <div class="title">
+        <button class="mobile-toggle" onclick="toggleSidebar()">☰ Menu</button>
+        <div class="hmbar"></div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageSub">Vue générale : stock, alertes, commandes client, achats en retard et rappels.</p>
+      </div>
+      <button class="btn soft">V8 base</button>
+    </div>
 
-<!-- MENU -->
-<div class="sidebar" id="sidebar">
-<h2>HM Group</h2>
+    <section id="dashboard" class="screen active">
+      <div class="kpis">
+        <div class="card kpi"><div class="label">Stock global dépôt</div><div class="value">1 320</div><div class="note">Toutes sociétés confondues</div></div>
+        <div class="card kpi"><div class="label">Valeur stock</div><div class="value">86 420 €</div><div class="note">Affichage démo</div></div>
+        <div class="card kpi"><div class="label">Produits sous mini</div><div class="value">3</div><div class="note">Calcul sur le global</div></div>
+        <div class="card kpi"><div class="label">Commandes ouvertes</div><div class="value">8</div><div class="note">Attendu / Reçu / Programmé / Repoussé</div></div>
+      </div>
 
-<button onclick="go('dashboard')">Dashboard</button>
-<button onclick="go('stock')">Stock</button>
-<button onclick="go('sortie')">Sorties</button>
-<button onclick="go('achat')">Achats</button>
-<button onclick="go('bl')">BL</button>
-<button onclick="go('valo')">Valorisation</button>
-</div>
+      <div class="grid2">
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Rappels et alertes</h3><p>Ce bloc reste comme dans la version validée.</p></div></div>
+          <div class="list">
+            <div class="listitem"><strong>Retard achat fournisseur</strong><div class="compact muted">Rexel • prévu le 22/04</div></div>
+            <div class="listitem"><strong>Commande à traiter</strong><div class="compact muted">Dupont • attendu • prévu le 23/04</div></div>
+            <div class="listitem"><strong>Info compta à transmettre</strong><div class="compact muted">Dujardin • stock Essentiel • facturé à FEV</div></div>
+          </div>
+        </div>
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Répartition analytique</h3><p>Ventilation CPTE / Essentiel</p></div></div>
+          <table>
+            <thead><tr><th>Société</th><th>Qté</th><th>Valeur</th></tr></thead>
+            <tbody>
+              <tr><td>CPTE Conseils</td><td>742</td><td>44 980 €</td></tr>
+              <tr><td>Essentiel Énergie</td><td>578</td><td>41 440 €</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-<!-- MAIN -->
-<div class="main">
+    <section id="stock" class="screen">
+      <div class="card section">
+        <div class="sectionhead"><div><h3>Stock dépôt commun</h3><p>Le mini se paramètre dans Paramètres &gt; Produits.</p></div></div>
+        <div class="toolbar">
+          <input placeholder="Recherche produit, référence, marque..." />
+          <select><option>Toutes catégories</option><option>Photovoltaïque</option><option>PAC</option><option>ECS</option></select>
+          <select><option>Vue globale</option><option>CPTE Conseils</option><option>Essentiel Énergie</option></select>
+          <button class="btn soft">Actualiser</button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Réf</th><th>Produit</th><th>Marque</th><th>Groupe</th><th>Global</th><th>Mini</th><th>CPTE</th><th>Essentiel</th><th>Dernier PA</th><th>Statut</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>PV500-JA</td><td>Panneau photovoltaïque 500W</td><td>JA Solar</td><td>Photovoltaïque</td><td>420</td><td>300</td><td>260</td><td>160</td><td>78 €</td><td><span class="pill pill-green">OK</span></td></tr>
+              <tr><td>HM-1000</td><td>Micro-onduleur Hoymiles HMS-1000</td><td>Hoymiles</td><td>Photovoltaïque</td><td>190</td><td>80</td><td>90</td><td>100</td><td>145 €</td><td><span class="pill pill-green">OK</span></td></tr>
+              <tr><td>COFF-AC</td><td>Coffret AC 1 rangée</td><td>Legrand</td><td>Électricité</td><td>12</td><td>20</td><td>4</td><td>8</td><td>74 €</td><td><span class="pill pill-orange">Stock faible</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="screen active">
-<div class="card">
-<h2>Dashboard</h2>
-<p>Application prête</p>
-</div>
-</div>
+    <section id="simpleOut" class="screen">
+      <div class="grid2eq">
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Nouvelle sortie simple</h3><p>Écran centré sur la création. Les actions de modification et retour sont à part.</p></div></div>
 
-<!-- STOCK -->
-<div id="stock" class="screen">
-<div class="card">
-<h2>Produits</h2>
+          <div class="form4">
+            <div><label>Société stock</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
+            <div><label>À facturer</label><select><option>Facturé à = société stock</option><option>CPTE Conseils</option><option>Essentiel Énergie</option><option>FEV</option></select></div>
+            <div><label>Client final</label><input placeholder="Client / destinataire" value="Dujardin" /></div>
+            <div><label>Commande liée</label><select><option>Sans commande liée</option><option>Dujardin — Essentiel</option><option>Dupont — CPTE</option></select></div>
+          </div>
 
-<input id="productName" placeholder="Nom produit">
-<button onclick="addProduct()">Ajouter</button>
+          <div class="block" style="margin-top:14px">
+            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter un produit</h3><p>Tu peux taper les premières lettres pour le retrouver plus vite.</p></div></div>
+            <div class="form3">
+              <input list="productsList" placeholder="Tape ex : micro, panneau, ballon..." />
+              <input type="number" min="1" value="12" />
+              <button class="btn primary">Ajouter produit</button>
+            </div>
+            <datalist id="productsList">
+              <option value="Panneau photovoltaïque 500W"></option>
+              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
+              <option value="Ballon thermodynamique 190L"></option>
+              <option value="PAC LG 12 kW"></option>
+            </datalist>
 
-<ul id="productList"></ul>
-</div>
-</div>
+            <div class="sep"></div>
 
-<!-- SORTIE -->
-<div id="sortie" class="screen">
-<div class="card">
-<h2>Sortie</h2>
+            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter un kit</h3><p>Le kit reste séparé visuellement du produit pour éviter toute confusion.</p></div></div>
+            <div class="form3">
+              <input list="kitsList" placeholder="Tape ex : kit 12, kit pac..." />
+              <input type="number" min="1" value="1" />
+              <button class="btn orange">Ajouter kit</button>
+            </div>
+            <datalist id="kitsList">
+              <option value="Kit 12 panneaux monophasé"></option>
+              <option value="Kit PAC LG 12 kW + ballon"></option>
+            </datalist>
 
-<select id="productSelect"></select>
-<input id="qty" type="number" placeholder="Quantité">
+            <div class="sep"></div>
 
-<button onclick="addSortie()">Valider</button>
-</div>
-</div>
+            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter une ligne commentaire</h3><p>Le commentaire est une ligne indépendante, pas attachée à un produit.</p></div></div>
+            <div class="form3">
+              <input style="grid-column: span 2" placeholder="Ex : palette à compléter lundi / matériel remis au technicien..." />
+              <button class="btn soft">Ajouter commentaire</button>
+            </div>
 
-<!-- ACHAT -->
-<div id="achat" class="screen">
-<div class="card">
-<h2>Achat</h2>
+            <table style="margin-top:12px">
+              <thead><tr><th>Type de ligne</th><th>Désignation</th><th>Qté</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Produit</td><td>Panneau photovoltaïque 500W</td><td>12</td><td><button class="btn red small">X</button></td></tr>
+                <tr><td>Produit</td><td>Micro-onduleur Hoymiles HMS-1000</td><td>6</td><td><button class="btn red small">X</button></td></tr>
+                <tr><td>Commentaire</td><td class="muted">Palette à compléter lundi</td><td>-</td><td><button class="btn red small">X</button></td></tr>
+              </tbody>
+            </table>
+          </div>
 
-<select id="achatProduct"></select>
-<input id="achatQty" type="number" placeholder="Quantité">
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+            <button class="btn soft">Éditer le BL</button>
+            <button class="btn primary">Valider sortie + créer BL</button>
+          </div>
+        </div>
 
-<button onclick="addAchat()">Créer</button>
-</div>
-</div>
+        <div class="card section subtle">
+          <div class="sectionhead"><div><h3>Actions sur une sortie existante</h3><p>Placées à part pour ne pas gêner la création d’une nouvelle sortie.</p></div></div>
 
-<!-- BL -->
-<div id="bl" class="screen">
-<div class="card">
-<h2>BL</h2>
-<div id="blList"></div>
-</div>
-</div>
+          <div class="block" style="margin-bottom:14px">
+            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Modifier une sortie</h3><p>Tu reprends le client ou le BL, tu charges la sortie, puis tu modifies.</p></div></div>
+            <div class="form4">
+              <div><label>Recherche client</label><input placeholder="Tape le nom du client" value="Dujardin" /></div>
+              <div><label>Ou N° BL</label><input placeholder="Ex : BL-2026-0012" /></div>
+              <div><label>Action</label><select><option>Modifier la sortie</option></select></div>
+              <div><label>&nbsp;</label><button class="btn soft" style="width:100%">Charger</button></div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:10px">
+              <button class="btn orange">Enregistrer modification</button>
+            </div>
+          </div>
 
-<!-- VALO -->
-<div id="valo" class="screen">
-<div class="card">
-<h2>Valorisation</h2>
-<div id="valoResult"></div>
-</div>
-</div>
+          <div class="block">
+            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Retour de stock</h3><p>Retour complet ou partiel depuis une sortie existante.</p></div></div>
+            <div class="form4">
+              <div><label>Recherche client</label><input placeholder="Tape le nom du client" value="Dujardin" /></div>
+              <div><label>Ou N° BL</label><input placeholder="Ex : BL-2026-0012" /></div>
+              <div><label>Mode de retour</label><select><option>Retour complet</option><option>Retour partiel</option></select></div>
+              <div><label>Produit à retourner</label><input list="productsList" placeholder="Tape le produit" /></div>
+            </div>
+            <div class="form4" style="margin-top:10px">
+              <div><label>Quantité retournée</label><input type="number" min="1" value="1" /></div>
+              <div style="grid-column: span 3"><label>Commentaire retour</label><input placeholder="Ex : erreur de préparation / matériel revenu du chantier" /></div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:10px">
+              <button class="btn green">Valider retour</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <section id="orders" class="screen">
+      <div class="grid2eq">
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Nouvelle commande attribuée</h3><p>Tu remplis tout sur le même écran, puis tu crées la commande à la fin.</p></div></div>
+
+          <div class="form4">
+            <div><label>Société</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
+            <div><label>Facturé à</label><select><option>Interne / même société</option><option>FEV</option><option>Autre société</option></select></div>
+            <div><label>Client final</label><input value="Dupont" /></div>
+            <div><label>Catégorie</label><select><option>Photovoltaïque</option><option>PAC</option><option>ECS</option></select></div>
+          </div>
+
+          <div class="form4" style="margin-top:10px">
+            <div><label>Date de commande</label><input type="date" /></div>
+            <div><label>Date de réception prévue</label><input type="date" /></div>
+            <div style="grid-column: span 2"><label>Commentaire</label><textarea>Commande client de démonstration</textarea></div>
+          </div>
+
+          <div class="block" style="margin-top:16px">
+            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Lignes de commande</h3><p>On reste sur le même écran, puis on crée la commande après.</p></div></div>
+            <div class="form3">
+              <input list="productsList2" placeholder="Tape ex : micro, panneau, ballon..." />
+              <input type="number" min="1" value="12" />
+              <button class="btn orange">Ajouter ligne</button>
+            </div>
+            <datalist id="productsList2">
+              <option value="Panneau photovoltaïque 500W"></option>
+              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
+              <option value="Ballon thermodynamique 190L"></option>
+              <option value="PAC LG 12 kW"></option>
+            </datalist>
+            <table style="margin-top:12px">
+              <thead><tr><th>Produit</th><th>Qté</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Panneau photovoltaïque 500W</td><td>12</td><td><button class="btn red small">X</button></td></tr>
+                <tr><td>Micro-onduleur Hoymiles HMS-1000</td><td>6</td><td><button class="btn red small">X</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;margin-top:12px">
+            <button class="btn primary">Créer la commande</button>
+          </div>
+        </div>
+
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Commandes attribuées</h3><p>Le statut reste géré ici, avec À replacer si besoin.</p></div></div>
+          <div class="toolbar">
+            <input placeholder="Recherche client final, commentaire..." />
+            <select><option>Toutes sociétés</option><option>CPTE Conseils</option><option>Essentiel Énergie</option></select>
+            <select><option>Tous statuts</option><option>Attendu</option><option>Reçu</option><option>Programmé</option><option>Posé</option><option>À replacer</option></select>
+            <button class="btn soft">Filtrer</button>
+          </div>
+          <table>
+            <thead><tr><th>Client final</th><th>Société</th><th>Facturé à</th><th>Statut</th><th>Détail</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Dupont</strong><div class="compact muted">23/04 • Toiture sud-ouest</div></td>
+                <td><span class="pill pill-blue">CPTE</span></td>
+                <td>Interne</td>
+                <td><span class="pill pill-red">Attendu</span></td>
+                <td class="compact">12 × Panneau photovoltaïque 500W<br>6 × Micro-onduleur Hoymiles</td>
+                <td><button class="btn soft small">Modifier</button> <button class="btn soft small">→</button> <button class="btn orange small">Vers BL</button></td>
+              </tr>
+              <tr>
+                <td><strong>Dujardin</strong><div class="compact muted">20/04 • À transmettre compta</div></td>
+                <td><span class="pill pill-green">Essentiel</span></td>
+                <td>FEV</td>
+                <td><span class="pill pill-slate">À replacer</span></td>
+                <td class="compact">1 × PAC LG 12 kW<br>1 × Ballon thermodynamique 190L</td>
+                <td><button class="btn soft small">Modifier</button> <button class="btn orange small">Vers BL</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="purchases" class="screen">
+      <div class="grid2eq">
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Nouvel achat fournisseur</h3><p>Bloc complet remis en place : fournisseur, dates, lignes produit, prix et copie sans prix.</p></div></div>
+
+          <div class="form4">
+            <div><label>Société</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
+            <div><label>Fournisseur</label><input value="Rexel" /></div>
+            <div><label>Date de commande</label><input type="date" /></div>
+            <div><label>Date de réception prévue</label><input type="date" /></div>
+          </div>
+
+          <div class="block" style="margin-top:14px">
+            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter une ligne achat</h3><p>Produit, quantité, prix et commentaire.</p></div></div>
+            <div class="form5">
+              <input list="purchaseProducts" placeholder="Tape ex : panneau, micro..." />
+              <input type="number" min="1" value="100" />
+              <input type="number" step="0.01" value="77.50" />
+              <input placeholder="Commentaire achat" value="Réappro panneaux" />
+              <button class="btn primary">Ajouter ligne</button>
+            </div>
+            <datalist id="purchaseProducts">
+              <option value="Panneau photovoltaïque 500W"></option>
+              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
+              <option value="Ballon thermodynamique 190L"></option>
+              <option value="PAC LG 12 kW"></option>
+            </datalist>
+
+            <table style="margin-top:12px">
+              <thead><tr><th>Produit</th><th>Qté</th><th>Prix</th><th>Commentaire</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Panneau photovoltaïque 500W</td><td>100</td><td>77.50 €</td><td>Réappro panneaux</td><td><button class="btn red small">X</button></td></tr>
+                <tr><td>Micro-onduleur Hoymiles HMS-1000</td><td>50</td><td>144.00 €</td><td>Réappro onduleurs</td><td><button class="btn red small">X</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+            <button class="btn soft">Copier commande fournisseur (sans prix)</button>
+            <button class="btn orange">Créer achat</button>
+          </div>
+        </div>
+
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Achats fournisseur</h3><p>Listing utile pour contrôler les réceptions et les factures.</p></div></div>
+          <div class="toolbar">
+            <input placeholder="Recherche fournisseur..." />
+            <input type="date" />
+            <select><option>Toutes réceptions</option><option>En attente</option><option>Réceptionnée</option><option>Annulée</option></select>
+            <button class="btn soft">Filtrer</button>
+          </div>
+          <table>
+            <thead><tr><th>Fournisseur</th><th>Date commande</th><th>Date prévue</th><th>Date réelle</th><th>Détail / total</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Rexel</strong></td>
+                <td>17/04/2026</td>
+                <td>22/04/2026</td>
+                <td>-</td>
+                <td class="compact">100 × Panneau photovoltaïque 500W<br>50 × Micro-onduleur Hoymiles HMS-1000<br><strong>Total : 14 950 €</strong></td>
+                <td><button class="btn green small">Réceptionné</button> <button class="btn soft small">Voir détail</button></td>
+              </tr>
+              <tr>
+                <td><strong>Sonepar</strong></td>
+                <td>14/04/2026</td>
+                <td>19/04/2026</td>
+                <td>19/04/2026</td>
+                <td class="compact">1 × PAC LG 12 kW<br>1 × Ballon thermodynamique 190L<br><strong>Total : 3 740 €</strong></td>
+                <td><button class="btn soft small">Voir détail</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="bl" class="screen">
+      <div class="card section">
+        <div class="sectionhead"><div><h3>Historique des BL</h3><p>L’onglet BL reste un historique uniquement : consultation et PDF.</p></div></div>
+        <div class="toolbar">
+          <input placeholder="Recherche client / n° BL..." />
+          <select><option>Toutes sociétés</option><option>CPTE Conseils</option><option>Essentiel Énergie</option></select>
+          <select><option>Tous statuts</option><option>Brouillon</option><option>Validé</option><option>Annulé</option></select>
+          <button class="btn soft">Filtrer</button>
+        </div>
+        <table>
+          <thead><tr><th>N° BL</th><th>Date</th><th>Société</th><th>Client final</th><th>Commentaire</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>BL-2026-0012</td><td>22/04/2026</td><td>CPTE Conseils</td><td>Dupont</td><td>Prépa palette client</td><td><button class="btn soft small">Voir PDF</button></td></tr>
+            <tr><td>BL-2026-0013</td><td>22/04/2026</td><td>Essentiel Énergie</td><td>Dujardin</td><td>Sortie ballon + PAC</td><td><button class="btn soft small">Voir PDF</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="params" class="screen">
+      <div class="grid2eq">
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Produits</h3><p>Les produits de démonstration sont remis, avec stock mini paramétrable et groupe choisi dans une liste.</p></div></div>
+
+          <div class="form5">
+            <input placeholder="Référence" />
+            <input placeholder="Produit" />
+            <input placeholder="Marque" />
+            <select><option>Choisir groupe existant</option><option>Photovoltaïque</option><option>Fixation</option><option>PAC</option><option>ECS</option><option>Électricité</option></select>
+            <button class="btn primary">Ajouter produit</button>
+          </div>
+
+          <div class="form4" style="margin-top:10px">
+            <div><label>Stock minimum</label><input type="number" value="300" /></div>
+            <div><label>Société</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
+            <div><label>Actif</label><select><option>Oui</option><option>Non</option></select></div>
+            <div><label>&nbsp;</label><button class="btn soft" style="width:100%">Enregistrer paramètres produit</button></div>
+          </div>
+
+          <table style="margin-top:12px">
+            <thead><tr><th>Réf</th><th>Produit</th><th>Marque</th><th>Groupe</th><th>Stock mini</th></tr></thead>
+            <tbody>
+              <tr><td>PV500-JA</td><td>Panneau photovoltaïque 500W</td><td>JA Solar</td><td>Photovoltaïque</td><td>300</td></tr>
+              <tr><td>HM-1000</td><td>Micro-onduleur Hoymiles HMS-1000</td><td>Hoymiles</td><td>Photovoltaïque</td><td>80</td></tr>
+              <tr><td>RAIL-420</td><td>Rail aluminium 4,20 m</td><td>K2</td><td>Fixation</td><td>200</td></tr>
+              <tr><td>COFF-AC</td><td>Coffret AC 1 rangée</td><td>Legrand</td><td>Électricité</td><td>20</td></tr>
+              <tr><td>PAC-LG12</td><td>PAC LG 12 kW</td><td>LG</td><td>PAC</td><td>2</td></tr>
+              <tr><td>BALL-190</td><td>Ballon thermodynamique 190L</td><td>Thermor</td><td>ECS</td><td>3</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card section">
+          <div class="sectionhead"><div><h3>Groupes / sociétés / kits</h3><p>Blocs complets remis en place.</p></div></div>
+
+          <div class="block" style="margin-bottom:14px">
+            <strong>Créer un groupe</strong>
+            <div class="form3" style="margin-top:10px">
+              <input style="grid-column: span 2" placeholder="Ex : Photovoltaïque" value="Photovoltaïque" />
+              <button class="btn orange">Ajouter groupe</button>
+            </div>
+          </div>
+
+          <div class="block" style="margin-bottom:14px">
+            <strong>Créer une société</strong>
+            <div class="form3" style="margin-top:10px">
+              <input style="grid-column: span 2" placeholder="Ex : FEV" value="FEV" />
+              <button class="btn orange">Ajouter société</button>
+            </div>
+          </div>
+
+          <div class="block">
+            <strong>Créer un kit</strong>
+            <div class="form4" style="margin-top:10px">
+              <div><label>Nom du kit</label><input value="Kit 12 panneaux monophasé" /></div>
+              <div><label>Produit</label><input list="kitProducts" placeholder="Tape un produit" /></div>
+              <div><label>Quantité</label><input type="number" min="1" value="12" /></div>
+              <div><label>&nbsp;</label><button class="btn orange" style="width:100%">Ajouter ligne au kit</button></div>
+            </div>
+            <datalist id="kitProducts">
+              <option value="Panneau photovoltaïque 500W"></option>
+              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
+              <option value="Rail aluminium 4,20 m"></option>
+              <option value="Coffret AC 1 rangée"></option>
+            </datalist>
+
+            <table style="margin-top:12px">
+              <thead><tr><th>Produit</th><th>Qté</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Panneau photovoltaïque 500W</td><td>12</td><td><button class="btn red small">X</button></td></tr>
+                <tr><td>Micro-onduleur Hoymiles HMS-1000</td><td>6</td><td><button class="btn red small">X</button></td></tr>
+                <tr><td>Rail aluminium 4,20 m</td><td>20</td><td><button class="btn red small">X</button></td></tr>
+                <tr><td>Coffret AC 1 rangée</td><td>1</td><td><button class="btn red small">X</button></td></tr>
+              </tbody>
+            </table>
+
+            <div style="display:flex;justify-content:flex-end;margin-top:10px">
+              <button class="btn primary">Enregistrer le kit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="moves" class="screen">
+      <div class="card section">
+        <div class="sectionhead"><div><h3>Mouvements</h3><p>Historique des mouvements.</p></div></div>
+        <table>
+          <thead><tr><th>Date</th><th>Type</th><th>Société stock</th><th>Facturé à</th><th>Produit</th><th>Qté</th><th>Commentaire</th></tr></thead>
+          <tbody>
+            <tr><td>22/04/2026</td><td>Sortie simple</td><td>CPTE Conseils</td><td>FEV</td><td>Ballon thermodynamique 190L</td><td>-1</td><td>Ballon sorti et attribué à la commande</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 </div>
 
 <script>
+const meta = {
+  dashboard:["Dashboard","Vue générale : stock, alertes, commandes client, achats en retard et rappels."],
+  stock:["Stock","Tableau principal type Excel."],
+  simpleOut:["Sorties simples","Sorties de stock hors commandes attribuées."],
+  orders:["Commandes attribuées","Suivi des commandes client avec statuts et filtres."],
+  purchases:["Achats","Commandes fournisseur, dates et réception."],
+  bl:["BL","Historique, PDF et traçabilité."],
+  params:["Paramètres","Produits, groupes, sociétés et kits."],
+  moves:["Mouvements","Historique des mouvements."]
+};
 
-/* DATA DEMO */
-let products = [
-{name:"Panneau 500W"},
-{name:"Micro-onduleur"},
-{name:"Ballon ECS"}
-]
-
-let movements = []
-let bl = []
-
-/* NAV */
-function toggleMenu(){
-document.getElementById("sidebar").classList.toggle("open")
+function switchScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.navbtn[data-screen="${name}"]`).classList.add('active');
+  document.getElementById('pageTitle').textContent = meta[name][0];
+  document.getElementById('pageSub').textContent = meta[name][1];
+  if (window.innerWidth <= 1200) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function go(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"))
-document.getElementById(id).classList.add("active")
-document.getElementById("sidebar").classList.remove("open")
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
 }
 
-/* PRODUITS */
-function renderProducts(){
-let list=""
-let options=""
-
-products.forEach((p,i)=>{
-list+=`<li>${p.name}</li>`
-options+=`<option value="${i}">${p.name}</option>`
-})
-
-document.getElementById("productList").innerHTML=list
-document.getElementById("productSelect").innerHTML=options
-document.getElementById("achatProduct").innerHTML=options
-}
-
-function addProduct(){
-let name=document.getElementById("productName").value
-products.push({name})
-renderProducts()
-}
-
-/* ACHAT */
-function addAchat(){
-let i=document.getElementById("achatProduct").value
-let qty=parseInt(document.getElementById("achatQty").value)
-
-movements.push({product:i,qty})
-}
-
-/* SORTIE */
-function addSortie(){
-let i=document.getElementById("productSelect").value
-let qty=parseInt(document.getElementById("qty").value)
-
-movements.push({product:i,qty:-qty})
-
-bl.push("BL client")
-
-renderBL()
-}
-
-/* BL */
-function renderBL(){
-let html=""
-bl.forEach(b=>{
-html+=`<div class="card">${b}</div>`
-})
-document.getElementById("blList").innerHTML=html
-}
-
-/* INIT */
-renderProducts()
-
+document.querySelectorAll('.navbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>switchScreen(btn.dataset.screen));
+});
 </script>
-
 </body>
 </html>
