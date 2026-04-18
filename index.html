@@ -8,15 +8,14 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f6f9}
 
-/* TOPBAR MOBILE */
+/* TOPBAR */
 .topbar{
-display:none;
+display:flex;
 background:#1f4e79;
 color:white;
 padding:12px;
 align-items:center;
-gap:10px;
-font-weight:bold;
+justify-content:space-between;
 }
 
 .topbar button{
@@ -29,16 +28,18 @@ cursor:pointer;
 
 /* MENU */
 .sidebar{
-width:220px;
-background:#1f4e79;
-color:white;
 position:fixed;
+top:0;
+left:-100%;
+width:240px;
 height:100%;
+background:#1f4e79;
 padding:15px;
 transition:0.3s;
+z-index:1000;
 }
 
-.sidebar h2{margin-top:0}
+.sidebar.open{left:0;}
 
 .sidebar button{
 display:block;
@@ -49,22 +50,17 @@ background:rgba(255,255,255,0.1);
 border:none;
 color:white;
 border-radius:10px;
-cursor:pointer;
 text-align:left;
-font-weight:bold;
 }
 
 /* MAIN */
 .main{
-margin-left:230px;
 padding:15px;
 }
 
-/* SCREENS */
 .screen{display:none}
 .screen.active{display:block}
 
-/* CARD */
 .card{
 background:white;
 padding:15px;
@@ -72,7 +68,6 @@ margin-bottom:15px;
 border-radius:12px;
 }
 
-/* FORM */
 input,select,button{
 width:100%;
 padding:10px;
@@ -87,72 +82,35 @@ color:white;
 font-weight:bold;
 }
 
-.row{
-display:flex;
-gap:10px;
-}
-
-.row>div{flex:1}
-
-/* MOBILE */
-@media(max-width:900px){
-
-.topbar{display:flex}
-
-.sidebar{
-left:-100%;
-top:0;
-z-index:1000;
-width:250px;
-}
-
-.sidebar.open{
-left:0;
-}
-
-.main{
-margin-left:0;
-padding:10px;
-}
-
-.row{flex-direction:column}
-
-}
 </style>
 </head>
 
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
 <button onclick="toggleMenu()">☰</button>
 <span>HM Group</span>
 </div>
 
-<!-- MENU -->
 <div class="sidebar" id="sidebar">
-<h2>HM Group</h2>
-
 <button onclick="go('dashboard')">Dashboard</button>
 <button onclick="go('stock')">Stock</button>
 <button onclick="go('sortie')">Sorties</button>
 <button onclick="go('achat')">Achats</button>
 <button onclick="go('bl')">BL</button>
 <button onclick="go('valo')">Valorisation</button>
-<button onclick="go('param')">Paramètres</button>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
 <div id="dashboard" class="screen active">
-<div class="card">Dashboard</div>
+<div class="card">Dashboard OK</div>
 </div>
 
 <div id="stock" class="screen">
 <div class="card">
 <h3>Produits</h3>
-<input id="productName" placeholder="Nom produit">
+<input id="productName">
 <button onclick="addProduct()">Ajouter</button>
 <ul id="productList"></ul>
 </div>
@@ -160,33 +118,27 @@ padding:10px;
 
 <div id="sortie" class="screen">
 <div class="card">
-<h3>Nouvelle sortie</h3>
-
-<input id="client" placeholder="Client">
+<h3>Sortie</h3>
 <select id="productSelect"></select>
-<input id="qty" type="number" placeholder="Quantité">
-<input id="price" placeholder="Prix">
-
-<button onclick="addSortie()">Valider sortie</button>
+<input id="qty">
+<input id="price">
+<button onclick="addSortie()">Valider</button>
 </div>
 </div>
 
 <div id="achat" class="screen">
 <div class="card">
-<h3>Achat fournisseur</h3>
-
+<h3>Achat</h3>
 <select id="achatProduct"></select>
-<input id="achatQty" placeholder="Quantité">
-<input id="achatPrice" placeholder="Prix">
-
-<button onclick="addAchat()">Créer achat</button>
+<input id="achatQty">
+<input id="achatPrice">
+<button onclick="addAchat()">Créer</button>
 </div>
 </div>
 
 <div id="bl" class="screen">
 <div class="card">
 <h3>BL</h3>
-<input placeholder="Recherche client">
 <div id="blList"></div>
 </div>
 </div>
@@ -194,31 +146,22 @@ padding:10px;
 <div id="valo" class="screen">
 <div class="card">
 <h3>Valorisation</h3>
-<input type="date" id="date">
 <button onclick="calcValo()">Calculer</button>
 <div id="valoResult"></div>
 </div>
 </div>
 
-<div id="param" class="screen">
-<div class="card">
-<h3>Paramètres</h3>
-<p>Base prête</p>
-</div>
 </div>
 
-</div>
-
-<!-- SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<!-- SUPABASE (CORRECT) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabase = supabase.createClient(
-"https://siirathwhnbrnlpsrkifr.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpaXJhdHdobmJybmxwc3JraWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NTU5NjYsImV4cCI6MjA5MjAzMTk2Nn0.f1wmZVst3Sh8CKgxpRxL3PrXpThXSk8vaQxlIXs6940"
-)
+const SUPABASE_URL = "https://siirathwhnbrnlpsrkifr.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpaXJhdHdobmJybmxwc3JraWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NTU5NjYsImV4cCI6MjA5MjAzMTk2Nn0.f1wmZVst3Sh8CKgxpRxL3PrXpThXSk8vaQxlIXs6940";
 
-// MENU
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("open")
 }
@@ -229,89 +172,71 @@ document.getElementById(id).classList.add("active")
 document.getElementById("sidebar").classList.remove("open")
 }
 
-// PRODUITS
+/* PRODUITS */
 async function addProduct(){
 let name=document.getElementById("productName").value
-await supabase.from("products").insert([{name}])
+await client.from("products").insert([{name}])
 loadProducts()
 }
 
 async function loadProducts(){
-let {data}=await supabase.from("products").select("*")
+let {data,error}=await client.from("products").select("*")
+if(error){console.log(error);return;}
 
-let list=""
-let options=""
+let html=""
+let opt=""
 
 data.forEach(p=>{
-list+=`<li>${p.name}</li>`
-options+=`<option value="${p.id}">${p.name}</option>`
+html+=`<li>${p.name}</li>`
+opt+=`<option value="${p.id}">${p.name}</option>`
 })
 
-document.getElementById("productList").innerHTML=list
-document.getElementById("productSelect").innerHTML=options
-document.getElementById("achatProduct").innerHTML=options
+document.getElementById("productList").innerHTML=html
+document.getElementById("productSelect").innerHTML=opt
+document.getElementById("achatProduct").innerHTML=opt
 }
 
-// ACHAT
+/* ACHAT */
 async function addAchat(){
-let product=document.getElementById("achatProduct").value
-let qty=document.getElementById("achatQty").value
-let price=document.getElementById("achatPrice").value
-
-await supabase.from("movements").insert([{
-product_id:product,
-quantity:qty,
+await client.from("movements").insert([{
+product_id:document.getElementById("achatProduct").value,
+quantity:document.getElementById("achatQty").value,
 type:"purchase",
-price:price
+price:document.getElementById("achatPrice").value
 }])
 }
 
-// SORTIE
+/* SORTIE */
 async function addSortie(){
-let product=document.getElementById("productSelect").value
-let qty=document.getElementById("qty").value
-let price=document.getElementById("price").value
-let client=document.getElementById("client").value
-
-await supabase.from("movements").insert([{
-product_id:product,
-quantity:-qty,
+await client.from("movements").insert([{
+product_id:document.getElementById("productSelect").value,
+quantity:-Math.abs(document.getElementById("qty").value),
 type:"sortie",
-price:price
+price:document.getElementById("price").value
 }])
 
-await supabase.from("bl").insert([{client}])
+await client.from("bl").insert([{}])
 
 loadBL()
 }
 
-// BL
+/* BL */
 async function loadBL(){
-let {data}=await supabase.from("bl").select("*")
-
+let {data}=await client.from("bl").select("*")
 let html=""
-
-data.forEach(b=>{
-html+=`<div class="card">${b.client}</div>`
-})
-
+data.forEach(b=>{html+=`<div class="card">BL</div>`})
 document.getElementById("blList").innerHTML=html
 }
 
-// VALO
+/* VALO */
 async function calcValo(){
-let {data}=await supabase.from("movements").select("*")
-
+let {data}=await client.from("movements").select("*")
 let total=0
-
-data.forEach(m=>{
-total+=m.quantity*(m.price||0)
-})
-
-document.getElementById("valoResult").innerHTML="Total : "+total+"€"
+data.forEach(m=>{total+=m.quantity*(m.price||0)})
+document.getElementById("valoResult").innerHTML="Total "+total+"€"
 }
 
-// INIT
+/* INIT */
 loadProducts()
 loadBL()
 
