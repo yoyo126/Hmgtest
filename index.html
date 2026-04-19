@@ -3,32 +3,55 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HM Group — V8.7 final</title>
+<title>HM Group — V8.8 final</title>
 <style>
 :root{
-  --bg:#f3f7fb;--panel:#fff;--panel-soft:#f8fbff;--line:#d9e4f0;--text:#122033;--muted:#66758a;
-  --hm:#2f7fbd;--ess:#8dc63f;--blue-soft:#e9f3fb;--shadow:0 10px 30px rgba(18,32,51,.08);--radius:18px
+  --bg:#f3f7fb;
+  --panel:#fff;
+  --panel-soft:#f8fbff;
+  --line:#d9e4f0;
+  --text:#122033;
+  --muted:#66758a;
+  --hm:#2f7fbd;
+  --ess:#8dc63f;
+  --blue-soft:#e9f3fb;
+  --shadow:0 10px 30px rgba(18,32,51,.08);
+  --radius:18px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
 .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
-.sidebar{background:linear-gradient(180deg,#0f172a 0%,#13324d 35%,#215e8d 100%);color:#fff;padding:18px 16px;position:sticky;top:0;height:100vh;overflow:auto}
+.sidebar{
+  background:linear-gradient(180deg,#0f172a 0%,#13324d 35%,#215e8d 100%);
+  color:#fff;padding:18px 16px;position:sticky;top:0;height:100vh;overflow:auto
+}
 .brand{display:flex;gap:12px;align-items:center;padding:8px 6px 18px;border-bottom:1px solid rgba(255,255,255,.12)}
-.logo-box{width:74px;height:44px;border-radius:10px;background:#fff;color:#1f4e79;display:flex;align-items:center;justify-content:center;font-weight:700}
+.logo-box{
+  width:74px;height:44px;border-radius:10px;background:#fff;color:#1f4e79;
+  display:flex;align-items:center;justify-content:center;font-weight:700
+}
 .brand .txt strong{display:block;font-size:18px;line-height:1.15}
 .brand .txt span{display:block;font-size:12px;color:#dbeafe;margin-top:4px}
 .nav{display:grid;gap:8px;margin-top:18px}
-.nav button{border:none;background:transparent;color:#eaf3ff;text-align:left;padding:12px 14px;border-radius:14px;cursor:pointer;font-weight:700;font-size:14px}
+.nav button{
+  border:none;background:transparent;color:#eaf3ff;text-align:left;padding:12px 14px;
+  border-radius:14px;cursor:pointer;font-weight:700;font-size:14px
+}
 .nav button.active{background:rgba(255,255,255,.15)}
 .nav button:hover{background:rgba(255,255,255,.10)}
-.sidebox{margin-top:18px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px}
+.sidebox{
+  margin-top:18px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;padding:14px
+}
 .sidebox h4{margin:0 0 8px;font-size:14px}
 .sidebox p{margin:0;color:#dbeafe;font-size:12px;line-height:1.5}
 .content{padding:18px}
 .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
 .title h1{margin:0;font-size:30px}
 .title p{margin:6px 0 0;color:var(--muted);font-size:14px}
-.btn{border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;font-size:14px}
+.btn{
+  border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;font-size:14px
+}
 .btn.primary{background:var(--hm);color:#fff}
 .btn.soft{background:var(--blue-soft);color:#1d4ed8}
 .btn.green{background:#dcfce7;color:#166534}
@@ -53,7 +76,9 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:
 .form4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .form5{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:10px}
 .form3{display:grid;grid-template-columns:1.6fr .8fr auto;gap:10px}
-input,select,textarea{width:100%;padding:11px 12px;border:1px solid #cdd8e4;border-radius:12px;background:#fff;color:var(--text)}
+input,select,textarea{
+  width:100%;padding:11px 12px;border:1px solid #cdd8e4;border-radius:12px;background:#fff;color:var(--text)
+}
 textarea{min-height:78px;resize:vertical}
 label{display:block;font-size:12px;color:var(--muted);margin:2px 0 6px}
 table{width:100%;border-collapse:collapse}
@@ -81,8 +106,17 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 .badge-active{display:inline-block;padding:4px 8px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px;font-weight:700}
 .badge-inactive{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5e7eb;color:#374151;font-size:12px;font-weight:700}
 .notice{margin-top:12px;padding:10px 12px;border-radius:12px;background:#eef6ff;color:#1d4ed8;font-size:13px;display:none;white-space:pre-wrap}
-.import-box{margin-top:14px;padding:14px;border:1px dashed #9fb8d3;border-radius:14px;background:#f9fcff}
-.import-result{margin-top:12px;padding:12px;border-radius:12px;background:#f8fafc;border:1px solid var(--line);font-size:13px;white-space:pre-wrap}
+.symbol-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700
+}
+.color-orange{background:#fff4e6;color:#ea580c}
+.color-blue{background:#e0f2fe;color:#0369a1}
+.color-green{background:#dcfce7;color:#166534}
+.color-red{background:#fee2e2;color:#b91c1c}
+.color-slate{background:#eef2f7;color:#334155}
+.detail-box{
+  margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fff
+}
 @media (max-width:1200px){
   .app{grid-template-columns:1fr}
   .sidebar{position:fixed;left:-100%;top:0;width:280px;height:100vh;z-index:1000;transition:.25s}
@@ -90,7 +124,10 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
   .content{padding:12px}
   .topbar{flex-direction:column}
   .kpis,.grid2,.grid2eq,.toolbar,.form4,.form5,.form3{grid-template-columns:1fr}
-  .mobile-toggle{display:inline-flex;align-items:center;justify-content:center;border:none;border-radius:12px;background:var(--hm);color:#fff;padding:10px 14px;font-weight:700;cursor:pointer}
+  .mobile-toggle{
+    display:inline-flex;align-items:center;justify-content:center;border:none;border-radius:12px;
+    background:var(--hm);color:#fff;padding:10px 14px;font-weight:700;cursor:pointer
+  }
 }
 </style>
 </head>
@@ -118,8 +155,8 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
     </div>
 
     <div class="sidebox">
-      <h4>Version V8.7</h4>
-      <p>Visuel conservé. Import CSV ajouté sans casser la structure.</p>
+      <h4>Version V8.8 finale</h4>
+      <p>Sorties réelles, BL groupés, PDF simple avec logo, produits avec symbole + couleur paramétrables.</p>
     </div>
   </aside>
 
@@ -131,35 +168,28 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
         <h1 id="pageTitle">Dashboard</h1>
         <p id="pageSub">Vue générale : stock, alertes, commandes client, achats en retard et rappels.</p>
       </div>
-      <button class="btn soft">V8.7</button>
+      <button class="btn soft">V8.8</button>
     </div>
 
     <section id="dashboard" class="screen active">
       <div class="kpis">
-        <div class="card kpi"><div class="label">Stock global dépôt</div><div class="value">1 320</div><div class="note">Toutes sociétés confondues</div></div>
-        <div class="card kpi"><div class="label">Valeur stock</div><div class="value">86 420 €</div><div class="note">Affichage démo</div></div>
-        <div class="card kpi"><div class="label">Produits sous mini</div><div class="value">3</div><div class="note">Calcul sur le global</div></div>
-        <div class="card kpi"><div class="label">Commandes ouvertes</div><div class="value">8</div><div class="note">Attendu / Reçu / Programmé / Repoussé</div></div>
+        <div class="card kpi"><div class="label">Stock global dépôt</div><div class="value" id="kpiStockGlobal">0</div><div class="note">Toutes sociétés confondues</div></div>
+        <div class="card kpi"><div class="label">Valeur stock</div><div class="value" id="kpiValueGlobal">0 €</div><div class="note">Valorisation simple</div></div>
+        <div class="card kpi"><div class="label">Produits sous mini</div><div class="value" id="kpiUnderMini">0</div><div class="note">Calcul sur le global</div></div>
+        <div class="card kpi"><div class="label">BL créés</div><div class="value" id="kpiBLCount">0</div><div class="note">Historique courant</div></div>
       </div>
 
       <div class="grid2">
         <div class="card section">
-          <div class="sectionhead"><div><h3>Rappels et alertes</h3><p>Ce bloc reste comme dans la version validée.</p></div></div>
-          <div class="list">
-            <div class="listitem"><strong>Retard achat fournisseur</strong><div class="compact muted">Rexel • prévu le 22/04</div></div>
-            <div class="listitem"><strong>Commande à traiter</strong><div class="compact muted">Dupont • attendu • prévu le 23/04</div></div>
-            <div class="listitem"><strong>Info compta à transmettre</strong><div class="compact muted">Dujardin • stock Essentiel • facturé à FEV</div></div>
-          </div>
+          <div class="sectionhead"><div><h3>Rappels et alertes</h3><p>Vue rapide sur l’état de ton activité.</p></div></div>
+          <div class="list" id="dashboardAlerts"></div>
         </div>
 
         <div class="card section">
           <div class="sectionhead"><div><h3>Répartition analytique</h3><p>Ventilation CPTE / Essentiel</p></div></div>
           <table>
             <thead><tr><th>Société</th><th>Qté</th><th>Valeur</th></tr></thead>
-            <tbody>
-              <tr><td>CPTE Conseils</td><td>742</td><td>44 980 €</td></tr>
-              <tr><td>Essentiel Énergie</td><td>578</td><td>41 440 €</td></tr>
-            </tbody>
+            <tbody id="dashboardSplit"></tbody>
           </table>
         </div>
       </div>
@@ -167,35 +197,43 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 
     <section id="stock" class="screen">
       <div class="card section">
-        <div class="sectionhead"><div><h3>Stock dépôt commun</h3><p>Le mini se paramètre dans Paramètres &gt; Produits. Les lignes importées s’affichent en dessous.</p></div></div>
+        <div class="sectionhead"><div><h3>Stock dépôt commun</h3><p>Filtre global / CPTE / Essentiel.</p></div></div>
 
         <div class="toolbar">
-          <input placeholder="Recherche produit, référence, marque..." />
-          <select id="stockFilter">
+          <input id="stockSearch" placeholder="Recherche produit, référence, marque..." oninput="renderStockTable()" />
+          <select id="stockFilter" onchange="renderStockTable()">
             <option value="all">Vue globale</option>
             <option value="CPTE">CPTE Conseils</option>
             <option value="ESS">Essentiel Énergie</option>
           </select>
-          <select><option>Toutes catégories</option><option>Photovoltaïque</option><option>PAC</option><option>ECS</option></select>
-          <button class="btn soft" onclick="applyStockFilter()">Actualiser</button>
+          <select id="stockCategoryFilter" onchange="renderStockTable()">
+            <option value="all">Toutes catégories</option>
+            <option value="Photovoltaïque">Photovoltaïque</option>
+            <option value="PAC">PAC</option>
+            <option value="ECS">ECS</option>
+            <option value="Fixation">Fixation</option>
+            <option value="Électricité">Électricité</option>
+          </select>
+          <button class="btn soft" onclick="renderStockTable()">Actualiser</button>
         </div>
 
         <div class="table-scroll">
           <table>
             <thead>
-              <tr><th>Réf</th><th>Produit</th><th>Marque</th><th>Groupe</th><th>Global</th><th>Mini</th><th>CPTE</th><th>Essentiel</th><th>Dernier PA</th><th>Statut</th></tr>
+              <tr>
+                <th>Réf</th>
+                <th>Produit</th>
+                <th>Marque</th>
+                <th>Groupe</th>
+                <th>Global</th>
+                <th>Mini</th>
+                <th>CPTE</th>
+                <th>Essentiel</th>
+                <th>Dernier PA</th>
+                <th>Statut</th>
+              </tr>
             </thead>
             <tbody id="stockBody"></tbody>
-          </table>
-        </div>
-
-        <div class="block" style="margin-top:14px">
-          <div class="sectionhead"><div><h3 style="font-size:16px">Stock importé</h3><p>Résultat brut de l’import CSV.</p></div></div>
-          <table>
-            <thead><tr><th>Référence produit</th><th>Quantité calculée</th></tr></thead>
-            <tbody id="importStockBody">
-              <tr><td colspan="2" class="muted">Aucun import pour le moment</td></tr>
-            </tbody>
           </table>
         </div>
       </div>
@@ -204,96 +242,150 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
     <section id="simpleOut" class="screen">
       <div class="grid2eq">
         <div class="card section">
-          <div class="sectionhead"><div><h3>Nouvelle sortie simple</h3><p>Écran centré sur la création. Les actions de modification et retour sont à part.</p></div></div>
+          <div class="sectionhead">
+            <div>
+              <h3>Nouvelle sortie simple</h3>
+              <p>Client, produits, kits, commentaire, puis création d’un BL unique.</p>
+            </div>
+          </div>
 
           <div class="form4">
-            <div><label>Société stock</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
-            <div><label>À facturer</label><select><option>Facturé à = société stock</option><option>CPTE Conseils</option><option>Essentiel Énergie</option><option>FEV</option></select></div>
-            <div><label>Client final</label><input placeholder="Client / destinataire" value="Dujardin" /></div>
-            <div><label>Commande liée</label><select><option>Sans commande liée</option><option>Dujardin — Essentiel</option><option>Dupont — CPTE</option></select></div>
+            <div>
+              <label>Société stock</label>
+              <select id="outSociete">
+                <option value="CPTE">CPTE Conseils</option>
+                <option value="ESS">Essentiel Énergie</option>
+              </select>
+            </div>
+            <div>
+              <label>À facturer</label>
+              <select id="outFacture">
+                <option value="same">Facturé à = société stock</option>
+                <option value="CPTE">CPTE Conseils</option>
+                <option value="ESS">Essentiel Énergie</option>
+                <option value="FEV">FEV</option>
+              </select>
+            </div>
+            <div>
+              <label>Client final</label>
+              <input id="outClient" placeholder="Client / destinataire" />
+            </div>
+            <div>
+              <label>Commande liée</label>
+              <select id="outOrderLink">
+                <option>Sans commande liée</option>
+                <option>Commande test 001</option>
+              </select>
+            </div>
           </div>
 
           <div class="block" style="margin-top:14px">
-            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter un produit</h3><p>Tu peux taper les premières lettres pour le retrouver plus vite.</p></div></div>
-            <div class="form3">
-              <input list="productsList" placeholder="Tape ex : micro, panneau, ballon..." />
-              <input type="number" min="1" value="12" />
-              <button class="btn primary">Ajouter produit</button>
+            <div class="sectionhead" style="margin-bottom:8px">
+              <div>
+                <h3 style="font-size:16px">Ajouter un produit</h3>
+                <p>Produits actifs uniquement.</p>
+              </div>
             </div>
-            <datalist id="productsList">
-              <option value="Panneau photovoltaïque 500W"></option>
-              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
-              <option value="Ballon thermodynamique 190L"></option>
-              <option value="PAC LG 12 kW"></option>
-            </datalist>
+
+            <div class="form3">
+              <select id="outProductSelect"></select>
+              <input id="outProductQty" type="number" min="1" value="1" />
+              <button class="btn primary" onclick="addProductLine()">Ajouter produit</button>
+            </div>
 
             <div class="sep"></div>
 
-            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter un kit</h3><p>Le kit reste séparé visuellement du produit pour éviter toute confusion.</p></div></div>
-            <div class="form3">
-              <input list="kitsList" placeholder="Tape ex : kit 12, kit pac..." />
-              <input type="number" min="1" value="1" />
-              <button class="btn orange">Ajouter kit</button>
+            <div class="sectionhead" style="margin-bottom:8px">
+              <div>
+                <h3 style="font-size:16px">Ajouter un kit</h3>
+                <p>Le kit ajoute automatiquement toutes ses lignes.</p>
+              </div>
             </div>
-            <datalist id="kitsList">
-              <option value="Kit 12 panneaux monophasé"></option>
-              <option value="Kit PAC LG 12 kW + ballon"></option>
-            </datalist>
+
+            <div class="form3">
+              <select id="outKitSelect"></select>
+              <input id="outKitQty" type="number" min="1" value="1" />
+              <button class="btn orange" onclick="addKitLine()">Ajouter kit</button>
+            </div>
 
             <div class="sep"></div>
 
-            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter une ligne commentaire</h3><p>Le commentaire est une ligne indépendante, pas attachée à un produit.</p></div></div>
+            <div class="sectionhead" style="margin-bottom:8px">
+              <div>
+                <h3 style="font-size:16px">Ajouter une ligne commentaire</h3>
+                <p>Le commentaire est indépendant des produits.</p>
+              </div>
+            </div>
+
             <div class="form3">
-              <input style="grid-column: span 2" placeholder="Ex : palette à compléter lundi / matériel remis au technicien..." />
-              <button class="btn soft">Ajouter commentaire</button>
+              <input id="outCommentText" style="grid-column: span 2" placeholder="Ex : pancarte HMG / palette à compléter / info chantier..." />
+              <button class="btn soft" onclick="addCommentLine()">Ajouter commentaire</button>
             </div>
 
             <table style="margin-top:12px">
-              <thead><tr><th>Type de ligne</th><th>Désignation</th><th>Qté</th><th></th></tr></thead>
-              <tbody>
-                <tr><td>Produit</td><td>Panneau photovoltaïque 500W</td><td>12</td><td><button class="btn red small">X</button></td></tr>
-                <tr><td>Produit</td><td>Micro-onduleur Hoymiles HMS-1000</td><td>6</td><td><button class="btn red small">X</button></td></tr>
-                <tr><td>Commentaire</td><td class="muted">Palette à compléter lundi</td><td>-</td><td><button class="btn red small">X</button></td></tr>
-              </tbody>
+              <thead><tr><th>Type</th><th>Désignation</th><th>Qté</th><th></th></tr></thead>
+              <tbody id="currentLinesTable"></tbody>
             </table>
           </div>
 
           <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
-            <button class="btn primary">Valider sortie + créer BL</button>
+            <button class="btn soft" onclick="previewCurrentBL()">Prévisualiser BL</button>
+            <button class="btn primary" onclick="validateOut()">Valider sortie + créer BL</button>
           </div>
         </div>
 
         <div class="card section subtle">
-          <div class="sectionhead"><div><h3>Actions sur une sortie existante</h3><p>Placées à part pour ne pas gêner la création d’une nouvelle sortie.</p></div></div>
-
-          <div class="block" style="margin-bottom:14px">
-            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Modifier une sortie</h3><p>Tu reprends le client ou le BL, tu charges la sortie, puis tu modifies.</p></div></div>
-            <div class="form4">
-              <div><label>Recherche client</label><input placeholder="Tape le nom du client" value="Dujardin" /></div>
-              <div><label>Ou N° BL</label><input placeholder="Ex : BL-2026-0012" /></div>
-              <div><label>Action</label><select><option>Modifier la sortie</option></select></div>
-              <div><label>&nbsp;</label><button class="btn soft" style="width:100%">Charger</button></div>
-            </div>
-            <div style="display:flex;justify-content:flex-end;margin-top:10px">
-              <button class="btn orange">Enregistrer modification</button>
+          <div class="sectionhead">
+            <div>
+              <h3>Actions sur une sortie existante</h3>
+              <p>Modification et retour stock simplifiés pour le test réel.</p>
             </div>
           </div>
 
+          <div class="block" style="margin-bottom:14px">
+            <div class="sectionhead" style="margin-bottom:8px">
+              <div>
+                <h3 style="font-size:16px">Charger un BL</h3>
+                <p>Saisis le numéro ou choisis dans la liste.</p>
+              </div>
+            </div>
+
+            <div class="form3">
+              <select id="editBLSelect"></select>
+              <input id="editBLComment" placeholder="Commentaire de modification (optionnel)" />
+              <button class="btn soft" onclick="loadBLForEdit()">Charger</button>
+            </div>
+
+            <div class="detail-box" id="editBLBox">Aucun BL chargé.</div>
+          </div>
+
           <div class="block">
-            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Retour de stock</h3><p>Retour complet ou partiel depuis une sortie existante.</p></div></div>
+            <div class="sectionhead" style="margin-bottom:8px">
+              <div>
+                <h3 style="font-size:16px">Retour de stock</h3>
+                <p>Retour complet ou partiel depuis un BL existant.</p>
+              </div>
+            </div>
+
             <div class="form4">
-              <div><label>Recherche client</label><input placeholder="Tape le nom du client" value="Dujardin" /></div>
-              <div><label>Ou N° BL</label><input placeholder="Ex : BL-2026-0012" /></div>
-              <div><label>Mode de retour</label><select><option>Retour complet</option><option>Retour partiel</option></select></div>
-              <div><label>Produit à retourner</label><input list="productsList" placeholder="Tape le produit" /></div>
+              <div>
+                <label>BL</label>
+                <select id="returnBLSelect"></select>
+              </div>
+              <div>
+                <label>Produit</label>
+                <select id="returnLineSelect"></select>
+              </div>
+              <div>
+                <label>Quantité retournée</label>
+                <input id="returnQty" type="number" min="1" value="1" />
+              </div>
+              <div>
+                <label>&nbsp;</label>
+                <button class="btn green" style="width:100%" onclick="returnStock()">Valider retour</button>
+              </div>
             </div>
-            <div class="form4" style="margin-top:10px">
-              <div><label>Quantité retournée</label><input type="number" min="1" value="1" /></div>
-              <div style="grid-column: span 3"><label>Commentaire retour</label><input placeholder="Ex : erreur de préparation / matériel revenu du chantier" /></div>
-            </div>
-            <div style="display:flex;justify-content:flex-end;margin-top:10px">
-              <button class="btn green">Valider retour</button>
-            </div>
+            <div class="notice" id="returnNotice"></div>
           </div>
         </div>
       </div>
@@ -302,7 +394,8 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
     <section id="orders" class="screen">
       <div class="grid2eq">
         <div class="card section">
-          <div class="sectionhead"><div><h3>Nouvelle commande attribuée</h3><p>Tu remplis tout sur le même écran, puis tu crées la commande à la fin.</p></div></div>
+          <div class="sectionhead"><div><h3>Nouvelle commande attribuée</h3><p>Écran prêt pour la suite.</p></div></div>
+
           <div class="form4">
             <div><label>Société</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
             <div><label>Facturé à</label><select><option>Interne / même société</option><option>FEV</option><option>Autre société</option></select></div>
@@ -315,43 +408,10 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
             <div><label>Date de réception prévue</label><input type="date" /></div>
             <div style="grid-column: span 2"><label>Commentaire</label><textarea>Commande client de démonstration</textarea></div>
           </div>
-
-          <div class="block" style="margin-top:16px">
-            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Lignes de commande</h3><p>On reste sur le même écran, puis on crée la commande après.</p></div></div>
-            <div class="form3">
-              <input list="productsList2" placeholder="Tape ex : micro, panneau, ballon..." />
-              <input type="number" min="1" value="12" />
-              <button class="btn orange">Ajouter ligne</button>
-            </div>
-            <datalist id="productsList2">
-              <option value="Panneau photovoltaïque 500W"></option>
-              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
-              <option value="Ballon thermodynamique 190L"></option>
-              <option value="PAC LG 12 kW"></option>
-            </datalist>
-            <table style="margin-top:12px">
-              <thead><tr><th>Produit</th><th>Qté</th><th>Prix interne</th><th></th></tr></thead>
-              <tbody>
-                <tr><td>Panneau photovoltaïque 500W</td><td>12</td><td>78 €</td><td><button class="btn red small">X</button></td></tr>
-                <tr><td>Micro-onduleur Hoymiles HMS-1000</td><td>6</td><td>145 €</td><td><button class="btn red small">X</button></td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
-            <button class="btn soft">Copier commande (sans prix)</button>
-            <button class="btn primary">Créer la commande</button>
-          </div>
         </div>
 
         <div class="card section">
-          <div class="sectionhead"><div><h3>Commandes attribuées</h3><p>Le statut reste géré ici, avec À replacer si besoin.</p></div></div>
-          <div class="toolbar">
-            <input placeholder="Recherche client final, commentaire..." />
-            <select><option>Toutes sociétés</option><option>CPTE Conseils</option><option>Essentiel Énergie</option></select>
-            <select><option>Tous statuts</option><option>Attendu</option><option>Reçu</option><option>Programmé</option><option>Posé</option><option>À replacer</option></select>
-            <button class="btn soft">Filtrer</button>
-          </div>
+          <div class="sectionhead"><div><h3>Commandes attribuées</h3><p>Bloc conservé pour la suite.</p></div></div>
           <table>
             <thead><tr><th>Client final</th><th>Société</th><th>Facturé à</th><th>Statut</th><th>Détail</th><th>Actions</th></tr></thead>
             <tbody>
@@ -361,14 +421,6 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
                 <td>Interne</td>
                 <td><span class="pill pill-red">Attendu</span></td>
                 <td class="compact">12 × Panneau photovoltaïque 500W<br>6 × Micro-onduleur Hoymiles</td>
-                <td><button class="btn soft small">Modifier</button> <button class="btn soft small">→</button> <button class="btn orange small">Vers BL</button></td>
-              </tr>
-              <tr>
-                <td><strong>Dujardin</strong><div class="compact muted">20/04 • À transmettre compta</div></td>
-                <td><span class="pill pill-green">Essentiel</span></td>
-                <td>FEV</td>
-                <td><span class="pill pill-slate">À replacer</span></td>
-                <td class="compact">1 × PAC LG 12 kW<br>1 × Ballon thermodynamique 190L</td>
                 <td><button class="btn soft small">Modifier</button> <button class="btn orange small">Vers BL</button></td>
               </tr>
             </tbody>
@@ -380,60 +432,27 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
     <section id="purchases" class="screen">
       <div class="grid2eq">
         <div class="card section">
-          <div class="sectionhead"><div><h3>Nouvel achat fournisseur</h3><p>Bloc complet remis en place : fournisseur, dates, lignes produit, prix et copie sans prix.</p></div></div>
+          <div class="sectionhead"><div><h3>Nouvel achat fournisseur</h3><p>Pour le test réel, les achats peuvent être saisis à la main.</p></div></div>
 
-          <div class="form4">
-            <div><label>Société</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
-            <div><label>Fournisseur</label><input value="Rexel" /></div>
-            <div><label>Date de commande</label><input type="date" /></div>
-            <div><label>Date de réception prévue</label><input type="date" /></div>
+          <div class="form5">
+            <select id="purchaseProductSelect"></select>
+            <input id="purchaseQty" type="number" min="1" value="1" />
+            <input id="purchasePrice" type="number" step="0.01" value="0" />
+            <select id="purchaseSociete">
+              <option value="CPTE">CPTE Conseils</option>
+              <option value="ESS">Essentiel Énergie</option>
+            </select>
+            <button class="btn primary" onclick="registerPurchase()">Ajouter achat</button>
           </div>
 
-          <div class="block" style="margin-top:14px">
-            <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Ajouter une ligne achat</h3><p>Produit, quantité, prix et commentaire.</p></div></div>
-            <div class="form5">
-              <input list="purchaseProducts" placeholder="Tape ex : panneau, micro..." />
-              <input type="number" min="1" value="100" />
-              <input type="number" step="0.01" value="77.50" />
-              <input placeholder="Commentaire achat" value="Réappro panneaux" />
-              <button class="btn primary">Ajouter ligne</button>
-            </div>
-            <datalist id="purchaseProducts">
-              <option value="Panneau photovoltaïque 500W"></option>
-              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
-              <option value="Ballon thermodynamique 190L"></option>
-              <option value="PAC LG 12 kW"></option>
-            </datalist>
-
-            <table style="margin-top:12px">
-              <thead><tr><th>Produit</th><th>Qté</th><th>Prix</th><th>Commentaire</th><th></th></tr></thead>
-              <tbody>
-                <tr><td>Panneau photovoltaïque 500W</td><td>100</td><td>77.50 €</td><td>Réappro panneaux</td><td><button class="btn red small">X</button></td></tr>
-                <tr><td>Micro-onduleur Hoymiles HMS-1000</td><td>50</td><td>144.00 €</td><td>Réappro onduleurs</td><td><button class="btn red small">X</button></td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
-            <button class="btn soft">Copier commande fournisseur (sans prix)</button>
-            <button class="btn orange">Créer achat</button>
-          </div>
+          <div class="notice" id="purchaseNotice"></div>
         </div>
 
         <div class="card section">
-          <div class="sectionhead"><div><h3>Achats fournisseur</h3><p>Listing utile pour contrôler les réceptions et les factures.</p></div></div>
-          <div class="toolbar">
-            <input placeholder="Recherche fournisseur..." />
-            <input type="date" />
-            <select><option>Toutes réceptions</option><option>En attente</option><option>Réceptionnée</option><option>Annulée</option></select>
-            <button class="btn soft">Filtrer</button>
-          </div>
+          <div class="sectionhead"><div><h3>Achats saisis</h3><p>Historique simplifié pour le test réel.</p></div></div>
           <table>
-            <thead><tr><th>Fournisseur</th><th>Date commande</th><th>Date prévue</th><th>Date réelle</th><th>Détail / total</th><th>Actions</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Rexel</strong></td><td>17/04/2026</td><td>22/04/2026</td><td>-</td><td class="compact">100 × Panneau photovoltaïque 500W<br>50 × Micro-onduleur Hoymiles HMS-1000<br><strong>Total : 14 950 €</strong></td><td><button class="btn green small">Réceptionné</button> <button class="btn soft small">Voir détail</button></td></tr>
-              <tr><td><strong>Sonepar</strong></td><td>14/04/2026</td><td>19/04/2026</td><td>19/04/2026</td><td class="compact">1 × PAC LG 12 kW<br>1 × Ballon thermodynamique 190L<br><strong>Total : 3 740 €</strong></td><td><button class="btn soft small">Voir détail</button></td></tr>
-            </tbody>
+            <thead><tr><th>Date</th><th>Produit</th><th>Société</th><th>Qté</th><th>Prix</th></tr></thead>
+            <tbody id="purchaseTableBody"></tbody>
           </table>
         </div>
       </div>
@@ -441,54 +460,49 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 
     <section id="bl" class="screen">
       <div class="card section">
-        <div class="sectionhead"><div><h3>Historique des BL</h3><p>Simple côté document, mais avec coût interne visible dans le CRM.</p></div></div>
+        <div class="sectionhead"><div><h3>Historique des BL</h3><p>Un BL = une sortie complète, avec plusieurs lignes.</p></div></div>
+
         <div class="toolbar">
-          <input placeholder="Recherche client / n° BL..." />
-          <select><option>Toutes sociétés</option><option>CPTE Conseils</option><option>Essentiel Énergie</option></select>
-          <select><option>Tous statuts</option><option>Brouillon</option><option>Validé</option><option>Annulé</option></select>
-          <button class="btn soft">Filtrer</button>
+          <input id="blSearch" placeholder="Recherche client / n° BL..." oninput="renderBLTable()" />
+          <select id="blSocFilter" onchange="renderBLTable()">
+            <option value="all">Toutes sociétés</option>
+            <option value="CPTE">CPTE Conseils</option>
+            <option value="ESS">Essentiel Énergie</option>
+          </select>
+          <select id="blStatusFilter" onchange="renderBLTable()">
+            <option value="all">Tous statuts</option>
+            <option value="valid">Validé</option>
+            <option value="modified">Modifié</option>
+          </select>
+          <button class="btn soft" onclick="renderBLTable()">Filtrer</button>
         </div>
+
         <table>
-          <thead><tr><th>N° BL</th><th>Date</th><th>Société</th><th>Client final</th><th>Commentaire</th><th>Coût interne</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td>BL-2026-0012</td><td>22/04/2026</td><td>CPTE Conseils</td><td>Dupont</td><td>Prépa palette client</td><td>1 806 €</td><td><button class="btn soft small">Voir PDF</button></td></tr>
-            <tr><td>BL-2026-0013</td><td>22/04/2026</td><td>Essentiel Énergie</td><td>Dujardin</td><td>Sortie ballon + PAC</td><td>3 740 €</td><td><button class="btn soft small">Voir PDF</button></td></tr>
-          </tbody>
+          <thead>
+            <tr>
+              <th>N° BL</th>
+              <th>Date</th>
+              <th>Société</th>
+              <th>Client</th>
+              <th>Détail</th>
+              <th>Commentaire</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="blTableBody"></tbody>
         </table>
 
-        <div class="block" style="margin-top:14px">
-          <div class="sectionhead" style="margin-bottom:8px"><div><h3 style="font-size:16px">Détail BL</h3><p>Document simple : produits, quantités, commentaire. Le coût reste interne.</p></div></div>
-          <table>
-            <thead><tr><th>Produit</th><th>Quantité</th></tr></thead>
-            <tbody>
-              <tr><td>Panneau photovoltaïque 500W</td><td>12</td></tr>
-              <tr><td>Micro-onduleur Hoymiles HMS-1000</td><td>6</td></tr>
-            </tbody>
-          </table>
-          <div class="form3" style="margin-top:12px">
-            <input style="grid-column:span 2" placeholder="Ajouter un commentaire complémentaire au BL" />
-            <button class="btn orange">Ajouter commentaire</button>
-          </div>
-        </div>
-
-        <div class="block" style="margin-top:14px">
-          <div class="sectionhead"><div><h3 style="font-size:16px">Sorties importées</h3><p>Historique brut issu du CSV.</p></div></div>
-          <table>
-            <thead><tr><th>Date</th><th>Client</th><th>Société</th><th>Référence produit</th><th>Quantité</th><th>Commentaire</th></tr></thead>
-            <tbody id="importSortiesBody">
-              <tr><td colspan="6" class="muted">Aucun import pour le moment</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="detail-box" id="blDetailBox">Sélectionne un BL pour voir le détail.</div>
       </div>
     </section>
 
     <section id="valuation" class="screen">
       <div class="card section">
-        <div class="sectionhead"><div><h3>Valorisation FIFO à date</h3><p>Mêmes filtres que le stock : Global / CPTE / Essentiel.</p></div></div>
+        <div class="sectionhead"><div><h3>Valorisation simple à date</h3><p>Lecture Global / CPTE / Essentiel sur l’état courant.</p></div></div>
+
         <div class="toolbar">
           <input type="date" id="valDate" value="2026-04-22" />
-          <select id="valFilter">
+          <select id="valFilter" onchange="renderValuation()">
             <option value="all">Global</option>
             <option value="CPTE">CPTE Conseils</option>
             <option value="ESS">Essentiel Énergie</option>
@@ -499,43 +513,58 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 
         <div class="table-scroll">
           <table>
-            <thead><tr><th>Produit</th><th>Quantité</th><th>Prix FIFO</th><th>Valeur</th></tr></thead>
+            <thead><tr><th>Produit</th><th>Quantité</th><th>Prix</th><th>Valeur</th></tr></thead>
             <tbody id="valuationBody"></tbody>
           </table>
         </div>
 
         <div class="total-box" id="valuationTotal">Total valorisé : 0 €</div>
-
-        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
-          <button class="btn soft">Exporter Excel</button>
-        </div>
       </div>
     </section>
 
     <section id="params" class="screen">
       <div class="grid2eq">
         <div class="card section">
-          <div class="sectionhead"><div><h3>Produits</h3><p>Création en haut, gestion complète en bas.</p></div></div>
+          <div class="sectionhead"><div><h3>Produits</h3><p>Couleur + symbole paramétrables, actif / inactif, sécurité.</p></div></div>
 
           <div class="form5">
-            <input placeholder="Référence" />
-            <input placeholder="Produit" />
-            <input placeholder="Marque" />
-            <select><option>Choisir groupe existant</option><option>Photovoltaïque</option><option>Fixation</option><option>PAC</option><option>ECS</option><option>Électricité</option></select>
-            <button class="btn primary">Ajouter produit</button>
+            <input id="newProductRef" placeholder="Référence" />
+            <input id="newProductName" placeholder="Produit" />
+            <input id="newProductBrand" placeholder="Marque" />
+            <select id="newProductGroup">
+              <option>Photovoltaïque</option>
+              <option>Fixation</option>
+              <option>PAC</option>
+              <option>ECS</option>
+              <option>Électricité</option>
+            </select>
+            <button class="btn primary" onclick="createProduct()">Ajouter produit</button>
           </div>
 
-          <div class="form4" style="margin-top:10px">
-            <div><label>Stock minimum</label><input type="number" value="300" /></div>
-            <div><label>Société</label><select><option>CPTE Conseils</option><option>Essentiel Énergie</option></select></div>
-            <div><label>Actif</label><select><option>Oui</option><option>Non</option></select></div>
-            <div><label>&nbsp;</label><button class="btn soft" style="width:100%">Enregistrer paramètres produit</button></div>
+          <div class="form5" style="margin-top:10px">
+            <select id="newProductColor">
+              <option value="orange">Orange</option>
+              <option value="blue">Bleu</option>
+              <option value="green">Vert</option>
+              <option value="red">Rouge</option>
+              <option value="slate">Gris</option>
+            </select>
+            <select id="newProductSymbol">
+              <option value="●">●</option>
+              <option value="×">×</option>
+              <option value="☀️">☀️</option>
+              <option value="⚡">⚡</option>
+              <option value="■">■</option>
+            </select>
+            <input id="newProductPrice" type="number" step="0.01" placeholder="Prix achat" />
+            <input id="newProductMini" type="number" placeholder="Stock mini" />
+            <button class="btn soft" onclick="refreshParamViews()">Actualiser</button>
           </div>
 
           <div class="block" style="margin-top:14px">
-            <div class="sectionhead"><div><h3 style="font-size:16px">Produits créés</h3><p>Actif / inactif, modification et suppression sécurisées.</p></div></div>
+            <div class="sectionhead"><div><h3 style="font-size:16px">Produits créés</h3><p>Modification et suppression bloquées si déjà utilisés.</p></div></div>
             <table>
-              <thead><tr><th>Nom</th><th>Statut</th><th>Utilisé</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Produit</th><th>Statut</th><th>Utilisé</th><th>Actions</th></tr></thead>
               <tbody id="productsCreatedBody"></tbody>
             </table>
             <div class="notice" id="productsNotice"></div>
@@ -543,13 +572,13 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
         </div>
 
         <div class="card section">
-          <div class="sectionhead"><div><h3>Groupes / sociétés / kits</h3><p>Gestion complète avec sécurité.</p></div></div>
+          <div class="sectionhead"><div><h3>Groupes / sociétés / kits</h3><p>Gestion complète avec sécurité et actif / inactif.</p></div></div>
 
           <div class="block" style="margin-bottom:14px">
             <strong>Créer un groupe</strong>
             <div class="form3" style="margin-top:10px">
-              <input style="grid-column: span 2" placeholder="Ex : Photovoltaïque" value="Photovoltaïque" />
-              <button class="btn orange">Ajouter groupe</button>
+              <input id="newGroupName" style="grid-column: span 2" placeholder="Ex : Photovoltaïque" />
+              <button class="btn orange" onclick="createGroup()">Ajouter groupe</button>
             </div>
           </div>
 
@@ -565,8 +594,8 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
           <div class="block" style="margin-bottom:14px">
             <strong>Créer une société</strong>
             <div class="form3" style="margin-top:10px">
-              <input style="grid-column: span 2" placeholder="Ex : FEV" value="FEV" />
-              <button class="btn orange">Ajouter société</button>
+              <input id="newCompanyName" style="grid-column: span 2" placeholder="Ex : FEV" />
+              <button class="btn orange" onclick="createCompany()">Ajouter société</button>
             </div>
           </div>
 
@@ -582,56 +611,29 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
           <div class="block">
             <strong>Créer un kit</strong>
             <div class="form4" style="margin-top:10px">
-              <div><label>Nom du kit</label><input value="Kit 12 panneaux monophasé" /></div>
-              <div><label>Produit</label><input list="kitProducts" placeholder="Tape un produit" /></div>
-              <div><label>Quantité</label><input type="number" min="1" value="12" /></div>
-              <div><label>&nbsp;</label><button class="btn orange" style="width:100%">Ajouter ligne au kit</button></div>
+              <div><label>Nom du kit</label><input id="newKitName" placeholder="Nom du kit" /></div>
+              <div><label>Produit</label><select id="newKitProductSelect"></select></div>
+              <div><label>Quantité</label><input id="newKitProductQty" type="number" min="1" value="1" /></div>
+              <div><label>&nbsp;</label><button class="btn orange" style="width:100%" onclick="addKitCompositionLine()">Ajouter ligne au kit</button></div>
             </div>
-            <datalist id="kitProducts">
-              <option value="Panneau photovoltaïque 500W"></option>
-              <option value="Micro-onduleur Hoymiles HMS-1000"></option>
-              <option value="Rail aluminium 4,20 m"></option>
-              <option value="Coffret AC 1 rangée"></option>
-            </datalist>
 
             <table style="margin-top:12px">
               <thead><tr><th>Produit</th><th>Qté</th><th></th></tr></thead>
-              <tbody>
-                <tr><td>Panneau photovoltaïque 500W</td><td>12</td><td><button class="btn red small">X</button></td></tr>
-                <tr><td>Micro-onduleur Hoymiles HMS-1000</td><td>6</td><td><button class="btn red small">X</button></td></tr>
-                <tr><td>Rail aluminium 4,20 m</td><td>20</td><td><button class="btn red small">X</button></td></tr>
-                <tr><td>Coffret AC 1 rangée</td><td>1</td><td><button class="btn red small">X</button></td></tr>
-              </tbody>
+              <tbody id="newKitLinesBody"></tbody>
             </table>
 
             <div style="display:flex;justify-content:flex-end;margin-top:10px">
-              <button class="btn primary">Enregistrer le kit</button>
+              <button class="btn primary" onclick="saveKit()">Enregistrer le kit</button>
             </div>
 
             <div class="sep"></div>
 
             <strong>Kits créés</strong>
             <table style="margin-top:12px">
-              <thead><tr><th>Nom</th><th>Statut</th><th>Utilisé</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Nom</th><th>Statut</th><th>Utilisé</th><th>Composition</th><th>Actions</th></tr></thead>
               <tbody id="kitsCreatedBody"></tbody>
             </table>
             <div class="notice" id="kitsNotice"></div>
-          </div>
-
-          <div class="import-box">
-            <div class="sectionhead"><div><h3 style="font-size:16px">Import CSV</h3><p>Test d’import achats et sorties sans casser le reste du CRM.</p></div></div>
-
-            <div class="form3">
-              <input type="file" id="fileInput" accept=".csv" />
-              <select id="importType">
-                <option value="auto">Détection auto</option>
-                <option value="achat">Achats</option>
-                <option value="sortie">Sorties</option>
-              </select>
-              <button class="btn primary" onclick="importCSV()">Importer</button>
-            </div>
-
-            <div class="import-result" id="importResult">Aucun fichier importé pour le moment.</div>
           </div>
         </div>
       </div>
@@ -639,13 +641,10 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 
     <section id="moves" class="screen">
       <div class="card section">
-        <div class="sectionhead"><div><h3>Mouvements</h3><p>Historique des mouvements.</p></div></div>
+        <div class="sectionhead"><div><h3>Mouvements</h3><p>Historique généré à partir des sorties et achats saisis.</p></div></div>
         <table>
-          <thead><tr><th>Date</th><th>Type</th><th>Société stock</th><th>Facturé à</th><th>Produit</th><th>Qté</th><th>Commentaire</th></tr></thead>
-          <tbody>
-            <tr><td>22/04/2026</td><td>Sortie simple</td><td>CPTE Conseils</td><td>FEV</td><td>Ballon thermodynamique 190L</td><td>-1</td><td>Ballon sorti et attribué à la commande</td></tr>
-            <tr><td>22/04/2026</td><td>Achat reçu</td><td>Essentiel Énergie</td><td>Essentiel Énergie</td><td>Panneau photovoltaïque 500W</td><td>+100</td><td>Réappro panneaux</td></tr>
-          </tbody>
+          <thead><tr><th>Date</th><th>Type</th><th>Société stock</th><th>Client / source</th><th>Produit</th><th>Qté</th><th>Commentaire</th></tr></thead>
+          <tbody id="movesBody"></tbody>
         </table>
       </div>
     </section>
@@ -653,106 +652,120 @@ th{background:#fbfdff;color:var(--muted);font-weight:700}
 </div>
 
 <script>
+/* -------------------------------
+   META
+--------------------------------*/
 const meta = {
   dashboard:["Dashboard","Vue générale : stock, alertes, commandes client, achats en retard et rappels."],
   stock:["Stock","Tableau principal type Excel."],
-  simpleOut:["Sorties simples","Sorties de stock hors commandes attribuées."],
+  simpleOut:["Sorties simples","Création réelle d’une sortie chantier avec BL groupé."],
   orders:["Commandes attribuées","Suivi des commandes client avec statuts et filtres."],
-  purchases:["Achats","Commandes fournisseur, dates et réception."],
-  bl:["BL","Historique, PDF et coût interne."],
-  valuation:["Valorisation","Valorisation FIFO à date avec filtres Global / CPTE / Essentiel."],
-  params:["Paramètres","Produits, groupes, sociétés, kits et import CSV."],
-  moves:["Mouvements","Historique des mouvements."]
+  purchases:["Achats","Ajout manuel d’achats pour alimenter le stock."],
+  bl:["BL","Historique, détail, modification, retour stock et PDF simple."],
+  valuation:["Valorisation","Lecture simple du stock par filtre Global / CPTE / Essentiel."],
+  params:["Paramètres","Produits, groupes, sociétés et kits paramétrables."],
+  moves:["Mouvements","Historique généré depuis tes actions."]
 };
 
-const stockDemo = [
-  {ref:"PV500-JA",name:"Panneau photovoltaïque 500W",brand:"JA Solar",group:"Photovoltaïque",cpte:260,ess:160,min:300,price:78},
-  {ref:"HM-1000",name:"Micro-onduleur Hoymiles HMS-1000",brand:"Hoymiles",group:"Photovoltaïque",cpte:90,ess:100,min:80,price:145},
-  {ref:"RAIL-420",name:"Rail aluminium 4,20 m",brand:"K2",group:"Fixation",cpte:320,ess:330,min:200,price:18.5},
-  {ref:"COFF-AC",name:"Coffret AC 1 rangée",brand:"Legrand",group:"Électricité",cpte:4,ess:8,min:20,price:74},
-  {ref:"PAC-LG12",name:"PAC LG 12 kW",brand:"LG",group:"PAC",cpte:3,ess:1,min:2,price:3200},
-  {ref:"BALL-190",name:"Ballon thermodynamique 190L",brand:"Thermor",group:"ECS",cpte:5,ess:2,min:3,price:540}
+/* -------------------------------
+   DATA
+--------------------------------*/
+let products = [
+  {id:1, ref:"PV-JN", name:"PV JN SOLAR 500WC", brand:"JN Solar", group:"Photovoltaïque", cpte:260, ess:160, min:300, price:78, color:"blue", symbol:"☀️", active:true, used:true},
+  {id:2, ref:"MICRO-HMS", name:"MICRO HOYMILES HMS-1000 + CABLE ET TRUNK", brand:"Hoymiles", group:"Photovoltaïque", cpte:90, ess:100, min:80, price:145, color:"green", symbol:"⚡", active:true, used:true},
+  {id:3, ref:"DTU", name:"PASSERELLE HOYMILES DTU", brand:"Hoymiles", group:"Photovoltaïque", cpte:12, ess:8, min:5, price:120, color:"green", symbol:"⚡", active:true, used:false},
+  {id:4, ref:"IZY-ROND", name:"IZY MECA ROND", brand:"IZY", group:"Fixation", cpte:100, ess:40, min:20, price:5, color:"orange", symbol:"●", active:true, used:true},
+  {id:5, ref:"IZY-CROIX", name:"IZY MECA CROIX", brand:"IZY", group:"Fixation", cpte:100, ess:40, min:20, price:5, color:"orange", symbol:"×", active:true, used:true},
+  {id:6, ref:"RAILS-240", name:"IZY RAILS RAILS 2M40", brand:"IZY", group:"Fixation", cpte:80, ess:30, min:20, price:18.5, color:"orange", symbol:"■", active:true, used:true},
+  {id:7, ref:"PAC-LG12", name:"PAC LG 12 kW", brand:"LG", group:"PAC", cpte:3, ess:1, min:2, price:3200, color:"red", symbol:"⚡", active:true, used:false},
+  {id:8, ref:"BALLON-190", name:"BALLON THERMODYNAMIQUE 190L", brand:"Thermor", group:"ECS", cpte:5, ess:2, min:3, price:540, color:"red", symbol:"●", active:true, used:false}
 ];
 
-const paramData = {
-  products: [
-    {id:1,name:"Panneau photovoltaïque 500W",active:true,used:true},
-    {id:2,name:"Micro-onduleur Hoymiles HMS-1000",active:true,used:true},
-    {id:3,name:"Rail aluminium 4,20 m",active:true,used:false},
-    {id:4,name:"Ballon thermodynamique 190L",active:false,used:true}
-  ],
-  groups: [
-    {id:1,name:"Photovoltaïque",active:true,used:true},
-    {id:2,name:"PAC",active:true,used:true},
-    {id:3,name:"Fixation",active:true,used:false}
-  ],
-  companies: [
-    {id:1,name:"CPTE Conseils",active:true,used:true},
-    {id:2,name:"Essentiel Énergie",active:true,used:true},
-    {id:3,name:"FEV",active:false,used:true},
-    {id:4,name:"Société test",active:true,used:false}
-  ],
-  kits: [
-    {id:1,name:"Kit 12 panneaux monophasé",active:true,used:true},
-    {id:2,name:"Kit PAC LG 12 kW + ballon",active:true,used:false},
-    {id:3,name:"Ancien kit démo",active:false,used:true}
-  ]
-};
+let groups = [
+  {id:1, name:"Photovoltaïque", active:true, used:true},
+  {id:2, name:"Fixation", active:true, used:true},
+  {id:3, name:"PAC", active:true, used:true},
+  {id:4, name:"ECS", active:true, used:true},
+  {id:5, name:"Électricité", active:true, used:false}
+];
 
-let achatsImport = [];
-let sortiesImport = [];
-let stockImport = {};
+let companies = [
+  {id:1, name:"CPTE Conseils", code:"CPTE", active:true, used:true},
+  {id:2, name:"Essentiel Énergie", code:"ESS", active:true, used:true},
+  {id:3, name:"FEV", code:"FEV", active:true, used:true}
+];
 
+let kits = [
+  {
+    id:1,
+    name:"Kit 12 panneaux monophasé",
+    active:true,
+    used:true,
+    lines:[
+      {productId:1, qty:12},
+      {productId:2, qty:6},
+      {productId:4, qty:2},
+      {productId:5, qty:2},
+      {productId:6, qty:12}
+    ]
+  }
+];
+
+let purchases = [];
+let movementLog = [];
+let currentLines = [];
+let currentKitLines = [];
+let BLs = [];
+let BLcounter = 1;
+let loadedBLId = null;
+
+/* -------------------------------
+   HELPERS
+--------------------------------*/
 function formatEuro(v){
   return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(v||0);
 }
-
+function productById(id){ return products.find(p=>p.id===id); }
+function activeProducts(){ return products.filter(p=>p.active); }
+function activeKits(){ return kits.filter(k=>k.active); }
+function getCompanyLabel(code){
+  if(code === "CPTE") return "CPTE Conseils";
+  if(code === "ESS") return "Essentiel Énergie";
+  return code || "";
+}
+function symbolBadge(product){
+  return `<span class="symbol-badge color-${product.color || 'slate'}">${product.symbol || ''} ${product.name}</span>`;
+}
 function stockStatus(q,m){
   if(q<=0) return '<span class="pill pill-red">Rupture</span>';
   if(q<=m) return '<span class="pill pill-orange">Stock faible</span>';
   return '<span class="pill pill-green">OK</span>';
 }
-
-function renderStockTable(filter='all'){
-  document.getElementById('stockBody').innerHTML = stockDemo.map(item=>{
-    const global = item.cpte + item.ess;
-    const shown = filter==='CPTE' ? item.cpte : filter==='ESS' ? item.ess : global;
-    return `<tr>
-      <td>${item.ref}</td>
-      <td>${item.name}</td>
-      <td>${item.brand}</td>
-      <td>${item.group}</td>
-      <td>${shown}</td>
-      <td>${item.min}</td>
-      <td>${item.cpte}</td>
-      <td>${item.ess}</td>
-      <td>${formatEuro(item.price)}</td>
-      <td>${stockStatus(shown,item.min)}</td>
-    </tr>`;
-  }).join('');
+function totalProductQty(p, filter){
+  if(filter === "CPTE") return p.cpte;
+  if(filter === "ESS") return p.ess;
+  return p.cpte + p.ess;
 }
-
-function applyStockFilter(){
-  renderStockTable(document.getElementById('stockFilter').value);
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
-
-function renderValuation(){
-  const filter = document.getElementById('valFilter').value;
-  let total = 0;
-  document.getElementById('valuationBody').innerHTML = stockDemo.map(item=>{
-    const qty = filter==='CPTE' ? item.cpte : filter==='ESS' ? item.ess : item.cpte + item.ess;
-    const value = qty * item.price;
-    total += value;
-    return `<tr>
-      <td>${item.name}</td>
-      <td>${qty}</td>
-      <td>${formatEuro(item.price)}</td>
-      <td>${formatEuro(value)}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('valuationTotal').textContent = `Total valorisé : ${formatEuro(total)}`;
+function notice(id, text){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = text;
+  el.style.display = "block";
+  setTimeout(()=>{ el.style.display = "none"; }, 2500);
 }
+function confirmDelete(name){ return confirm(`Supprimer "${name}" ?`); }
 
+/* -------------------------------
+   NAV
+--------------------------------*/
 function switchScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(name).classList.add('active');
@@ -765,229 +778,805 @@ function switchScreen(name){
   }
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
 }
+document.querySelectorAll('.navbtn').forEach(btn=>{
+  btn.addEventListener('click',()=>switchScreen(btn.dataset.screen));
+});
 
-function showNotice(id, text){
-  const el = document.getElementById(id);
-  el.textContent = text;
-  el.style.display = 'block';
-  setTimeout(()=>{ el.style.display = 'none'; }, 2500);
+/* -------------------------------
+   STOCK + DASHBOARD + VALORISATION
+--------------------------------*/
+function renderStockTable(){
+  const filter = document.getElementById('stockFilter').value;
+  const search = (document.getElementById('stockSearch').value || '').toLowerCase().trim();
+  const category = document.getElementById('stockCategoryFilter').value;
+
+  const rows = products.filter(p=>{
+    const matchSearch = !search ||
+      p.ref.toLowerCase().includes(search) ||
+      p.name.toLowerCase().includes(search) ||
+      p.brand.toLowerCase().includes(search);
+    const matchCat = category === 'all' || p.group === category;
+    return matchSearch && matchCat;
+  });
+
+  document.getElementById('stockBody').innerHTML = rows.map(p=>{
+    const shown = totalProductQty(p, filter);
+    return `<tr>
+      <td>${p.ref}</td>
+      <td>${symbolBadge(p)}</td>
+      <td>${p.brand}</td>
+      <td>${p.group}</td>
+      <td>${shown}</td>
+      <td>${p.min}</td>
+      <td>${p.cpte}</td>
+      <td>${p.ess}</td>
+      <td>${formatEuro(p.price)}</td>
+      <td>${stockStatus(shown,p.min)}</td>
+    </tr>`;
+  }).join('');
+}
+function renderDashboard(){
+  const globalQty = products.reduce((s,p)=>s+p.cpte+p.ess,0);
+  const globalValue = products.reduce((s,p)=>s+((p.cpte+p.ess)*p.price),0);
+  const underMini = products.filter(p=>(p.cpte+p.ess) <= p.min).length;
+
+  document.getElementById('kpiStockGlobal').textContent = globalQty;
+  document.getElementById('kpiValueGlobal').textContent = formatEuro(globalValue);
+  document.getElementById('kpiUnderMini').textContent = underMini;
+  document.getElementById('kpiBLCount').textContent = BLs.length;
+
+  document.getElementById('dashboardAlerts').innerHTML = products
+    .filter(p=>(p.cpte+p.ess) <= p.min)
+    .slice(0,4)
+    .map(p=>`<div class="listitem"><strong>Stock faible</strong><div class="compact muted">${p.name} • ${p.cpte+p.ess} en stock</div></div>`)
+    .join('') || `<div class="listitem"><strong>Aucune alerte critique</strong><div class="compact muted">Tout est sous contrôle pour le moment.</div></div>`;
+
+  const cpteQty = products.reduce((s,p)=>s+p.cpte,0);
+  const essQty = products.reduce((s,p)=>s+p.ess,0);
+  const cpteValue = products.reduce((s,p)=>s+(p.cpte*p.price),0);
+  const essValue = products.reduce((s,p)=>s+(p.ess*p.price),0);
+
+  document.getElementById('dashboardSplit').innerHTML = `
+    <tr><td>CPTE Conseils</td><td>${cpteQty}</td><td>${formatEuro(cpteValue)}</td></tr>
+    <tr><td>Essentiel Énergie</td><td>${essQty}</td><td>${formatEuro(essValue)}</td></tr>
+  `;
+}
+function renderValuation(){
+  const filter = document.getElementById('valFilter').value;
+  let total = 0;
+  document.getElementById('valuationBody').innerHTML = products.map(p=>{
+    const qty = totalProductQty(p, filter);
+    const value = qty * p.price;
+    total += value;
+    return `<tr>
+      <td>${symbolBadge(p)}</td>
+      <td>${qty}</td>
+      <td>${formatEuro(p.price)}</td>
+      <td>${formatEuro(value)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('valuationTotal').textContent = `Total valorisé : ${formatEuro(total)}`;
 }
 
-function confirmDelete(name){
-  return confirm(`Supprimer "${name}" ?`);
-}
+/* -------------------------------
+   OUT - CURRENT LINES
+--------------------------------*/
+function refreshOutSelectors(){
+  document.getElementById('outProductSelect').innerHTML = activeProducts().map(p=>
+    `<option value="${p.id}">${p.ref} — ${p.name}</option>`
+  ).join('');
 
-function toggleActive(type, id){
-  const item = paramData[type].find(x=>x.id===id);
-  if(!item) return;
-  item.active = !item.active;
-  renderParamLists();
-  showNotice(type+'Notice', item.active ? 'Élément réactivé' : 'Élément désactivé');
-}
+  document.getElementById('outKitSelect').innerHTML = activeKits().map(k=>
+    `<option value="${k.id}">${k.name}</option>`
+  ).join('') || `<option value="">Aucun kit actif</option>`;
 
-function editItem(type, id){
-  const item = paramData[type].find(x=>x.id===id);
-  if(!item) return;
-  if(item.used){
-    showNotice(type+'Notice', 'Impossible de modifier : déjà utilisé');
+  document.getElementById('purchaseProductSelect').innerHTML = activeProducts().map(p=>
+    `<option value="${p.id}">${p.ref} — ${p.name}</option>`
+  ).join('');
+
+  document.getElementById('newKitProductSelect').innerHTML = activeProducts().map(p=>
+    `<option value="${p.id}">${p.ref} — ${p.name}</option>`
+  ).join('');
+}
+function addProductLine(){
+  const productId = parseInt(document.getElementById('outProductSelect').value,10);
+  const qty = parseFloat(document.getElementById('outProductQty').value);
+  if(!productId || !qty || qty<=0) return alert("Choisis un produit et une quantité.");
+  currentLines.push({type:'product', productId, qty});
+  renderCurrentLines();
+}
+function addKitLine(){
+  const kitId = parseInt(document.getElementById('outKitSelect').value,10);
+  const times = parseFloat(document.getElementById('outKitQty').value);
+  const kit = kits.find(k=>k.id===kitId);
+  if(!kit) return alert("Choisis un kit.");
+  if(!times || times<=0) return alert("Quantité de kit invalide.");
+
+  currentLines.push({
+    type:'kit',
+    kitId,
+    qty:times,
+    label:kit.name
+  });
+
+  kit.lines.forEach(l=>{
+    currentLines.push({
+      type:'product',
+      productId:l.productId,
+      qty:l.qty * times,
+      fromKit:kit.name
+    });
+  });
+  renderCurrentLines();
+}
+function addCommentLine(){
+  const txt = document.getElementById('outCommentText').value.trim();
+  if(!txt) return;
+  currentLines.push({type:'comment', text:txt});
+  document.getElementById('outCommentText').value = '';
+  renderCurrentLines();
+}
+function removeCurrentLine(index){
+  currentLines.splice(index,1);
+  renderCurrentLines();
+}
+function renderCurrentLines(){
+  const body = document.getElementById('currentLinesTable');
+  if(currentLines.length===0){
+    body.innerHTML = `<tr><td colspan="4" class="muted">Aucune ligne pour le moment</td></tr>`;
     return;
   }
-  const next = prompt("Modifier le nom :", item.name);
-  if(next && next.trim()){
-    item.name = next.trim();
-    renderParamLists();
-    showNotice(type+'Notice', 'Élément modifié');
-  }
+  body.innerHTML = currentLines.map((l,i)=>{
+    if(l.type === 'comment'){
+      return `<tr>
+        <td>Commentaire</td>
+        <td class="muted">${escapeHtml(l.text)}</td>
+        <td>-</td>
+        <td><button class="btn red small" onclick="removeCurrentLine(${i})">X</button></td>
+      </tr>`;
+    }
+    if(l.type === 'kit'){
+      return `<tr>
+        <td>Kit</td>
+        <td>${escapeHtml(l.label)}</td>
+        <td>${l.qty}</td>
+        <td><button class="btn red small" onclick="removeCurrentLine(${i})">X</button></td>
+      </tr>`;
+    }
+    const p = productById(l.productId);
+    return `<tr>
+      <td>Produit</td>
+      <td>${p ? symbolBadge(p) : '-'}</td>
+      <td>${l.qty}</td>
+      <td><button class="btn red small" onclick="removeCurrentLine(${i})">X</button></td>
+    </tr>`;
+  }).join('');
+}
+function previewCurrentBL(){
+  const client = document.getElementById('outClient').value.trim() || 'Client';
+  const detail = currentLines.map(l=>{
+    if(l.type==='comment') return `Commentaire : ${l.text}`;
+    if(l.type==='kit') return `Kit : ${l.label} x${l.qty}`;
+    const p = productById(l.productId);
+    return `${p ? p.name : 'Produit'} x${l.qty}`;
+  }).join("\n");
+  alert(`Prévisualisation BL\n\nClient : ${client}\n\n${detail || 'Aucune ligne'}`);
 }
 
-function deleteItem(type, id){
-  const item = paramData[type].find(x=>x.id===id);
-  if(!item) return;
-  if(item.used){
-    showNotice(type+'Notice', 'Impossible de supprimer : déjà utilisé');
+/* -------------------------------
+   CREATE BL / MODIFY / RETURN
+--------------------------------*/
+function consumeStock(companyCode, productId, qty){
+  const p = productById(productId);
+  if(!p) return;
+  if(companyCode === 'CPTE') p.cpte -= qty;
+  if(companyCode === 'ESS') p.ess -= qty;
+}
+function restoreStock(companyCode, productId, qty){
+  const p = productById(productId);
+  if(!p) return;
+  if(companyCode === 'CPTE') p.cpte += qty;
+  if(companyCode === 'ESS') p.ess += qty;
+}
+function validateOut(){
+  const client = document.getElementById('outClient').value.trim();
+  const societe = document.getElementById('outSociete').value;
+  const facture = document.getElementById('outFacture').value;
+  const linkedOrder = document.getElementById('outOrderLink').value;
+
+  if(!client) return alert("Renseigne un client.");
+  const productLines = currentLines.filter(l=>l.type==='product');
+  if(productLines.length===0) return alert("Ajoute au moins un produit.");
+
+  const commentLines = currentLines.filter(l=>l.type==='comment').map(l=>l.text);
+  const kitLines = currentLines.filter(l=>l.type==='kit').map(l=>l.label);
+
+  const bl = {
+    id: "BL-" + String(BLcounter).padStart(6,"0"),
+    date: new Date().toLocaleDateString('fr-FR'),
+    client,
+    societe,
+    factureA: facture === 'same' ? societe : facture,
+    linkedOrder,
+    status:'valid',
+    lines: productLines.map(l=>({productId:l.productId, qty:l.qty, fromKit:l.fromKit || ''})),
+    kits: kitLines,
+    comments: commentLines,
+    createdAt: Date.now()
+  };
+
+  BLcounter++;
+  BLs.unshift(bl);
+
+  productLines.forEach(l=>{
+    consumeStock(societe, l.productId, l.qty);
+    const p = productById(l.productId);
+    if(p) p.used = true;
+    movementLog.unshift({
+      date: bl.date,
+      type:"Sortie simple",
+      societe,
+      client,
+      productName: p ? p.name : '',
+      qty:-l.qty,
+      comment: commentLines.join(' | ')
+    });
+  });
+
+  currentLines = [];
+  renderCurrentLines();
+  renderBLTable();
+  renderStockTable();
+  renderDashboard();
+  renderValuation();
+  refreshEditSelectors();
+  alert(`BL créé : ${bl.id}`);
+}
+function renderBLTable(){
+  const search = (document.getElementById('blSearch').value || '').toLowerCase().trim();
+  const soc = document.getElementById('blSocFilter').value;
+  const status = document.getElementById('blStatusFilter').value;
+
+  const rows = BLs.filter(bl=>{
+    const matchSearch = !search || bl.id.toLowerCase().includes(search) || bl.client.toLowerCase().includes(search);
+    const matchSoc = soc === 'all' || bl.societe === soc;
+    const matchStatus = status === 'all' || bl.status === status;
+    return matchSearch && matchSoc && matchStatus;
+  });
+
+  const body = document.getElementById('blTableBody');
+  if(rows.length===0){
+    body.innerHTML = `<tr><td colspan="7" class="muted">Aucun BL pour le moment</td></tr>`;
     return;
   }
-  if(confirmDelete(item.name)){
-    paramData[type] = paramData[type].filter(x=>x.id!==id);
-    renderParamLists();
-    showNotice(type+'Notice', 'Élément supprimé');
-  }
-}
 
-function renderParamTable(type, bodyId){
-  const body = document.getElementById(bodyId);
-  body.innerHTML = paramData[type].map(item=>{
-    const status = item.active
-      ? '<span class="badge-active">Actif</span>'
-      : '<span class="badge-inactive">Inactif</span>';
-    const used = item.used
-      ? '<span class="pill pill-orange">Oui</span>'
-      : '<span class="pill pill-green">Non</span>';
-
-    return `<tr style="${item.active ? '' : 'opacity:.55'}">
-      <td>${item.name}</td>
-      <td>${status}</td>
-      <td>${used}</td>
+  body.innerHTML = rows.map(bl=>{
+    const detail = bl.lines.map(l=>{
+      const p = productById(l.productId);
+      return `${p ? p.name : ''} x${l.qty}`;
+    }).join('<br>');
+    const comment = (bl.comments || []).join(' | ');
+    return `<tr>
+      <td>${bl.id}</td>
+      <td>${bl.date}</td>
+      <td>${getCompanyLabel(bl.societe)}</td>
+      <td>${escapeHtml(bl.client)}</td>
+      <td class="compact">${detail}</td>
+      <td class="compact">${escapeHtml(comment)}</td>
       <td>
         <div class="row-actions">
-          <button class="btn soft small" onclick="toggleActive('${type}', ${item.id})">${item.active ? 'Désactiver' : 'Activer'}</button>
-          <button class="btn orange small" onclick="editItem('${type}', ${item.id})">Modifier</button>
-          <button class="btn red small" onclick="deleteItem('${type}', ${item.id})">Supprimer</button>
+          <button class="btn soft small" onclick="showBLDetail('${bl.id}')">Voir</button>
+          <button class="btn orange small" onclick="loadBLForEditById('${bl.id}')">Modifier</button>
+          <button class="btn primary small" onclick="printBL('${bl.id}')">PDF</button>
         </div>
       </td>
     </tr>`;
   }).join('');
 }
-
-function renderParamLists(){
-  renderParamTable('products','productsCreatedBody');
-  renderParamTable('groups','groupsCreatedBody');
-  renderParamTable('companies','companiesCreatedBody');
-  renderParamTable('kits','kitsCreatedBody');
+function showBLDetail(id){
+  const bl = BLs.find(b=>b.id===id);
+  if(!bl) return;
+  const lines = bl.lines.map(l=>{
+    const p = productById(l.productId);
+    return `<tr><td>${p ? symbolBadge(p) : ''}</td><td>${l.qty}</td><td>${escapeHtml(l.fromKit || '')}</td></tr>`;
+  }).join('');
+  document.getElementById('blDetailBox').innerHTML = `
+    <strong>${bl.id}</strong><br>
+    Date : ${bl.date}<br>
+    Société : ${getCompanyLabel(bl.societe)}<br>
+    Client : ${escapeHtml(bl.client)}<br>
+    Facturé à : ${getCompanyLabel(bl.factureA)}<br>
+    <table style="margin-top:10px">
+      <thead><tr><th>Produit</th><th>Qté</th><th>Kit</th></tr></thead>
+      <tbody>${lines}</tbody>
+    </table>
+    <div style="margin-top:10px"><strong>Commentaires :</strong> ${escapeHtml((bl.comments||[]).join(" | ") || "-")}</div>
+  `;
 }
+function refreshEditSelectors(){
+  const options = BLs.map(bl=>`<option value="${bl.id}">${bl.id} — ${bl.client}</option>`).join('');
+  document.getElementById('editBLSelect').innerHTML = options || `<option value="">Aucun BL</option>`;
+  document.getElementById('returnBLSelect').innerHTML = options || `<option value="">Aucun BL</option>`;
+  refreshReturnLineSelect();
+}
+function loadBLForEdit(){
+  const id = document.getElementById('editBLSelect').value;
+  loadBLForEditById(id);
+}
+function loadBLForEditById(id){
+  const bl = BLs.find(b=>b.id===id);
+  if(!bl) return;
 
-function renderImportStock(){
-  const body = document.getElementById('importStockBody');
-  const keys = Object.keys(stockImport);
-  if(keys.length === 0){
-    body.innerHTML = `<tr><td colspan="2" class="muted">Aucun import pour le moment</td></tr>`;
+  loadedBLId = id;
+  currentLines = [];
+
+  bl.lines.forEach(l=>{
+    currentLines.push({type:'product', productId:l.productId, qty:l.qty, fromKit:l.fromKit || ''});
+  });
+  (bl.comments || []).forEach(c=>{
+    currentLines.push({type:'comment', text:c});
+  });
+
+  document.getElementById('outClient').value = bl.client;
+  document.getElementById('outSociete').value = bl.societe;
+  document.getElementById('outFacture').value = bl.factureA === bl.societe ? 'same' : bl.factureA;
+  renderCurrentLines();
+
+  document.getElementById('editBLBox').innerHTML = `
+    <strong>${bl.id} chargé dans l’écran "Sorties simples"</strong><br>
+    Tu peux modifier les lignes puis revalider.<br>
+    L’ancien BL restera dans l’historique avec le statut "Modifié".
+  `;
+  switchScreen('simpleOut');
+}
+function refreshReturnLineSelect(){
+  const id = document.getElementById('returnBLSelect').value;
+  const bl = BLs.find(b=>b.id===id);
+  const select = document.getElementById('returnLineSelect');
+  if(!bl){
+    select.innerHTML = `<option value="">Aucune ligne</option>`;
     return;
   }
-  body.innerHTML = keys.map(ref=>`<tr><td>${ref}</td><td>${stockImport[ref]}</td></tr>`).join('');
+  select.innerHTML = bl.lines.map((l,idx)=>{
+    const p = productById(l.productId);
+    return `<option value="${idx}">${p ? p.name : ''} x${l.qty}</option>`;
+  }).join('');
+}
+document.getElementById('returnBLSelect').addEventListener('change', refreshReturnLineSelect);
+
+function returnStock(){
+  const blId = document.getElementById('returnBLSelect').value;
+  const lineIndex = parseInt(document.getElementById('returnLineSelect').value,10);
+  const qty = parseFloat(document.getElementById('returnQty').value);
+  const bl = BLs.find(b=>b.id===blId);
+  if(!bl) return notice('returnNotice','Choisis un BL.');
+  const line = bl.lines[lineIndex];
+  if(!line) return notice('returnNotice','Choisis une ligne.');
+  if(!qty || qty<=0) return notice('returnNotice','Quantité invalide.');
+  if(qty > line.qty) return notice('returnNotice','Quantité supérieure à la ligne.');
+
+  line.qty -= qty;
+  restoreStock(bl.societe, line.productId, qty);
+
+  const p = productById(line.productId);
+  movementLog.unshift({
+    date: new Date().toLocaleDateString('fr-FR'),
+    type:"Retour stock",
+    societe: bl.societe,
+    client: bl.client,
+    productName: p ? p.name : '',
+    qty: qty,
+    comment: `Retour depuis ${bl.id}`
+  });
+
+  if(line.qty === 0){
+    bl.lines.splice(lineIndex,1);
+  }
+
+  renderBLTable();
+  showBLDetail(bl.id);
+  renderStockTable();
+  renderDashboard();
+  renderValuation();
+  refreshEditSelectors();
+  refreshReturnLineSelect();
+  notice('returnNotice','Retour de stock enregistré');
 }
 
-function renderImportSorties(){
-  const body = document.getElementById('importSortiesBody');
-  if(sortiesImport.length === 0){
-    body.innerHTML = `<tr><td colspan="6" class="muted">Aucun import pour le moment</td></tr>`;
+/* -------------------------------
+   PDF SIMPLE
+--------------------------------*/
+function printBL(id){
+  const bl = BLs.find(b=>b.id===id);
+  if(!bl) return;
+
+  const linesHtml = bl.lines.map(l=>{
+    const p = productById(l.productId);
+    return `
+      <tr>
+        <td>${escapeHtml(p ? p.ref : '')}</td>
+        <td>${escapeHtml(p ? `${p.name} ${p.symbol || ''}` : '')}</td>
+        <td style="text-align:right">${l.qty}</td>
+      </tr>
+    `;
+  }).join('');
+
+  const comments = (bl.comments || []).join(' | ');
+  const html = `
+  <html>
+  <head>
+    <title>${escapeHtml(bl.id)}</title>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;padding:32px;color:#111}
+      .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+      .logo{height:60px;object-fit:contain}
+      h1{margin:0 0 10px;font-size:24px}
+      .meta p{margin:4px 0}
+      table{width:100%;border-collapse:collapse;margin-top:20px}
+      th,td{border:1px solid #ddd;padding:10px;font-size:14px}
+      th{background:#f7f7f7;text-align:left}
+      .footer{margin-top:18px;font-size:14px}
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <div>
+        <h1>Bon de préparation</h1>
+        <div class="meta">
+          <p><strong>N° :</strong> ${escapeHtml(bl.id)}</p>
+          <p><strong>Date :</strong> ${escapeHtml(bl.date)}</p>
+          <p><strong>Client :</strong> ${escapeHtml(bl.client)}</p>
+          <p><strong>Société :</strong> ${escapeHtml(getCompanyLabel(bl.societe))}</p>
+        </div>
+      </div>
+      <img src="hmgroup.png" class="logo" onerror="this.style.display='none'">
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Référence</th>
+          <th>Désignation</th>
+          <th style="text-align:right">Quantité</th>
+        </tr>
+      </thead>
+      <tbody>${linesHtml}</tbody>
+    </table>
+
+    <div class="footer">
+      <p><strong>Commentaire :</strong> ${escapeHtml(comments || '-')}</p>
+    </div>
+  </body>
+  </html>
+  `;
+  const w = window.open("", "_blank");
+  w.document.write(html);
+  w.document.close();
+  setTimeout(()=>w.print(), 500);
+}
+
+/* -------------------------------
+   PURCHASES + MOVES
+--------------------------------*/
+function registerPurchase(){
+  const productId = parseInt(document.getElementById('purchaseProductSelect').value,10);
+  const qty = parseFloat(document.getElementById('purchaseQty').value);
+  const price = parseFloat(document.getElementById('purchasePrice').value);
+  const societe = document.getElementById('purchaseSociete').value;
+  const p = productById(productId);
+
+  if(!p) return notice('purchaseNotice','Produit introuvable');
+  if(!qty || qty<=0) return notice('purchaseNotice','Quantité invalide');
+  if(isNaN(price) || price < 0) return notice('purchaseNotice','Prix invalide');
+
+  if(societe === 'CPTE') p.cpte += qty;
+  if(societe === 'ESS') p.ess += qty;
+  p.price = price;
+  p.used = true;
+
+  const row = {
+    date: new Date().toLocaleDateString('fr-FR'),
+    productId,
+    societe,
+    qty,
+    price
+  };
+  purchases.unshift(row);
+  movementLog.unshift({
+    date: row.date,
+    type:"Achat reçu",
+    societe,
+    client:"Fournisseur",
+    productName:p.name,
+    qty:qty,
+    comment:`Prix : ${price}`
+  });
+
+  renderPurchaseTable();
+  renderStockTable();
+  renderDashboard();
+  renderValuation();
+  notice('purchaseNotice','Achat ajouté');
+}
+function renderPurchaseTable(){
+  const body = document.getElementById('purchaseTableBody');
+  if(purchases.length===0){
+    body.innerHTML = `<tr><td colspan="5" class="muted">Aucun achat saisi</td></tr>`;
     return;
   }
-  body.innerHTML = sortiesImport.map(row=>`<tr>
-    <td>${row.date || ''}</td>
-    <td>${row.client || ''}</td>
-    <td>${row.societe || ''}</td>
-    <td>${row.reference_produit || ''}</td>
-    <td>${row.quantite || ''}</td>
-    <td>${row.commentaire || ''}</td>
+  body.innerHTML = purchases.map(r=>{
+    const p = productById(r.productId);
+    return `<tr>
+      <td>${r.date}</td>
+      <td>${p ? p.name : ''}</td>
+      <td>${getCompanyLabel(r.societe)}</td>
+      <td>${r.qty}</td>
+      <td>${formatEuro(r.price)}</td>
+    </tr>`;
+  }).join('');
+}
+function renderMoves(){
+  const body = document.getElementById('movesBody');
+  if(movementLog.length===0){
+    body.innerHTML = `<tr><td colspan="7" class="muted">Aucun mouvement</td></tr>`;
+    return;
+  }
+  body.innerHTML = movementLog.map(m=>`<tr>
+    <td>${m.date}</td>
+    <td>${escapeHtml(m.type)}</td>
+    <td>${escapeHtml(getCompanyLabel(m.societe))}</td>
+    <td>${escapeHtml(m.client)}</td>
+    <td>${escapeHtml(m.productName)}</td>
+    <td>${m.qty}</td>
+    <td>${escapeHtml(m.comment || '')}</td>
   </tr>`).join('');
 }
 
-function csvLineToArray(line){
-  const result = [];
-  let current = '';
-  let insideQuotes = false;
-
-  for(let i=0;i<line.length;i++){
-    const char = line[i];
-    const next = line[i+1];
-
-    if(char === '"'){
-      if(insideQuotes && next === '"'){
-        current += '"';
-        i++;
-      } else {
-        insideQuotes = !insideQuotes;
-      }
-    } else if(char === ',' && !insideQuotes){
-      result.push(current);
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  result.push(current);
-  return result.map(v=>v.trim());
+/* -------------------------------
+   PARAMS
+--------------------------------*/
+function refreshParamViews(){
+  renderProductsParamTable();
+  renderGroupsTable();
+  renderCompaniesTable();
+  renderKitsTable();
+  refreshOutSelectors();
 }
+function createProduct(){
+  const ref = document.getElementById('newProductRef').value.trim();
+  const name = document.getElementById('newProductName').value.trim();
+  const brand = document.getElementById('newProductBrand').value.trim();
+  const group = document.getElementById('newProductGroup').value;
+  const color = document.getElementById('newProductColor').value;
+  const symbol = document.getElementById('newProductSymbol').value;
+  const price = parseFloat(document.getElementById('newProductPrice').value || '0');
+  const min = parseFloat(document.getElementById('newProductMini').value || '0');
 
-function importCSV(){
-  const file = document.getElementById('fileInput').files[0];
-  if(!file){
-    document.getElementById('importResult').textContent = 'Choisis un fichier CSV.';
+  if(!ref || !name) return notice('productsNotice','Référence et nom obligatoires');
+  if(products.some(p=>p.ref.toLowerCase() === ref.toLowerCase())) return notice('productsNotice','Référence déjà existante');
+
+  products.push({
+    id: Date.now(),
+    ref, name, brand, group,
+    cpte:0, ess:0, min, price,
+    color, symbol,
+    active:true, used:false
+  });
+
+  document.getElementById('newProductRef').value = '';
+  document.getElementById('newProductName').value = '';
+  document.getElementById('newProductBrand').value = '';
+  document.getElementById('newProductPrice').value = '';
+  document.getElementById('newProductMini').value = '';
+
+  refreshParamViews();
+  renderStockTable();
+  renderDashboard();
+  renderValuation();
+  notice('productsNotice','Produit créé');
+}
+function createGroup(){
+  const name = document.getElementById('newGroupName').value.trim();
+  if(!name) return notice('groupsNotice','Nom obligatoire');
+  groups.push({id:Date.now(), name, active:true, used:false});
+  document.getElementById('newGroupName').value = '';
+  renderGroupsTable();
+  notice('groupsNotice','Groupe créé');
+}
+function createCompany(){
+  const name = document.getElementById('newCompanyName').value.trim();
+  if(!name) return notice('companiesNotice','Nom obligatoire');
+  companies.push({id:Date.now(), name, code:name, active:true, used:false});
+  document.getElementById('newCompanyName').value = '';
+  renderCompaniesTable();
+  notice('companiesNotice','Société créée');
+}
+function toggleEntity(listName, id, noticeId){
+  const arr = (listName === 'products') ? products : (listName === 'groups' ? groups : (listName === 'companies' ? companies : kits));
+  const item = arr.find(x=>x.id===id);
+  if(!item) return;
+  item.active = !item.active;
+  refreshParamViews();
+  notice(noticeId, item.active ? 'Élément réactivé' : 'Élément désactivé');
+}
+function editEntity(listName, id, noticeId){
+  const arr = (listName === 'products') ? products : (listName === 'groups' ? groups : (listName === 'companies' ? companies : kits));
+  const item = arr.find(x=>x.id===id);
+  if(!item) return;
+
+  if(item.used){
+    notice(noticeId,'Impossible de modifier : déjà utilisé');
     return;
   }
 
-  const forcedType = document.getElementById('importType').value;
-  const reader = new FileReader();
-
-  reader.onload = function(e){
-    const text = e.target.result.replace(/\r/g,'');
-    const lines = text.split('\n').filter(l=>l.trim() !== '');
-
-    if(lines.length < 2){
-      document.getElementById('importResult').textContent = 'Fichier vide ou invalide.';
-      return;
+  const next = prompt("Modifier le nom :", item.name);
+  if(next && next.trim()){
+    item.name = next.trim();
+    refreshParamViews();
+    if(listName === 'products'){
+      renderStockTable();
+      renderBLTable();
+      renderCurrentLines();
     }
+    notice(noticeId,'Élément modifié');
+  }
+}
+function deleteEntity(listName, id, noticeId){
+  let arr = (listName === 'products') ? products : (listName === 'groups' ? groups : (listName === 'companies' ? companies : kits));
+  const item = arr.find(x=>x.id===id);
+  if(!item) return;
 
-    const headers = csvLineToArray(lines[0]);
-    let type = forcedType;
+  if(item.used){
+    notice(noticeId,'Impossible de supprimer : déjà utilisé');
+    return;
+  }
 
-    if(type === 'auto'){
-      if(headers.includes('fournisseur')) type = 'achat';
-      else if(headers.includes('client')) type = 'sortie';
-      else type = 'inconnu';
-    }
+  if(!confirmDelete(item.name)) return;
 
-    if(type === 'inconnu'){
-      document.getElementById('importResult').textContent = 'Impossible de détecter le type du fichier.';
-      return;
-    }
+  if(listName === 'products') products = products.filter(x=>x.id!==id);
+  if(listName === 'groups') groups = groups.filter(x=>x.id!==id);
+  if(listName === 'companies') companies = companies.filter(x=>x.id!==id);
+  if(listName === 'kits') kits = kits.filter(x=>x.id!==id);
 
-    let importedCount = 0;
+  refreshParamViews();
+  notice(noticeId,'Élément supprimé');
+}
+function renderProductsParamTable(){
+  document.getElementById('productsCreatedBody').innerHTML = products.map(p=>`
+    <tr style="${p.active ? '' : 'opacity:.55'}">
+      <td>${symbolBadge(p)}<br><span class="muted">${p.ref}</span></td>
+      <td>${p.active ? '<span class="badge-active">Actif</span>' : '<span class="badge-inactive">Inactif</span>'}</td>
+      <td>${p.used ? '<span class="pill pill-orange">Oui</span>' : '<span class="pill pill-green">Non</span>'}</td>
+      <td>
+        <div class="row-actions">
+          <button class="btn soft small" onclick="toggleEntity('products', ${p.id}, 'productsNotice')">${p.active ? 'Désactiver' : 'Activer'}</button>
+          <button class="btn orange small" onclick="editEntity('products', ${p.id}, 'productsNotice')">Modifier</button>
+          <button class="btn red small" onclick="deleteEntity('products', ${p.id}, 'productsNotice')">Supprimer</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+function renderGroupsTable(){
+  document.getElementById('groupsCreatedBody').innerHTML = groups.map(g=>`
+    <tr style="${g.active ? '' : 'opacity:.55'}">
+      <td>${escapeHtml(g.name)}</td>
+      <td>${g.active ? '<span class="badge-active">Actif</span>' : '<span class="badge-inactive">Inactif</span>'}</td>
+      <td>${g.used ? '<span class="pill pill-orange">Oui</span>' : '<span class="pill pill-green">Non</span>'}</td>
+      <td>
+        <div class="row-actions">
+          <button class="btn soft small" onclick="toggleEntity('groups', ${g.id}, 'groupsNotice')">${g.active ? 'Désactiver' : 'Activer'}</button>
+          <button class="btn orange small" onclick="editEntity('groups', ${g.id}, 'groupsNotice')">Modifier</button>
+          <button class="btn red small" onclick="deleteEntity('groups', ${g.id}, 'groupsNotice')">Supprimer</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+function renderCompaniesTable(){
+  document.getElementById('companiesCreatedBody').innerHTML = companies.map(c=>`
+    <tr style="${c.active ? '' : 'opacity:.55'}">
+      <td>${escapeHtml(c.name)}</td>
+      <td>${c.active ? '<span class="badge-active">Actif</span>' : '<span class="badge-inactive">Inactif</span>'}</td>
+      <td>${c.used ? '<span class="pill pill-orange">Oui</span>' : '<span class="pill pill-green">Non</span>'}</td>
+      <td>
+        <div class="row-actions">
+          <button class="btn soft small" onclick="toggleEntity('companies', ${c.id}, 'companiesNotice')">${c.active ? 'Désactiver' : 'Activer'}</button>
+          <button class="btn orange small" onclick="editEntity('companies', ${c.id}, 'companiesNotice')">Modifier</button>
+          <button class="btn red small" onclick="deleteEntity('companies', ${c.id}, 'companiesNotice')">Supprimer</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+function addKitCompositionLine(){
+  const productId = parseInt(document.getElementById('newKitProductSelect').value,10);
+  const qty = parseFloat(document.getElementById('newKitProductQty').value);
+  const p = productById(productId);
+  if(!p || !qty || qty<=0) return;
+  currentKitLines.push({productId, qty});
+  renderNewKitLines();
+}
+function renderNewKitLines(){
+  const body = document.getElementById('newKitLinesBody');
+  if(currentKitLines.length===0){
+    body.innerHTML = `<tr><td colspan="3" class="muted">Aucune ligne kit</td></tr>`;
+    return;
+  }
+  body.innerHTML = currentKitLines.map((l,i)=>{
+    const p = productById(l.productId);
+    return `<tr>
+      <td>${p ? p.name : ''}</td>
+      <td>${l.qty}</td>
+      <td><button class="btn red small" onclick="removeNewKitLine(${i})">X</button></td>
+    </tr>`;
+  }).join('');
+}
+function removeNewKitLine(i){
+  currentKitLines.splice(i,1);
+  renderNewKitLines();
+}
+function saveKit(){
+  const name = document.getElementById('newKitName').value.trim();
+  if(!name) return notice('kitsNotice','Nom du kit obligatoire');
+  if(currentKitLines.length===0) return notice('kitsNotice','Ajoute au moins une ligne au kit');
 
-    for(let i=1;i<lines.length;i++){
-      const cols = csvLineToArray(lines[i]);
-      const row = {};
-      headers.forEach((h,idx)=> row[h.trim()] = cols[idx] || '');
+  kits.push({
+    id:Date.now(),
+    name,
+    active:true,
+    used:false,
+    lines: currentKitLines.map(l=>({...l}))
+  });
 
-      const ref = row.reference_produit;
-      const qty = parseFloat((row.quantite || '0').replace(',','.'));
-
-      if(!ref || isNaN(qty)) continue;
-      if(!stockImport[ref]) stockImport[ref] = 0;
-
-      if(type === 'achat'){
-        achatsImport.push(row);
-        stockImport[ref] += qty;
-        importedCount++;
-      }
-
-      if(type === 'sortie'){
-        sortiesImport.push(row);
-        stockImport[ref] -= qty;
-        importedCount++;
-      }
-    }
-
-    renderImportStock();
-    renderImportSorties();
-
-    document.getElementById('importResult').textContent =
-      `Import terminé.
-Type détecté : ${type}
-Lignes importées : ${importedCount}
-
-Totaux actuels :
-- Achats importés : ${achatsImport.length}
-- Sorties importées : ${sortiesImport.length}
-- Références stockées : ${Object.keys(stockImport).length}`;
-  };
-
-  reader.readAsText(file, 'utf-8');
+  document.getElementById('newKitName').value = '';
+  currentKitLines = [];
+  renderNewKitLines();
+  renderKitsTable();
+  refreshOutSelectors();
+  notice('kitsNotice','Kit créé');
+}
+function renderKitsTable(){
+  document.getElementById('kitsCreatedBody').innerHTML = kits.map(k=>`
+    <tr style="${k.active ? '' : 'opacity:.55'}">
+      <td>${escapeHtml(k.name)}</td>
+      <td>${k.active ? '<span class="badge-active">Actif</span>' : '<span class="badge-inactive">Inactif</span>'}</td>
+      <td>${k.used ? '<span class="pill pill-orange">Oui</span>' : '<span class="pill pill-green">Non</span>'}</td>
+      <td class="compact">${k.lines.map(l=>`${productById(l.productId)?.name || ''} x${l.qty}`).join('<br>')}</td>
+      <td>
+        <div class="row-actions">
+          <button class="btn soft small" onclick="toggleEntity('kits', ${k.id}, 'kitsNotice')">${k.active ? 'Désactiver' : 'Activer'}</button>
+          <button class="btn orange small" onclick="editEntity('kits', ${k.id}, 'kitsNotice')">Modifier</button>
+          <button class="btn red small" onclick="deleteEntity('kits', ${k.id}, 'kitsNotice')">Supprimer</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
 }
 
-document.querySelectorAll('.navbtn').forEach(btn=>{
-  btn.addEventListener('click',()=>switchScreen(btn.dataset.screen));
-});
-
-renderStockTable();
-renderValuation();
-renderParamLists();
-renderImportStock();
-renderImportSorties();
+/* -------------------------------
+   INIT
+--------------------------------*/
+function init(){
+  renderStockTable();
+  renderDashboard();
+  renderValuation();
+  renderCurrentLines();
+  renderBLTable();
+  renderPurchaseTable();
+  renderMoves();
+  renderProductsParamTable();
+  renderGroupsTable();
+  renderCompaniesTable();
+  renderKitsTable();
+  renderNewKitLines();
+  refreshOutSelectors();
+  refreshEditSelectors();
+}
+init();
 </script>
 </body>
 </html>
