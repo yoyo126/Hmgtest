@@ -81,21 +81,26 @@ save();
 }
 
 function createOrder(){
-let pid = prodSelect.value;
-let soc = soc.value;
-let qty = parseFloat(qtyCmd.value);
-let price = parseFloat(priceCmd.value);
+  let pid = document.getElementById("prodSelect").value;
+  let societe = document.getElementById("soc").value;
+  let qty = parseFloat(document.getElementById("qtyCmd").value);
+  let price = parseFloat(document.getElementById("priceCmd").value);
 
-data.orders.push({
-id:data.id++,
-productId:pid,
-soc,
-qtyOrdered:qty,
-qtyReceived:0,
-price,
-status:"pending"
-});
-save();
+  if(!pid) return alert("Choisis un produit");
+  if(!qty || qty <= 0) return alert("Quantité invalide");
+  if(isNaN(price) || price < 0) return alert("Prix invalide");
+
+  data.orders.push({
+    id: data.id++,
+    productId: parseInt(pid, 10),
+    soc: societe,
+    qtyOrdered: qty,
+    qtyReceived: 0,
+    price: price,
+    status: "pending"
+  });
+
+  save();
 }
 
 function receive(){
