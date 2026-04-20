@@ -104,50 +104,59 @@ function createOrder(){
 }
 
 function receive(){
-let oid = orderSelect.value;
-let order = data.orders.find(o=>o.id==oid);
-let qty = parseFloat(qtyRec.value);
+  let oid = document.getElementById("orderSelect").value;
+  let order = data.orders.find(o => o.id == oid);
+  let qty = parseFloat(document.getElementById("qtyRec").value);
 
-if(order.qtyReceived + qty > order.qtyOrdered){
-alert("Trop reçu");
-return;
-}
+  if(!order) return alert("Commande introuvable");
+  if(!qty || qty <= 0) return alert("Quantité reçue invalide");
 
-order.qtyReceived += qty;
-order.status = order.qtyReceived == order.qtyOrdered ? "done" : "partial";
+  if(order.qtyReceived + qty > order.qtyOrdered){
+    alert("Trop reçu");
+    return;
+  }
 
-let p = data.products.find(p=>p.id==order.productId);
+  order.qtyReceived += qty;
+  order.status = order.qtyReceived == order.qtyOrdered ? "done" : "partial";
 
-let lot = {qty, price:order.price};
+  let p = data.products.find(p => p.id == order.productId);
+  if(!p) return alert("Produit introuvable");
 
-if(order.soc=="cpte") p.cpteLots.push(lot);
-if(order.soc=="ess") p.essLots.push(lot);
+  let lot = { qty, price: order.price };
 
-save();
+  if(order.soc == "cpte") p.cpteLots.push(lot);
+  if(order.soc == "ess") p.essLots.push(lot);
+
+  save();
 }
 
 function consume(){
-let pid = prodOut.value;
-let soc = socOut.value;
-let qty = parseFloat(qtyOut.value);
+  let pid = document.getElementById("prodOut").value;
+  let societe = document.getElementById("socOut").value;
+  let qty = parseFloat(document.getElementById("qtyOut").value);
 
-let p = data.products.find(p=>p.id==pid);
-let lots = soc=="cpte" ? p.cpteLots : p.essLots;
+  if(!pid) return alert("Choisis un produit");
+  if(!qty || qty <= 0) return alert("Quantité invalide");
 
-while(qty > 0 && lots.length){
-let l = lots[0];
-if(l.qty <= qty){
-qty -= l.qty;
-lots.shift();
-}else{
-l.qty -= qty;
-qty = 0;
-}
-}
+  let p = data.products.find(p => p.id == pid);
+  if(!p) return alert("Produit introuvable");
 
-if(qty>0) alert("Stock insuffisant");
+  let lots = societe == "cpte" ? p.cpteLots : p.essLots;
 
-save();
+  while(qty > 0 && lots.length){
+    let l = lots[0];
+    if(l.qty <= qty){
+      qty -= l.qty;
+      lots.shift();
+    } else {
+      l.qty -= qty;
+      qty = 0;
+    }
+  }
+
+  if(qty > 0) alert("Stock insuffisant");
+
+  save();
 }
 
 function render(){
