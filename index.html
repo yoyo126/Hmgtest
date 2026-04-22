@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>HM GROUP V12.7.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:Arial;background:#f5f7fb;margin:0;padding:20px}
+.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:15px}
+input,select{padding:6px;margin:4px}
+button{padding:6px 10px;margin:4px;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+td,th{border:1px solid #ddd;padding:6px}
+.bold{font-weight:bold}
+.badge{padding:3px 6px;border-radius:6px;font-size:12px}
+.green{background:#dcfce7}
+.orange{background:#ffedd5}
+.red{background:#fee2e2}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h3>Commande client</h3>
+
+<input id="ref" placeholder="Ref commande">
+<input id="client" placeholder="Client">
+<select id="status">
+<option>EN ATTENTE</option>
+<option>PROGRAMMÉ</option>
+<option>PARTIEL</option>
+<option>POSÉ</option>
+</select>
+<input type="date" id="date">
+
+<br>
+
+<select id="prod">
+<option value="PAC">PAC</option>
+<option value="BALLON">BALLON</option>
+</select>
+<input id="qty" type="number" value="1">
+
+<button onclick="addLine()">Ajouter</button>
+
+<table>
+<tbody id="draft"></tbody>
+</table>
+
+<button onclick="saveOrder()">Créer commande</button>
+</div>
+
+<div class="card">
+<h3>Sortie / BL</h3>
+
+<input id="blClient" placeholder="Client">
+<input id="linkOrder" placeholder="Commande liée">
+
+<select id="blProd">
+<option value="PAC">PAC</option>
+<option value="BALLON">BALLON</option>
+</select>
+<input id="blQty" type="number" value="1">
+<button onclick="addBLLine()">Ajouter</button>
+
+<table>
+<tbody id="blDraft"></tbody>
+</table>
+
+<button onclick="validateBL()">Valider BL</button>
+</div>
+
+<div class="card">
+<h3>Commandes</h3>
+<table>
+<thead><tr><th>Ref</th><th>Client</th><th>Statut</th><th>Matériel</th><th>Détail</th><th>Reste</th><th>Action</th></tr></thead>
+<tbody id="orders"></tbody>
+</table>
+</div>
+
+<div class="card">
+<h3>BL</h3>
+<table>
+<thead><tr><th>ID</th><th>Client</th><th>Commande</th><th>Détail BL</th><th>Détail commande</th></tr></thead>
+<tbody id="bls"></tbody>
+</table>
+</div>
+
+<script>
+let orders=[]
+let bls=[]
+let draft=[]
+let blDraft=[]
+let id=1
+
+function addLine(){
+ draft.push({p:prod.value,q:parseInt(qty.value),remain:parseInt(qty.value),delivered:0})
+ renderDraft()
+}
+
+function renderDraft(){
+ draftEl.innerHTML=draft.map(l=>`<tr><td>${l.p}</td><td>${l.q}</td></tr>`).join('')
+}
+
+function saveOrder(){
+ orders.push({
+   ref:ref.value,
+   client:client.value,
+   status:status.value,
+   date:date.value,
+   material:"NON LIVRÉ",
+   lines:JSON.parse(JSON.stringify(draft))
+ })
+ draft=[]
+ renderDraft()
+ renderOrders()
+}
+
+function addBLLine(){
+ blDraft.push({p:blProd.value,q:parseInt(blQty.value)})
+ renderBLDraft()
+}
+
+function renderBLDraft(){
+ blDraftEl.innerHTML=blDraft.map(l=>`<tr><td>${l.p}</td><td>${l.q}</td></tr>`).join('')
+}
+
+function validateBL(){
+ let linked=linkOrder.value
+ let order=orders.find(o=>o.ref===linked)
+
+ if(order){
+   blDraft.forEach(l=>{
+     let line=order.lines.find(x=>x.p===l.p && x.remain>0)
+     if(line){
+       let d=Math.min(line.remain,l.q)
+       line.remain-=d
+       line.delivered+=d
+     }
+   })
+
+   let totalRemain=order.lines.reduce((s,l)=>s+l.remain,0)
+   if(totalRemain==0){
+     order.material="COMPLET"
+     order.status="POSÉ"
+   }else{
+     order.material="PARTIEL"
+     order.status="PARTIEL"
+   }
+ }
+
+ bls.push({
+   id:"BL-"+id++,
+   client:blClient.value,
+   order:linked,
+   lines:[...blDraft]
+ })
+
+ blDraft=[]
+ renderBLDraft()
+ renderOrders()
+ renderBLs()
+}
+
+function renderOrders(){
+ ordersEl.innerHTML=orders.map(o=>{
+   let lines=o.lines.map(l=>l.p+" x"+l.q).join("<br>")
+   let remain=o.lines.map(l=>l.p+" : "+l.remain).join("<br>")
+   return `<tr>
+     <td>${o.ref}</td>
+     <td>${o.client}</td>
+     <td>${o.status}</td>
+     <td class="badge ${o.material==="COMPLET"?"green":o.material==="PARTIEL"?"orange":"red"}">${o.material}</td>
+     <td>${lines}</td>
+     <td>${remain}</td>
+     <td><button onclick="editOrder('${o.ref}')">Modifier</button></td>
+   </tr>`
+ }).join('')
+}
+
+function editOrder(ref){
+ let o=orders.find(x=>x.ref===ref)
+ if(!o)return
+ status.value=o.status
+ date.value=o.date
+}
+
+function renderBLs(){
+ blsEl.innerHTML=bls.map(b=>{
+   let order=orders.find(o=>o.ref===b.order)
+   let orderDetail=order?order.lines.map(l=>l.p+" x"+l.q).join("<br>"):"-"
+   let blDetail=b.lines.map(l=>l.p+" x"+l.q).join("<br>")
+   return `<tr>
+     <td>${b.id}</td>
+     <td>${b.client}</td>
+     <td class="bold">${b.order}</td>
+     <td>${blDetail}</td>
+     <td>${orderDetail}</td>
+   </tr>`
+ }).join('')
+}
+
+renderOrders()
+renderBLs()
+
+</script>
+</body>
+</html>
